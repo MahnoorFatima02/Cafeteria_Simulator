@@ -25,12 +25,29 @@ public class CafeteriaController {
         // Configure the model based on input parameters from GUI
         configureModel();
 
-        // Start the simulation in the model
-        model.startSimulation();
-
-        // Listen for simulation updates (e.g., progress, metrics)
-        trackSimulationProgress();
+        // Starts the simulation in a new thread
+        Thread simulationThread = new Thread(() -> {
+            model.startSimulation();
+            trackSimulationProgress();
+        });
+        simulationThread.start();
     }
+
+
+    // Method to Pause simulation
+    public void setPaused() {
+        model.isPaused(true);
+        gui.displayMessage("Simulation paused");
+    }
+
+    // Method to Restart simulation
+    public void setRestarted() {
+        model.isRestarted(true);
+        model.isPaused(false);
+        gui.displayMessage("Simulation restarted.");
+    }
+
+
 
     // Method to validate user input from the GUI
     private boolean validateInputParameters() {
@@ -44,11 +61,45 @@ public class CafeteriaController {
     // Method to configure the model based on user input
     private void configureModel() {
         model.setArrivalRate(gui.getArrivalRate());
-        model.setServiceSpeeds(gui.getServiceSpeeds());
-        model.setCheckoutAvailability(gui.isSelfCheckoutAvailable(), gui.isCashierCheckoutAvailable());
+        model.setFoodLineSpeed(gui.getFoodLineSpeed());
+        model.setCashierSpeed(gui.getCashierSpeed());
         model.setSimulationDuration(gui.getSimulationDuration());
-        model.loadDataFile(gui.getDataFilePath());
+        model.isPaused(false);
+        model.isRestarted(false);
+        model.loadDataFile(gui.getDataFilePath()); // ??
     }
+
+
+    // Method to speed up or slow down the simulation
+    public void changeParameter(String parameter, boolean increase) {
+        double factor = increase ? 1.1 : 0.9;
+
+        switch (parameter) {
+            case "simulationSpeed":
+                model.setSimulationSpeed(model.getSimulationSpeed() * factor);
+                gui.updateSimulationParameters(model.getSimulationSpeed());
+                break;
+
+            case "arrivalRate":
+                model.setArrivalRate(model.getArrivalRate() * factor);
+                gui.updateArrivalRate(model.getArrivalRate());
+                break;
+
+            case "foodLineSpeed":
+                model.setFoodLineSpeed(model.getFoodLineSpeed() * factor);
+                gui.updateFoodLine(model.getFoodLineSpeed());
+                break;
+
+            case "cashierSpeed":
+                model.setCashierSpeed(model.getCashierSpeed() * factor);
+                gui.updateCashier(model.getCashierSpeed());
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown parameter: " + parameter);
+        }
+    }
+
 
     // Method to track progress of the simulation
     private void trackSimulationProgress() {
@@ -64,20 +115,23 @@ public class CafeteriaController {
         displaySimulationResults();
     }
 
+
     // Method to stop the simulation
     public void stopSimulation() {
         model.stopSimulation();
         gui.displayMessage("Simulation stopped.");
     }
 
+
     // Method to display final results
     private void displaySimulationResults() {
         gui.displayResults(
                 model.getTotalStudentsServed(),
                 model.getAverageTotalTimePerStudent(),
-                model.getAverageTimePerServicePoint(),
-                model.getLongestServicePointTime(),
-                model.getPeakQueueLengths()
+                model.getAverageTimeNormalFoodLine(),
+                model.getAverageTimeVeganFoodLine(),
+                model.getAverageTimeStaffedCashier(),
+                model.getAverageTimeSelfServiceCashier()
         );
     }
 }
