@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Ellipse?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<SplitPane dividerPositions="0.5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <items>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <VBox prefHeight="698.0" prefWidth="333.0">
+               <children>
+                  <StackPane prefHeight="76.0" prefWidth="607.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ff5000" height="65.0" stroke="WHITE" strokeType="INSIDE" width="545.0" />
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Cafeteria Management System" textAlignment="CENTER" wrappingWidth="606.13671875">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="134.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox prefHeight="59.0" prefWidth="607.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Simulation Time: " wrappingWidth="215.13671875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <TextArea fx:id="simulationTime" prefHeight="39.0" prefWidth="200.0">
+                                       <HBox.margin>
+                                          <Insets bottom="7.0" top="7.0" />
+                                       </HBox.margin>
+                                    </TextArea>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="minutes">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="59.0" prefWidth="607.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delay Time: " wrappingWidth="215.13671875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <TextArea fx:id="delayTime" prefHeight="39.0" prefWidth="200.0">
+                                       <HBox.margin>
+                                          <Insets bottom="7.0" top="7.0" />
+                                       </HBox.margin>
+                                    </TextArea>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <StackPane.margin>
+                              <Insets left="15.0" top="15.0" />
+                           </StackPane.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="294.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="203.0" text="Simulation Speed">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="lessSimulationSpeed" mnemonicParsing="false" onAction="#lessSimulationSpeed" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label fx:id="simulationSpeed" prefHeight="62.0" prefWidth="115.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="moreSimulationSpeed" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreSimulationSpeed" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="10.0" prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="203.0" text="Arrival Rate">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="lessArrivalRate" mnemonicParsing="false" onAction="#lessArrivalRate" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label fx:id="arrivalRate" prefHeight="62.0" prefWidth="115.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="moreArrivalRate" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreArrivalRate" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="203.0" text="Food Line Speed">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="lessFoodLineSpped" mnemonicParsing="false" onAction="#lessFoodLineSpped" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label fx:id="foodLineSpeed" prefHeight="62.0" prefWidth="115.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="moreFoodLineSpeed" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreFoodLineSpeed" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="148.0" prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="203.0" text="Cashier Speed">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="lessCashierSpeed" mnemonicParsing="false" onAction="#lessCashierSpeed" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="10.0" top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Label fx:id="cashierSpeed" prefHeight="62.0" prefWidth="115.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Button fx:id="moreCashierSpeed" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreCashierSpeed" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="3.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <StackPane.margin>
+                              <Insets left="5.0" top="15.0" />
+                           </StackPane.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="98.0" stroke="WHITE" strokeType="INSIDE" width="577.0" />
+                        <HBox prefHeight="87.0" prefWidth="607.0">
+                           <children>
+                              <Button fx:id="startButton" mnemonicParsing="false" onAction="#startButton" style="-fx-background-color: #ff5000;" text="START" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="32.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="pauseButton" layoutX="30.0" layoutY="20.0" mnemonicParsing="false" onAction="#pauseButton" style="-fx-background-color: #ff5000;" text="PAUSE" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="resumeButton" layoutX="135.0" layoutY="10.0" mnemonicParsing="false" onAction="#resumeButton" style="-fx-background-color: #ff5000;" text="RESUME" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="restartButton" layoutX="240.0" layoutY="10.0" mnemonicParsing="false" onAction="#restartButton" style="-fx-background-color: #ff5000;" text="RESTART" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <StackPane.margin>
+                              <Insets left="3.0" top="37.0" />
+                           </StackPane.margin>
+                        </HBox>
+                     </children>
+                  </StackPane>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="698.0" prefWidth="735.0">
+         <children>
+            <Ellipse fill="#ffcebb" layoutX="572.0" layoutY="649.0" radiusX="47.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label layoutX="548.0" layoutY="637.0" prefHeight="23.0" prefWidth="49.0" text="START" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Group layoutX="425.0" layoutY="484.0">
+               <children>
+                  <Ellipse fill="#ffcebb" layoutX="55.0" layoutY="26.0" radiusX="53.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+                  <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="46.0" text="QUEUE: " textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="queueTwo" layoutX="58.0" layoutY="11.0" prefHeight="30.0" prefWidth="44.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Group>
+            <Group layoutX="607.0" layoutY="484.0">
+               <children>
+                  <Ellipse fill="#ffcebb" layoutX="55.0" layoutY="26.0" radiusX="53.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+                  <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="46.0" text="QUEUE: " textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="queueOne" layoutX="58.0" layoutY="11.0" prefHeight="30.0" prefWidth="44.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Group>
+            <Rectangle fill="#53565a" height="34.0" layoutX="568.0" layoutY="589.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="7.0" layoutX="477.0" layoutY="582.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="188.0" />
+            <Rectangle fill="#53565a" height="46.0" layoutX="477.0" layoutY="536.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="46.0" layoutX="659.0" layoutY="536.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="46.0" layoutX="477.0" layoutY="438.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="7.0" layoutX="414.0" layoutY="431.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="132.0" />
+            <Rectangle fill="#53565a" height="60.0" layoutX="540.0" layoutY="371.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="113.0" layoutX="659.0" layoutY="371.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="60.0" layoutX="414.0" layoutY="371.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="250.0" layoutX="374.0" layoutY="121.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Rectangle fill="#53565a" height="68.0" layoutX="413.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="74.0" layoutX="540.0" layoutY="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="68.0" layoutX="659.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="250.0" layoutX="501.0" layoutY="122.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="250.0" layoutX="620.0" layoutY="121.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Text layoutX="387.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NORMAL FOOD LINE" textAlignment="CENTER" wrappingWidth="57.470062255859375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="514.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="NORMAL FOOD LINE" textAlignment="CENTER" wrappingWidth="57.470062255859375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Text layoutX="633.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="VEGAN FOOD LINE" textAlignment="CENTER" wrappingWidth="57.470062255859375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle fill="#53565a" height="7.0" layoutX="74.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="591.0" />
+            <Rectangle fill="#53565a" height="68.0" layoutX="74.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="68.0" layoutX="242.0" layoutY="53.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Group layoutX="21.0" layoutY="121.0">
+               <children>
+                  <Ellipse fill="#ffcebb" layoutX="55.0" layoutY="26.0" radiusX="53.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+                  <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="46.0" text="QUEUE: " textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="queueFour" layoutX="58.0" layoutY="11.0" prefHeight="30.0" prefWidth="44.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Group>
+            <Group layoutX="189.0" layoutY="121.0">
+               <children>
+                  <Ellipse fill="#ffcebb" layoutX="55.0" layoutY="26.0" radiusX="53.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+                  <Label layoutX="15.0" layoutY="10.0" prefHeight="30.0" prefWidth="46.0" text="QUEUE: " textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="queueThree" layoutX="58.0" layoutY="11.0" prefHeight="30.0" prefWidth="44.0" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Group>
+            <Rectangle fill="#53565a" height="113.0" layoutX="74.0" layoutY="173.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="46.0" layoutX="242.0" layoutY="173.0" rotate="360.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="7.0" layoutX="186.0" layoutY="219.0" rotate="360.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="118.0" />
+            <Rectangle fill="#53565a" height="60.0" layoutX="186.0" layoutY="226.0" rotate="360.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="60.0" layoutX="298.0" layoutY="226.0" rotate="360.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="253.0" layoutX="35.0" layoutY="286.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Text layoutX="48.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SELF SERVICE CASHIER" textAlignment="CENTER" wrappingWidth="57.470062255859375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="253.0" layoutX="147.0" layoutY="286.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Text layoutX="160.0" layoutY="341.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STAFFED CASHIER" textAlignment="CENTER" wrappingWidth="57.470062255859375">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#ffcebb" height="253.0" layoutX="259.0" layoutY="286.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" width="83.0" />
+            <Text layoutX="268.0" layoutY="343.0" strokeType="OUTSIDE" strokeWidth="0.0" text="STAFFED CASHIER (DYNAMIC)" textAlignment="CENTER" wrappingWidth="66.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Rectangle fill="#53565a" height="39.0" layoutX="74.0" layoutY="539.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="7.0" layoutX="74.0" layoutY="578.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="231.0" />
+            <Rectangle fill="#53565a" height="37.0" layoutX="186.0" layoutY="585.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Ellipse fill="#ffcebb" layoutX="188.0" layoutY="647.0" radiusX="71.0" radiusY="26.0" stroke="#ff5000" strokeType="INSIDE" strokeWidth="2.0" />
+            <Label layoutX="137.0" layoutY="635.0" prefHeight="23.0" prefWidth="107.0" text="SEATING/EXIT" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Circle fill="#1fff34" layoutX="416.0" layoutY="144.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#ff1f1f" layoutX="543.0" layoutY="144.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#1fff34" layoutX="662.0" layoutY="144.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#1fff34" layoutX="76.0" layoutY="309.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#1fff34" layoutX="189.0" layoutY="309.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fill="#ff1f1f" layoutX="300.0" layoutY="309.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" />
+            <ImageView fitHeight="58.0" fitWidth="58.0" layoutX="49.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@self.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="74.0" layoutX="160.0" layoutY="388.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cashier.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="59.0" fitWidth="74.0" layoutX="272.0" layoutY="390.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@cashier.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="57.0" layoutX="386.0" layoutY="224.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@meat.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="57.0" fitWidth="66.0" layoutX="515.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@fish.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="58.0" fitWidth="66.0" layoutX="632.0" layoutY="220.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@salad.png" />
+               </image>
+            </ImageView>
+            <Rectangle fill="#53565a" height="39.0" layoutX="186.0" layoutY="539.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Rectangle fill="#53565a" height="39.0" layoutX="299.0" layoutY="539.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="6.0" />
+            <Label layoutX="393.0" layoutY="285.0" text="SERVING" />
+            <Label layoutX="395.0" layoutY="324.0" text="SERVED" />
+            <Label fx:id="normalLineTwoServing" layoutX="388.0" layoutY="303.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="normalLineTwoServed" layoutX="388.0" layoutY="342.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label layoutX="520.0" layoutY="287.0" text="SERVING" />
+            <Label layoutX="522.0" layoutY="326.0" text="SERVED" />
+            <Label fx:id="normalLineOneServing" layoutX="515.0" layoutY="305.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="normalLineOneServed" layoutX="515.0" layoutY="344.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label layoutX="639.0" layoutY="286.0" text="SERVING" />
+            <Label layoutX="641.0" layoutY="325.0" text="SERVED" />
+            <Label fx:id="veganLineServing" layoutX="634.0" layoutY="304.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="veganLineServed" layoutX="634.0" layoutY="343.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label layoutX="54.0" layoutY="452.0" text="SERVING" />
+            <Label layoutX="56.0" layoutY="491.0" text="SERVED" />
+            <Label fx:id="selfCashierServing" layoutX="49.0" layoutY="470.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="selfCashierServed" layoutX="49.0" layoutY="509.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label layoutX="165.0" layoutY="453.0" text="SERVING" />
+            <Label layoutX="167.0" layoutY="492.0" text="SERVED" />
+            <Label fx:id="staffedCashierServing" layoutX="160.0" layoutY="471.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="staffedCashierServed" layoutX="160.0" layoutY="510.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label layoutX="278.0" layoutY="454.0" text="SERVING" />
+            <Label layoutX="280.0" layoutY="493.0" text="SERVED" />
+            <Label fx:id="dynamicCashierServing" layoutX="273.0" layoutY="472.0" prefHeight="20.0" prefWidth="56.0" />
+            <Label fx:id="dynamicCashierServed" layoutX="273.0" layoutY="511.0" prefHeight="20.0" prefWidth="56.0" />
+         </children>
+      </AnchorPane>
+  </items>
+</SplitPane>
