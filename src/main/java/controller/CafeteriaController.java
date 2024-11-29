@@ -34,6 +34,7 @@ public class CafeteriaController implements Initializable {
         this.gui = gui;
     }
 
+
     // Method to start the simulation
     public void startSimulation() {
         // Validate input parameters from GUI
