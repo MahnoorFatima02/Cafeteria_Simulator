@@ -5,17 +5,25 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import controller.CafeteriaController;
 
 public class CafeteriaGUI extends Application {
+    private CafeteriaController controller;
+    private Stage primaryStage;
+
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/mainpage.fxml"));
+        this.primaryStage = stage;
+        loadScene("/mainpage.fxml");
+    }
+
+    public void loadScene(String fxmlFile) throws Exception {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         Parent root = fxmlLoader.load();
-        stage.setTitle("Cafeteria Simulator");
-        stage.setScene(new Scene(root));
-        stage.show();
+        controller = fxmlLoader.getController();
+        controller.setMainApp(this);
+        primaryStage.setTitle("Cafeteria Simulator");
+        primaryStage.setScene(new Scene(root));
+        primaryStage.show();
     }
 }
-
-//There is not yet any logic in this class to switch scenes or panels.
-//The IDs of buttons and fields has been added to FXML files.
