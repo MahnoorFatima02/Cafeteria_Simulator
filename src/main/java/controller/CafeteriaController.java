@@ -1,6 +1,6 @@
 package controller;
 
-import model.Cafeteria;
+import simu.Cafeteria;
 import view.CafeteriaGUI;
 
 public class CafeteriaController {
