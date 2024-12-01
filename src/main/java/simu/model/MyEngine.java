@@ -37,38 +37,34 @@ public class MyEngine extends Engine {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
 
-            Random r = new Random();
+// --------------------
+// Random Number Generator
+// --------------------
+        Random r = new Random();
 
-            ContinuousGenerator arrivalTime = null;
-            ContinuousGenerator veganFoodServiceTime = null;
-            ContinuousGenerator nonVeganFoodServiceTime = null;
-            ContinuousGenerator cashierServiceTime = null;
-            ContinuousGenerator selfCheckoutServiceTime = null;
+// --------------------
+// Continuous Generators
+// --------------------
+        ContinuousGenerator arrivalTime =  new Negexp(SimulationConstants.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
+        ContinuousGenerator veganFoodServiceTime =  new Normal(SimulationConstants.MEAN_VEGAN_SERVICE, SimulationConstants.STD_DEV_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
+        ContinuousGenerator nonVeganFoodServiceTime = new Normal(SimulationConstants.MEAN_NON_VEGAN_SERVICE, SimulationConstants.STD_DEV_NON_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
+        ContinuousGenerator cashierServiceTime = new Normal(SimulationConstants.MEAN_CASHIER, SimulationConstants.STD_DEV_CASHIER, Integer.toUnsignedLong(r.nextInt()));
+        ContinuousGenerator selfCheckoutServiceTime =  new Normal(SimulationConstants.MEAN_SELF_CHECKOUT, SimulationConstants.STD_DEV_SELF_CHECKOUT, Integer.toUnsignedLong(r.nextInt()));
 
-            arrivalTime = new Negexp(SimulationConstants.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
+// --------------------
+// Service Points
+// --------------------
+        veganFoodStation = new ServicePoint(veganFoodServiceTime, eventList, EventType.DEP1);
+        nonVeganFoodStation[0] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
+        nonVeganFoodStation[1] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
+        cashierServicePoints[0] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3);
+        cashierServicePoints[1] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3, false);
+        selfCheckoutServicePoint = new ServicePoint(selfCheckoutServiceTime, eventList, EventType.DEP4);
 
-            veganFoodServiceTime = new Normal(SimulationConstants.MEAN_VEGAN_SERVICE, SimulationConstants.STD_DEV_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
-            nonVeganFoodServiceTime = new Normal(SimulationConstants.MEAN_NON_VEGAN_SERVICE, SimulationConstants.STD_DEV_NON_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
-            cashierServiceTime = new Normal(SimulationConstants.MEAN_CASHIER, SimulationConstants.STD_DEV_CASHIER, Integer.toUnsignedLong(r.nextInt()));
-            selfCheckoutServiceTime = new Normal(SimulationConstants.MEAN_SELF_CHECKOUT, SimulationConstants.STD_DEV_SELF_CHECKOUT, Integer.toUnsignedLong(r.nextInt()));
-
-            // Vegan food service point
-            veganFoodStation = new ServicePoint(veganFoodServiceTime, eventList, EventType.DEP1);
-
-            // NonVeganServicePoints = new ServicePoint[2];
-            nonVeganFoodStation[0] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
-            nonVeganFoodStation[1] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
-
-            // Cashier service point
-            cashierServicePoints[0] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3);
-            cashierServicePoints[1] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3, false);
-
-            // Self-service cashier service point
-            selfCheckoutServicePoint = new ServicePoint(selfCheckoutServiceTime, eventList, EventType.DEP4);
-
-            // Arrival process
-            arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
-
+// --------------------
+// Arrival Process
+// --------------------
+        arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
     }
 
     @Override
@@ -76,8 +72,12 @@ public class MyEngine extends Engine {
         arrivalProcess.generateNextEvent();
     }
 
+
+// --------------------
+//  B phase events
+// --------------------
     @Override
-    protected void runEvent(Event t) {  // B phase events
+    protected void runEvent(Event t) {
         System.out.println("Simulation speed" + delayTime);
         // Implement delay
         try {
@@ -120,9 +120,10 @@ public class MyEngine extends Engine {
         checkAdjustments();
     }
 
-
+// --------------------
+// C phase events
+// --------------------
     @Override
-    // It ensures that available service points continue to serve customers in their queues by
     // starting service for the next customer.
     protected void tryCEvents() {
 
@@ -156,6 +157,10 @@ public class MyEngine extends Engine {
         }
     }
 
+// --------------------
+// Results
+// --------------------
+
     @Override
     protected void results() {
         System.out.println();
@@ -164,7 +169,7 @@ public class MyEngine extends Engine {
 
         // Total number of customers created
         int totalCustomersCreated = Customer.getTotalCustomers();
-        System.out.println("Total customers created: " + totalCustomersCreated  + "\n");
+        System.out.println("Total customers created: " + totalCustomersCreated + "\n");
 
 
         // Total number of customers served
@@ -269,28 +274,31 @@ public class MyEngine extends Engine {
     }
 
 
-    //     Helper method to assign customer to cashier or self-service
+// --------------------------------
+// Assign to Cashier or Self-Service
+// --------------------------------
+
     private void assignToCashier(Customer customer) {
-        if(assignByQueueLength){
+        if (assignByQueueLength) {
             System.out.println("Assigning by queue length");
-        // cashiers share same waiting queue
-        int firstCashierQueueSize = cashierServicePoints[0].getQueueSize();
-        System.out.println("The cashier queue before customer arrival : " + firstCashierQueueSize);
+            // cashiers share same waiting queue
+            int firstCashierQueueSize = cashierServicePoints[0].getQueueSize();
+            System.out.println("The cashier queue before customer arrival : " + firstCashierQueueSize);
 
-        //  compare with self service queue size
-        int selfServiceQueueSize = selfCheckoutServicePoint.getQueueSize();
-        System.out.println("The self service cashier queue before customer arrival: " + selfServiceQueueSize);
+            //  compare with self service queue size
+            int selfServiceQueueSize = selfCheckoutServicePoint.getQueueSize();
+            System.out.println("The self service cashier queue before customer arrival: " + selfServiceQueueSize);
 
-        // Assign customer to the appropriate queue
-        if (firstCashierQueueSize <= selfServiceQueueSize) {
-            cashierServicePoints[0].addQueue(customer);
+            // Assign customer to the appropriate queue
+            if (firstCashierQueueSize <= selfServiceQueueSize) {
+                cashierServicePoints[0].addQueue(customer);
 
+            } else {
+                selfCheckoutServicePoint.addQueue(customer);
+                System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
+                System.out.println("Self Service Cash Counter Activated");
+            }
         } else {
-            selfCheckoutServicePoint.addQueue(customer);
-            System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
-            System.out.println("Self Service Cash Counter Activated");
-        }
-    } else {
             System.out.println("Assigning by customer preference");
             boolean chooseSelfCheckOut = Math.random() < SimulationConstants.CUSTOMER_PREFERENCE;
             if (chooseSelfCheckOut) {
@@ -308,15 +316,15 @@ public class MyEngine extends Engine {
 
         // Assign customers to the shortest queue between the two cashiers if the second cashier is active
         assignToShortestCashierQueue(customer);
+
+        // Update the queue sizes
         int updatedFirstCashierQueueSize = cashierServicePoints[0].getQueueSize();
         int updatedSecondCashierQueueSize = cashierServicePoints[1].getQueueSize();
         int updatedSelfServiceQueueSize = selfCheckoutServicePoint.getQueueSize();
-        ;
 
         System.out.println("The first cashier queue length: " + updatedFirstCashierQueueSize);
         System.out.println("The Second cashier queue length: " + updatedSecondCashierQueueSize);
         System.out.println("The self service queue length: " + updatedSelfServiceQueueSize);
-
 
     }
 
@@ -325,7 +333,6 @@ public class MyEngine extends Engine {
         int cashierQueueSize = cashierServicePoints[0].getQueueSize();
         System.out.println("Current cashier queue size: " + cashierQueueSize);
         System.out.println("Second cashier active: " + cashierServicePoints[1].isActive());
-
 
         // Check if the second cashier should be active
         if (cashierQueueSize >= SimulationConstants.CASHIER_UPPER_LIMIT && !cashierServicePoints[1].isActive()) {
@@ -336,7 +343,6 @@ public class MyEngine extends Engine {
             System.out.println("Second Cashier Deactivated");
         }
     }
-
 
     private void assignToShortestCashierQueue(Customer customer) {
         if (cashierServicePoints[1].isActive()) {
@@ -356,6 +362,9 @@ public class MyEngine extends Engine {
         }
     }
 
+// --------------------------------
+// Adjustments
+// --------------------------------
     private void checkAdjustments() {
         if (adjustStudentArrivalFlag != null) {
             adjustStudentArrival(adjustStudentArrivalFlag);
@@ -391,7 +400,6 @@ public class MyEngine extends Engine {
         }
     }
 
-
     public void adjustStudentArrival(boolean increase) {
         if (increase) {
             SimulationConstants.ARRIVAL_MEAN *= 1.1;
@@ -413,7 +421,7 @@ public class MyEngine extends Engine {
         } else {
             SimulationConstants.MEAN_VEGAN_SERVICE *= 0.9;
             SimulationConstants.MEAN_NON_VEGAN_SERVICE *= 0.9;
-            System.out.println("I am here, meanVeganService is " + SimulationConstants.MEAN_VEGAN_SERVICE );
+            System.out.println("I am here, meanVeganService is " + SimulationConstants.MEAN_VEGAN_SERVICE);
 
 
         }
@@ -423,16 +431,20 @@ public class MyEngine extends Engine {
         if (increase) {
             SimulationConstants.MEAN_CASHIER *= 1.1;
             SimulationConstants.MEAN_SELF_CHECKOUT *= 1.1;
-            System.out.println("I am here, meanCashier is " +  SimulationConstants.MEAN_CASHIER );
+            System.out.println("I am here, meanCashier is " + SimulationConstants.MEAN_CASHIER);
 
 
         } else {
-            SimulationConstants.MEAN_CASHIER  *= 0.9;
+            SimulationConstants.MEAN_CASHIER *= 0.9;
             SimulationConstants.MEAN_SELF_CHECKOUT *= 0.9;
-            System.out.println("I am here, meanCashier is " +  SimulationConstants.MEAN_CASHIER );
+            System.out.println("I am here, meanCashier is " + SimulationConstants.MEAN_CASHIER);
 
         }
     }
+
+// --------------------------------
+// Getters and Setters
+// --------------------------------
 
     // setter method to set the assignment method
     public void setAssignByQueueLength(boolean assignByQueueLength) {
@@ -440,11 +452,11 @@ public class MyEngine extends Engine {
     }
 
     public double getArrivalMean() {
-        return SimulationConstants.ARRIVAL_MEAN ;
+        return SimulationConstants.ARRIVAL_MEAN;
     }
 
     public double getFoodLineSpeed() {
-        return  SimulationConstants.MEAN_NON_VEGAN_SERVICE;
+        return SimulationConstants.MEAN_NON_VEGAN_SERVICE;
     }
 
     public double getCashierSpeed() {
