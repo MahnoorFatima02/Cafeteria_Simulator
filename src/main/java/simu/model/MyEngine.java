@@ -8,7 +8,6 @@ import eduni.distributions.Negexp;
 import java.util.Random;
 
 public class MyEngine extends Engine {
-    public static final boolean TEXTDEMO = true;
     Customer customer;
     private double simulationTime;
     private double delayTime;
@@ -25,6 +24,9 @@ public class MyEngine extends Engine {
     private Boolean adjustCashierServiceSpeedFlag = null;
     private Boolean adjustStimulationSpeedFlag = null;
 
+    // Flag to determine assignment method
+    private boolean assignByQueueLength;
+
 
     // TODO: Average service time should include customer remove from list or total served?
     // TODO: put variables in database
@@ -35,7 +37,6 @@ public class MyEngine extends Engine {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
 
-        if (TEXTDEMO) {
             Random r = new Random();
 
             ContinuousGenerator arrivalTime = null;
@@ -51,24 +52,23 @@ public class MyEngine extends Engine {
             cashierServiceTime = new Normal(SimulationConstants.MEAN_CASHIER, SimulationConstants.STD_DEV_CASHIER, Integer.toUnsignedLong(r.nextInt()));
             selfCheckoutServiceTime = new Normal(SimulationConstants.MEAN_SELF_CHECKOUT, SimulationConstants.STD_DEV_SELF_CHECKOUT, Integer.toUnsignedLong(r.nextInt()));
 
-            // vegan food service point
+            // Vegan food service point
             veganFoodStation = new ServicePoint(veganFoodServiceTime, eventList, EventType.DEP1);
 
-            // nonVeganServicePoints = new ServicePoint[2];
+            // NonVeganServicePoints = new ServicePoint[2];
             nonVeganFoodStation[0] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
             nonVeganFoodStation[1] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
 
-            // cashier service point
+            // Cashier service point
             cashierServicePoints[0] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3);
             cashierServicePoints[1] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3, false);
 
-            // self-service cashier service point
+            // Self-service cashier service point
             selfCheckoutServicePoint = new ServicePoint(selfCheckoutServiceTime, eventList, EventType.DEP4);
 
-
+            // Arrival process
             arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
 
-        }
     }
 
     @Override
@@ -158,24 +158,26 @@ public class MyEngine extends Engine {
 
     @Override
     protected void results() {
+        System.out.println();
         System.out.println("Simulation ended at " + Clock.getInstance().getClock());
+        System.out.println("Results: \n");
 
         // Total number of customers created
         int totalCustomersCreated = Customer.getTotalCustomers();
-        System.out.println("Total customers created: " + totalCustomersCreated);
+        System.out.println("Total customers created: " + totalCustomersCreated  + "\n");
 
 
         // Total number of customers served
         int totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
         System.out.println("Total customers served by Cashier 1: " + cashierServicePoints[0].getTotalCustomersRemoved());
         System.out.println("Total customers served by Cashier 2: " + cashierServicePoints[1].getTotalCustomersRemoved());
-        System.out.println("Total customers served by Self CheckOut: " + selfCheckoutServicePoint.getTotalCustomersRemoved());
+        System.out.println("Total customers served by Self CheckOut: " + selfCheckoutServicePoint.getTotalCustomersRemoved() + "\n");
 
         System.out.println("Total customers served: " + totalCustomersServed);
 
         // Average efficiency
         double averageEfficiency = (double) totalCustomersServed / totalCustomersCreated * 100;
-        System.out.println("Average efficiency: " + String.format("%.2f", averageEfficiency) + "%");
+        System.out.println("Average efficiency: " + String.format("%.2f", averageEfficiency) + "%" + "\n");
 
 
         // Average service times
@@ -187,7 +189,7 @@ public class MyEngine extends Engine {
         System.out.println("Average time spent at Vegan Service Point: " + String.format("%.2f", avgVeganServiceTime));
         System.out.println("Average time spent at Non-Vegan Service Points: " + String.format("%.2f", avgNonVeganServiceTime));
         System.out.println("Average time spent at Cashier Service Points: " + String.format("%.2f", avgCashierServiceTime));
-        System.out.println("Average time spent at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutServiceTime));
+        System.out.println("Average time spent at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutServiceTime) + "\n");
 
         // Average waiting times
         double avgVeganWaitingTime = veganFoodStation.getAverageWaitingTime();
@@ -199,7 +201,7 @@ public class MyEngine extends Engine {
         System.out.println("Average waiting time at Vegan Service Point: " + String.format("%.2f", avgVeganWaitingTime));
         System.out.println("Average waiting time at Non-Vegan Service Points: " + String.format("%.2f", avgNonVeganWaitingTime));
         System.out.println("Average waiting time at Cashier Service Points: " + String.format("%.2f", avgCashierWaitingTime));
-        System.out.println("Average waiting time at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutWaitingTime));
+        System.out.println("Average waiting time at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutWaitingTime) + "\n");
 
     }
 
@@ -269,6 +271,8 @@ public class MyEngine extends Engine {
 
     //     Helper method to assign customer to cashier or self-service
     private void assignToCashier(Customer customer) {
+        if(assignByQueueLength){
+            System.out.println("Assigning by queue length");
         // cashiers share same waiting queue
         int firstCashierQueueSize = cashierServicePoints[0].getQueueSize();
         System.out.println("The cashier queue before customer arrival : " + firstCashierQueueSize);
@@ -280,9 +284,23 @@ public class MyEngine extends Engine {
         // Assign customer to the appropriate queue
         if (firstCashierQueueSize <= selfServiceQueueSize) {
             cashierServicePoints[0].addQueue(customer);
+
         } else {
             selfCheckoutServicePoint.addQueue(customer);
+            System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
             System.out.println("Self Service Cash Counter Activated");
+        }
+    } else {
+            System.out.println("Assigning by customer preference");
+            boolean chooseSelfCheckOut = Math.random() < SimulationConstants.CUSTOMER_PREFERENCE;
+            if (chooseSelfCheckOut) {
+                selfCheckoutServicePoint.addQueue(customer);
+                System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
+                System.out.println("Self Service Cash Counter Activated");
+            } else {
+                cashierServicePoints[0].addQueue(customer);
+            }
+
         }
 
         // Check and update the status of the second cashier
@@ -330,6 +348,7 @@ public class MyEngine extends Engine {
 
             for (int i = 0; i < remainingCustomers; i++) {
                 System.out.println("Adding a customer in second cashier queue ");
+                System.out.println("Customer " + customer.getId() + " assigned to Cashier 2");
                 Customer customerToBeServed = cashierServicePoints[0].removeQueue();
                 cashierServicePoints[1].addQueue(customerToBeServed);
             }
@@ -415,6 +434,11 @@ public class MyEngine extends Engine {
         }
     }
 
+    // setter method to set the assignment method
+    public void setAssignByQueueLength(boolean assignByQueueLength) {
+        this.assignByQueueLength = assignByQueueLength;
+    }
+
     public double getArrivalMean() {
         return SimulationConstants.ARRIVAL_MEAN ;
     }
@@ -429,6 +453,31 @@ public class MyEngine extends Engine {
 
 
 }
+
+
+/*
+Analysis of Results
+
+Non-Vegan Service Points:
+The average time spent (348.39) and the average waiting time (318.67) are significantly higher compared to other service points.
+This indicates that customers are spending a lot of time waiting in the queue before being served.
+This could be due to a high arrival rate of customers at the non-vegan service points, slower service times, or both.
+It suggests that the service capacity at these points is not sufficient to handle the incoming customer load efficiently.
+
+Cashier Service Points:
+The average time spent (279.28) and the average waiting time (266.47) are also quite high.
+This indicates that customers are experiencing long wait times at the cashier service points.
+Similar to the non-vegan service points, this could be due to a high arrival rate of customers or slower service times.
+
+Self-Checkout:
+The average time spent (217.49) and the average waiting time (186.91) are lower than the non-vegan and cashier service points
+but still relatively high. This suggests that while self-checkout is more efficient, there is still a significant wait time.
+
+Vegan Service Point:
+The average time spent (60.07) and the average waiting time (35.33) are the lowest among all service points. This indicates that
+the vegan service point is handling the customer load more efficiently, with shorter wait times and faster service.
+
+ */
 
 
 

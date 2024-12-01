@@ -31,6 +31,7 @@ public class Simulator {
 
         Trace.setTraceLevel(Level.INFO);
         MyEngine engine = new MyEngine();
+        engine.setAssignByQueueLength(true);
         engine.setSimulationTime(1000);
         engine.setDelayTime(0); // Example delay time
 //		engine.adjustStudentArrival(false); // Increase student arrival rate by 10%
