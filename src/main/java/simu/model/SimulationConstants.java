@@ -14,5 +14,7 @@ public class SimulationConstants {
     public static final double CASHIER_UPPER_LIMIT = 6;
     public static final double  CASHIER_LOWER_LIMIT = 4;
     public static final double  CUSTOMER_PREFERENCE = 0.3;
+    public static final double  SIMULATION_UPPER_SPEED = 1.1;
+    public static final double  SIMULATION_LOWER_SPEED = 0.9;
 
 }

@@ -7,7 +7,9 @@ import eduni.distributions.Negexp;
 
 import java.util.Random;
 
+
 public class MyEngine extends Engine {
+    private SimulationAdjustments adjustments;
     Customer customer;
     private double simulationTime;
     private double delayTime;
@@ -17,12 +19,6 @@ public class MyEngine extends Engine {
     private ServicePoint[] cashierServicePoints;
     private ServicePoint selfCheckoutServicePoint;
 
-
-    // Flags to indicate if adjustments are needed and their direction
-    private Boolean adjustStudentArrivalFlag = null;
-    private Boolean adjustFoodLineServiceSpeedFlag = null;
-    private Boolean adjustCashierServiceSpeedFlag = null;
-    private Boolean adjustStimulationSpeedFlag = null;
 
     // Flag to determine assignment method
     private boolean assignByQueueLength;
@@ -36,35 +32,39 @@ public class MyEngine extends Engine {
     public MyEngine() {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
+        adjustments = new SimulationAdjustments();
+        adjustments.setAdjustStimulationSpeedFlag(false);
+        adjustments.setAdjustStudentArrivalFlag(false);
 
-// --------------------
-// Random Number Generator
-// --------------------
+    /*
+      ======  Random Number Generator =======
+    */
+
         Random r = new Random();
+    /*
+      ======  Continuous Generators =======
+    */
 
-// --------------------
-// Continuous Generators
-// --------------------
         ContinuousGenerator arrivalTime =  new Negexp(SimulationConstants.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
         ContinuousGenerator veganFoodServiceTime =  new Normal(SimulationConstants.MEAN_VEGAN_SERVICE, SimulationConstants.STD_DEV_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
         ContinuousGenerator nonVeganFoodServiceTime = new Normal(SimulationConstants.MEAN_NON_VEGAN_SERVICE, SimulationConstants.STD_DEV_NON_VEGAN_SERVICE, Integer.toUnsignedLong(r.nextInt()));
         ContinuousGenerator cashierServiceTime = new Normal(SimulationConstants.MEAN_CASHIER, SimulationConstants.STD_DEV_CASHIER, Integer.toUnsignedLong(r.nextInt()));
         ContinuousGenerator selfCheckoutServiceTime =  new Normal(SimulationConstants.MEAN_SELF_CHECKOUT, SimulationConstants.STD_DEV_SELF_CHECKOUT, Integer.toUnsignedLong(r.nextInt()));
 
-// --------------------
-// Service Points
-// --------------------
+    /*
+      ====== Service Points =======
+    */
         veganFoodStation = new ServicePoint(veganFoodServiceTime, eventList, EventType.DEP1);
         nonVeganFoodStation[0] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
         nonVeganFoodStation[1] = new ServicePoint(nonVeganFoodServiceTime, eventList, EventType.DEP2);
         cashierServicePoints[0] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3);
         cashierServicePoints[1] = new ServicePoint(cashierServiceTime, eventList, EventType.DEP3, false);
         selfCheckoutServicePoint = new ServicePoint(selfCheckoutServiceTime, eventList, EventType.DEP4);
+  /*
+      ====== Arrival Process =======
+  */
 
-// --------------------
-// Arrival Process
-// --------------------
-        arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
+   arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
     }
 
     @Override
@@ -72,10 +72,10 @@ public class MyEngine extends Engine {
         arrivalProcess.generateNextEvent();
     }
 
+    /*
+      ====== B phase events =======
+   */
 
-// --------------------
-//  B phase events
-// --------------------
     @Override
     protected void runEvent(Event t) {
         System.out.println("Simulation speed" + delayTime);
@@ -120,9 +120,10 @@ public class MyEngine extends Engine {
         checkAdjustments();
     }
 
-// --------------------
-// C phase events
-// --------------------
+    /*
+        ====== C phase events =======
+    */
+
     @Override
     // starting service for the next customer.
     protected void tryCEvents() {
@@ -156,10 +157,9 @@ public class MyEngine extends Engine {
             selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
         }
     }
-
-// --------------------
-// Results
-// --------------------
+     /*
+        ====== Results =======
+    */
 
     @Override
     protected void results() {
@@ -273,10 +273,10 @@ public class MyEngine extends Engine {
         }
     }
 
+     /*
+         ====== Assign to Cashier or Self-Service =======
+     */
 
-// --------------------------------
-// Assign to Cashier or Self-Service
-// --------------------------------
 
     private void assignToCashier(Customer customer) {
         if (assignByQueueLength) {
@@ -362,110 +362,34 @@ public class MyEngine extends Engine {
         }
     }
 
-// --------------------------------
-// Adjustments
-// --------------------------------
+    /*
+        ====== Adjustments =======
+    */
     private void checkAdjustments() {
-        if (adjustStudentArrivalFlag != null) {
-            adjustStudentArrival(adjustStudentArrivalFlag);
-            adjustStudentArrivalFlag = null;
-        }
-        if (adjustFoodLineServiceSpeedFlag != null) {
-            adjustFoodLineServiceSpeed(adjustFoodLineServiceSpeedFlag);
-            adjustFoodLineServiceSpeedFlag = null;
-        }
-        if (adjustCashierServiceSpeedFlag != null) {
-            adjustCashierServiceSpeed(adjustCashierServiceSpeedFlag);
-            adjustCashierServiceSpeedFlag = null;
-        }
+        SimulationConstants.ARRIVAL_MEAN *= adjustments.adjustStudentArrival();
+        System.out.println("Student Arrival value coming from adjustment " + adjustments.adjustStudentArrival());
+        System.out.println("Student Arrival rate mean " + SimulationConstants.ARRIVAL_MEAN);
 
-        if (adjustStimulationSpeedFlag != null) {
-            adjustStimulationSpeed(adjustStimulationSpeedFlag);
-            adjustStimulationSpeedFlag = null;
-        }
+        SimulationConstants.MEAN_VEGAN_SERVICE  *= adjustments.adjustFoodLineServiceSpeed();
+        SimulationConstants.MEAN_NON_VEGAN_SERVICE *= adjustments.adjustFoodLineServiceSpeed();
+        System.out.println("Mean Vegan Service is " + SimulationConstants.MEAN_VEGAN_SERVICE);
+
+        SimulationConstants.MEAN_CASHIER *= adjustments.adjustCashierServiceSpeed();
+        SimulationConstants.MEAN_SELF_CHECKOUT *= adjustments.adjustCashierServiceSpeed();
+        System.out.println("Mean cashier is " + SimulationConstants.MEAN_CASHIER);
+
+        this.delayTime *= adjustments.adjustStimulationSpeed();
+        System.out.println("Delay rate is " + this.delayTime);
     }
 
     public void setDelayTime(double simulationTime) {
         this.delayTime = simulationTime;
     }
 
-    public void adjustStimulationSpeed(boolean increase) {
-        if (increase) {
-            this.delayTime *= 1.1;
-            System.out.println("I am here, delay rate is " + this.delayTime);
-        } else {
-            this.delayTime *= 0.9;
-            System.out.println("I am here, delay rate is " + this.delayTime);
-
-        }
-    }
-
-    public void adjustStudentArrival(boolean increase) {
-        if (increase) {
-            SimulationConstants.ARRIVAL_MEAN *= 1.1;
-            System.out.println("I am here, arrival rate is " + SimulationConstants.ARRIVAL_MEAN);
-        } else {
-            SimulationConstants.ARRIVAL_MEAN *= 0.9;
-            System.out.println("I am here, arrival rate is " + SimulationConstants.ARRIVAL_MEAN);
-
-        }
-    }
-
-    public void adjustFoodLineServiceSpeed(boolean increase) {
-        if (increase) {
-            SimulationConstants.MEAN_VEGAN_SERVICE *= 1.1;
-            SimulationConstants.MEAN_NON_VEGAN_SERVICE *= 1.1;
-            System.out.println("I am here, meanVeganService is " + SimulationConstants.MEAN_VEGAN_SERVICE);
-
-
-        } else {
-            SimulationConstants.MEAN_VEGAN_SERVICE *= 0.9;
-            SimulationConstants.MEAN_NON_VEGAN_SERVICE *= 0.9;
-            System.out.println("I am here, meanVeganService is " + SimulationConstants.MEAN_VEGAN_SERVICE);
-
-
-        }
-    }
-
-    public void adjustCashierServiceSpeed(boolean increase) {
-        if (increase) {
-            SimulationConstants.MEAN_CASHIER *= 1.1;
-            SimulationConstants.MEAN_SELF_CHECKOUT *= 1.1;
-            System.out.println("I am here, meanCashier is " + SimulationConstants.MEAN_CASHIER);
-
-
-        } else {
-            SimulationConstants.MEAN_CASHIER *= 0.9;
-            SimulationConstants.MEAN_SELF_CHECKOUT *= 0.9;
-            System.out.println("I am here, meanCashier is " + SimulationConstants.MEAN_CASHIER);
-
-        }
-    }
-
-// --------------------------------
-// Getters and Setters
-// --------------------------------
-
-    // setter method to set the assignment method
     public void setAssignByQueueLength(boolean assignByQueueLength) {
         this.assignByQueueLength = assignByQueueLength;
     }
-
-    public double getArrivalMean() {
-        return SimulationConstants.ARRIVAL_MEAN;
-    }
-
-    public double getFoodLineSpeed() {
-        return SimulationConstants.MEAN_NON_VEGAN_SERVICE;
-    }
-
-    public double getCashierSpeed() {
-        return SimulationConstants.MEAN_CASHIER;
-    }
-
-
 }
-
 
 /*
 Analysis of Results

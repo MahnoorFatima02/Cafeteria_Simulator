@@ -37,7 +37,7 @@ public class Simulator {
 //		engine.adjustStudentArrival(false); // Increase student arrival rate by 10%
 //		engine.adjustFoodLineServiceSpeed(false); // Decrease food line service speed by 10%
 //		engine.adjustCashierServiceSpeed(true); // Increase cashier service speed by 10%
-        engine.adjustStimulationSpeed(false);
+//        engine.adjustStimulationSpeed(false);
 //		engine.run();
 
         if (startSimulation) {
