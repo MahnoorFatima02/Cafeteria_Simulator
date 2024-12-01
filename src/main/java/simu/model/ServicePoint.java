@@ -65,7 +65,6 @@ public class ServicePoint {
 			reserved = true;
 			double serviceTime = generator.sample();
 			eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
-//			Trace.out(Trace.Level.INFO, "ServicePoint: Service ended for the customer #" + customer.getId());
 		}
 	}
 

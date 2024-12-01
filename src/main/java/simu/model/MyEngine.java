@@ -365,11 +365,6 @@ public class MyEngine extends Engine {
                 cashierServicePoints[1].addQueue(customerToBeServed);
             }
 
-//            if (firstCashierQueueSize <= secondCashierQueueSize) {
-//                cashierServicePoints[0].addQueue(customer);
-//            } else {
-//                cashierServicePoints[1].addQueue(customer);
-//            }
         }
     }
 
