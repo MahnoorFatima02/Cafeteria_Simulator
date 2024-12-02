@@ -78,7 +78,19 @@ public class ServicePoint {
         return customer;
     }
 
-    public void beginService() { // Begins a new service, customer is on the queue during the service
+//    public void beginService() { // Begins a new service, customer is on the queue during the service
+//        Customer customer = queue.peek();
+//        if (customer != null) {
+//            customer.setServiceStartTime(Clock.getInstance().getClock());
+//            Trace.out(Trace.Level.INFO, "ServicePoint: Starting a new service for the customer #" + customer.getId());
+//            reserved = true;
+//            double serviceTime = generator.sample();
+//            customer.setExpectedDepartureTime(Clock.getInstance().getClock() + serviceTime);
+//            eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
+//        }
+//    }
+
+    public Customer beginService() {
         Customer customer = queue.peek();
         if (customer != null) {
             customer.setServiceStartTime(Clock.getInstance().getClock());
@@ -88,6 +100,7 @@ public class ServicePoint {
             customer.setExpectedDepartureTime(Clock.getInstance().getClock() + serviceTime);
             eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
         }
+        return customer;
     }
 
     public Customer peekQueue() {

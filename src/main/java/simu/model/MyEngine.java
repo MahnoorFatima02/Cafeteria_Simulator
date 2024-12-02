@@ -5,7 +5,10 @@ import eduni.distributions.Normal;
 import simu.framework.*;
 import eduni.distributions.Negexp;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 
 public class MyEngine extends Engine {
@@ -22,6 +25,10 @@ public class MyEngine extends Engine {
     private ServicePoint[] cashierServicePoints;
     private ServicePoint selfCheckoutServicePoint;
 
+    private int veganCustomerId;
+    private int nonVeganCustomerId;
+    private int cashierCustomerId;
+    private int selfCheckoutCustomerId;
 
     // Flag to determine assignment method
     private boolean assignByQueueLength;
@@ -130,14 +137,16 @@ public class MyEngine extends Engine {
         if (!veganFoodStation.isReserved() && veganFoodStation.isOnQueue()) {
             System.out.println("VEGAN FOOD POINT SERVICE STARTED: ");
 
-            veganFoodStation.beginService();
+            Customer customer = veganFoodStation.beginService();
+            veganCustomerId = customer.getId();
         }
 
         // for non-vegan service points event scheduling
         for (ServicePoint sp : nonVeganFoodStation) {
             if (!sp.isReserved() && sp.isOnQueue()) {
                 System.out.println("NON VEGAN FOOD POINT SERVICE STARTED: ");
-                sp.beginService();
+                Customer customer = sp.beginService();
+                nonVeganCustomerId = customer.getId();
             }
         }
 
@@ -145,14 +154,16 @@ public class MyEngine extends Engine {
         for (ServicePoint p : cashierServicePoints) {
             if (p.isActive() && !p.isReserved() && p.isOnQueue()) {
                 System.out.println("CASHIER POINT SERVICE STARTED: ");
-                p.beginService();
+                Customer customer = p.beginService();
+                cashierCustomerId = customer.getId();
             }
         }
 
         // Handle self-service checkout independently
         if (!selfCheckoutServicePoint.isReserved() && selfCheckoutServicePoint.isOnQueue()) {
             System.out.println("SELF SERVICE POINT SERVICE STARTED: ");
-            selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
+            Customer customer =  selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
+            selfCheckoutCustomerId = customer.getId();
         }
     }
      /*
@@ -220,7 +231,6 @@ public class MyEngine extends Engine {
             veganFoodStation.addQueue(customer);
         } else {
             // Assign to the shorter non-vegan queue
-            // TODO: Make names simpler like nonVeganServicePoint1.addQueue() something like this
             if (nonVeganFoodStation[0].getQueueSize() <= nonVeganFoodStation[1].getQueueSize()) {
                 nonVeganFoodStation[0].addQueue(customer);
             } else {
@@ -399,6 +409,43 @@ public class MyEngine extends Engine {
 
     public int getTotalCustomersServed() {
         return totalCustomersServed;
+    }
+
+    // Getter methods for the customer IDs
+    public int getVeganCustomerId() {
+        return veganCustomerId;
+    }
+
+    public int getNonVeganCustomerId() {
+        return nonVeganCustomerId;
+    }
+
+    public int getCashierCustomerId() {
+        return cashierCustomerId;
+    }
+
+    public int getSelfCheckoutCustomerId() {
+        return selfCheckoutCustomerId;
+    }
+
+    public int getVeganQueueSize() {
+        return veganFoodStation.getQueueSize();
+    }
+
+    public List<Integer> getNonVeganQueueSizes() {
+        return Arrays.stream(nonVeganFoodStation)
+                .map(ServicePoint::getQueueSize)
+                .collect(Collectors.toList());
+    }
+
+    public List<Integer> getCashierQueueSizes() {
+        return Arrays.stream(cashierServicePoints)
+                .map(ServicePoint::getQueueSize)
+                .collect(Collectors.toList());
+    }
+
+    public int getSelfCheckoutQueueSize() {
+        return selfCheckoutServicePoint.getQueueSize();
     }
 
 }

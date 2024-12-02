@@ -13,19 +13,8 @@ import simu.model.SimulationConstants;
 import java.util.Scanner;
 
 /* Command-line type User Interface */
-
-// Simulation time
-// Delay time
-// simulation speed
-// parameter for strategy of cashier
 // Comma separated file on Excel at the end
-// create graphics on JavaFX
-// getters for simulation speed
-// getter for arrival rate
-        // getter for speed
 
-
-// check pause and restart button
 
 public class Simulator {
     public static void main(String[] args) {
@@ -76,11 +65,24 @@ public class Simulator {
         double averageCashierTime = engine.avgCashierServiceTime;
         double averageSelfCheckoutTime = engine.avgSelfCheckoutServiceTime;
 
-        
+
         // Toggle simulation flags of start, resume, pause and stop using getter and setter methods
         engine.setRunning(true);
         engine.setPaused(false);
         engine.setStopped(false);
+
+        // Retrieve and print the customer IDs for simulation
+        System.out.println("Vegan Customer ID: " + engine.getVeganCustomerId());
+        System.out.println("Non-Vegan Customer ID: " + engine.getNonVeganCustomerId());
+        System.out.println("Cashier Customer ID: " + engine.getCashierCustomerId());
+        System.out.println("Self-Checkout Customer ID: " + engine.getSelfCheckoutCustomerId());
+
+
+        // Retrieve and print the queue sizes of people waiting at each queue for simulation
+        System.out.println("Vegan Queue Size: " + engine.getVeganQueueSize());
+        System.out.println("Non-Vegan Queue Sizes: " + engine.getNonVeganQueueSizes());
+        System.out.println("Cashier Queue Sizes: " + engine.getCashierQueueSizes());
+        System.out.println("Self-Checkout Queue Size: " + engine.getSelfCheckoutQueueSize());
 
 
         if (engine.isRunning() && !engine.isPaused()) {
