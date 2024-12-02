@@ -19,6 +19,18 @@
         <dependency> <groupId>org.openjfx</groupId> <artifactId>javafx-graphics</artifactId> <version>20.0.1</version> </dependency>
         <dependency> <groupId>org.openjfx</groupId> <artifactId>javafx-fxml</artifactId> <version>20.0.1</version> </dependency>
         <dependency> <groupId>org.openjfx</groupId> <artifactId>javafx-controls</artifactId> <version>20.0.1</version> </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>eduni</groupId>-->
+<!--            <artifactId>distribution</artifactId>-->
+<!--            <version>1.0</version>-->
+<!--            <scope>system</scope>-->
+<!--&lt;!&ndash;            <systemPath>${project.basedir}/distribution.jar</systemPath>&ndash;&gt;-->
+<!--        </dependency>-->
+
+
     </dependencies>
+
+
 
 </project>

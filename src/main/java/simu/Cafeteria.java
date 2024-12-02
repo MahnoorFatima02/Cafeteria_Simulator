@@ -1,4 +1,4 @@
-package model;
+package simu;
 
 public class Cafeteria {
 }
