@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<StackPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CafeteriaController">
+   <children>
+      <ImageView fitHeight="903.0" fitWidth="1480.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@Marjaana_Malkamaki_KEKSI_Metropolia_brandikuvat2019-9839_nettikoko.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Rectangle arcHeight="50.0" arcWidth="50.0" fill="WHITE" height="400.0" layoutX="138.0" layoutY="266.0" opacity="0.8" stroke="WHITE" strokeType="INSIDE" width="500.0" />
+            <ImageView fitHeight="140.0" fitWidth="678.0" layoutX="63.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@metropolia.png" />
+               </image>
+            </ImageView>
+            <Text fill="#53565a" layoutX="120.0" layoutY="355.0" stroke="WHITE" strokeLineJoin="ROUND" strokeType="OUTSIDE" strokeWidth="0.0" text="CAFETERIA SIMULATOR" textAlignment="CENTER" wrappingWidth="517.4329223632812">
+               <font>
+                  <Font name="Arial Bold" size="60.0" />
+               </font>
+            </Text>
+            <Button fx:id="initialStartButton" alignment="CENTER" contentDisplay="BOTTOM" layoutX="211.0" layoutY="477.0" mnemonicParsing="false" onAction="#initialStartButtonAction" prefHeight="149.0" prefWidth="341.0" style="-fx-background-color: #ff5000; -fx-background-radius: 50; -fx-background-insets: 10;" text="START" textFill="WHITE">
+               <font>
+                  <Font name="Arial Bold" size="50.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </children>
+</StackPane>

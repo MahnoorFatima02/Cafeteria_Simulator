@@ -1,181 +1,175 @@
 package controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import model.Cafeteria;
 import view.CafeteriaGUI;
 
 public class CafeteriaController {
+    private CafeteriaGUI mainApp;
 
-    private Cafeteria model;
-    private CafeteriaGUI gui;
     @FXML
-    private Button startButton;
+    private Button lessSimulationSpeed1, moreSimulationSpeed1, lessArrivalRate1, moreArrivalRate1, lessFoodLineSpeed1, moreFoodLineSpeed1, lessCashierSpeed1, moreCashierSpeed1, startButton1, pauseButton1, resumeButton1, preferenceButton1, queueLengthButton1;
     @FXML
-    private TextArea simulationTime;
+    private TextArea simulationTime1, delayTime1;
     @FXML
-    private TextArea delayTime;
+    private Label messageBox;
 
-
-    public CafeteriaController(Cafeteria model, CafeteriaGUI gui) {
-        this.model = model;
-        this.gui = gui;
+    public void setMainApp(CafeteriaGUI mainApp) {
+        this.mainApp = mainApp;
     }
 
-
-    // Method to start the simulation
-    @FXML
-    public void startButton() {
-        String simulationTimeValue = simulationTime.getText();
-        String delayTimeValue = delayTime.getText();
-
-
-        // validate input
-        if (!validateInput(simulationTimeValue, delayTimeValue)) {
-            showAlert("Invalid input, please enter positive numbers for Simulation Time and Delay Time");
-            return;
-        }
-
-        double simTime = Double.parseDouble(simulationTimeValue);
-        double delay = Double.parseDouble(delayTimeValue);
-
-        model.setSimulationTime(simTime);
-        model.setDelayTime(delay);
-        model.setIsPaused(false);
-        model.setIsResume(false);
-        model.setIsRestarted(false);
-        startButton.setDisable(true);
-
-
-        Thread simulationThread = new Thread(() -> {
-            try {
-                model.startSimulation();
-                trackSimulationProgress(); // problems with UI ?
-            } catch (Exception e) {
-                e.printStackTrace();
-                Platform.runLater(() -> showAlert("An error occurred while running the simulation."));
-            } finally {
-                Platform.runLater(() -> startButton.setDisable(false));
-            }
-        });
-
-        simulationThread.setDaemon(true);
-        simulationThread.start();
+    private void setButtonsDisabled(boolean disabled) {
+        lessSimulationSpeed1.setDisable(disabled);
+        moreSimulationSpeed1.setDisable(disabled);
+        lessArrivalRate1.setDisable(disabled);
+        moreArrivalRate1.setDisable(disabled);
+        lessFoodLineSpeed1.setDisable(disabled);
+        moreFoodLineSpeed1.setDisable(disabled);
+        lessCashierSpeed1.setDisable(disabled);
+        moreCashierSpeed1.setDisable(disabled);
+        startButton1.setDisable(disabled);
+        pauseButton1.setDisable(disabled);
+        resumeButton1.setDisable(disabled);
+        //restartButton1.setDisable(disabled);
+        preferenceButton1.setDisable(disabled);
+        queueLengthButton1.setDisable(disabled);
     }
 
-
-    // Method to validate user input from the GUI
-    private boolean validateInput(String simulationTimeValue, String delayTimeValue) {
-        if (simulationTimeValue.isEmpty() || delayTimeValue.isEmpty()) {
-            return false;
-        }
-
+    private boolean isInteger(String str) {
         try {
-            double simTime = Double.parseDouble(simulationTimeValue);
-            double delay = Double.parseDouble(delayTimeValue);
-            if (simTime <= 0 || delay <= 0) {
-                return false;
-            }
-
+            Integer.parseInt(str);
+            return true;
         } catch (NumberFormatException e) {
             return false;
         }
-        return true;
-    }
-}
-
-@FXML
-public void pauseButton() {
-    if (!model.isPaused()) {
-
-        model.setIsPaused(true);
-        showAlert.updateStatus("Simulation Paused");
-        pauseButton.setDisable(true);
-        resumeButton.setDisable(false);
-    }
-}
-
-
-
-
-        /*
-    // Method to Restart simulation
-    public void setRestarted() {
-        model.isRestarted(true);
-        model.isPaused(false);
-        gui.displayMessage("Simulation restarted.");
     }
 
+    private boolean validateInputs() {
+        boolean valid = true;
+        if (!isInteger(simulationTime1.getText())) {
+            messageBox.setText("Simulation Time must be an integer.");
+            valid = false;
+        } else if (!isInteger(delayTime1.getText())) {
+            messageBox.setText("Delay Time must be an integer.");
+            valid = false;
+        } else if (!preferenceButton1.isDisable() && !queueLengthButton1.isDisable()) {
+            messageBox.setText("Please select Choosing Type.");
+            valid = false;
+        }
+        return valid;
+    }
 
+    @FXML
+    private void preferenceButtonAction() {
+        preferenceButton1.setDisable(true);
+        queueLengthButton1.setDisable(false);
+        resumeButton1.setDisable(true);
+        checkStartConditions();
+    }
 
+    @FXML
+    private void queueLengthButtonAction() {
+        queueLengthButton1.setDisable(true);
+        preferenceButton1.setDisable(false);
+        resumeButton1.setDisable(true);
+        checkStartConditions();
+    }
 
-
-
-    // Method to speed up or slow down the simulation
-    public void changeParameter(String parameter, boolean increase) {
-        double factor = increase ? 1.1 : 0.9;
-
-        switch (parameter) {
-            case "simulationSpeed":
-                model.setSimulationSpeed(model.getSimulationSpeed() * factor);
-                gui.updateSimulationParameters(model.getSimulationSpeed());
-                break;
-
-            case "arrivalRate":
-                model.setArrivalRate(model.getArrivalRate() * factor);
-                gui.updateArrivalRate(model.getArrivalRate());
-                break;
-
-            case "foodLineSpeed":
-                model.setFoodLineSpeed(model.getFoodLineSpeed() * factor);
-                gui.updateFoodLine(model.getFoodLineSpeed());
-                break;
-
-            case "cashierSpeed":
-                model.setCashierSpeed(model.getCashierSpeed() * factor);
-                gui.updateCashier(model.getCashierSpeed());
-                break;
-
-            default:
-                throw new IllegalArgumentException("Unknown parameter: " + parameter);
+    private void checkStartConditions() {
+        if (validateInputs()) {
+            startButton1.setDisable(false);
+            messageBox.setText("Press START to begin the simulation.");
         }
     }
 
-
-    // Method to track progress of the simulation
-    private void trackSimulationProgress() {
-
-        while (!model.isSimulationComplete()) {
-            gui.updateProgress(model.getCurrentProgress());
-
-            // Display intermediate queue lengths or congestion levels
-            gui.updateQueueLengths(model.getQueueLengths());
+    @FXML
+    private void startButtonAction() {
+        if (validateInputs()) {
+            setButtonsDisabled(false);
+            startButton1.setDisable(true);
+            preferenceButton1.setDisable(true);
+            queueLengthButton1.setDisable(true);
+            //restartButton1.setDisable(true);
+            pauseButton1.setDisable(false);
+            resumeButton1.setDisable(true);
+            messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
         }
-
-        // Display final results once simulation is complete
-        displaySimulationResults();
     }
 
-
-    // Method to stop the simulation
-    public void stopSimulation() {
-        model.stopSimulation();
-        gui.displayMessage("Simulation stopped.");
+    @FXML
+    private void pauseButtonAction() {
+        pauseButton1.setDisable(true);
+        resumeButton1.setDisable(false);
+        preferenceButton1.setDisable(false);
+        queueLengthButton1.setDisable(false);
+        //restartButton1.setDisable(false);
+        messageBox.setText("Simulation paused. Press RESUME to continue.");
     }
 
+    @FXML
+    private void resumeButtonAction() {
+        resumeButton1.setDisable(true);
+        pauseButton1.setDisable(false);
+        preferenceButton1.setDisable(true);
+        queueLengthButton1.setDisable(true);
+        //restartButton1.setDisable(true);
+        messageBox.setText("Simulation resumed.");
+    }
 
-    // Method to display final results
-    private void displaySimulationResults() {
-        gui.displayResults(
-                model.getTotalStudentsServed(),
-                model.getAverageTotalTimePerStudent(),
-                model.getAverageTimeNormalFoodLine(),
-                model.getAverageTimeVeganFoodLine(),
-                model.getAverageTimeStaffedCashier(),
-                model.getAverageTimeSelfServiceCashier()
-        );
+//    @FXML
+//    private void restartButtonAction() {
+//        if (validateInputs()) {
+//            setButtonsDisabled(false);
+//            startButton1.setDisable(true);
+//            preferenceButton1.setDisable(true);
+//            queueLengthButton1.setDisable(true);
+//            restartButton1.setDisable(true);
+//            pauseButton1.setDisable(false);
+//            resumeButton1.setDisable(true);
+//            messageBox.setText("Simulation restarted.");
+//        }
+//    }
+
+    public void initialStartButtonAction() {
+        System.out.println("The initialStartButton has been pressed");
+        try {
+            mainApp.loadScene("/simulationpage.fxml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void lessSimulationSpeedAction() {
+        System.out.println("The lessSimulationSpeedAction button has been pressed");
+    }
+
+    public void moreSimulationSpeedAction() {
+        System.out.println("The moreSimulationSpeedAction button has been pressed");
+    }
+
+    public void lessArrivalRateAction() {
+        System.out.println("The lessArrivalRateAction button has been pressed");
+    }
+
+    public void moreArrivalRateAction() {
+        System.out.println("The moreArrivalRateAction button has been pressed");
+    }
+
+    public void lessFoodLineSpeedAction() {
+        System.out.println("The lessFoodLineSpeedAction button has been pressed");
+    }
+
+    public void moreFoodLineSpeedAction() {
+        System.out.println("The moreFoodLineSpeedAction button has been pressed");
+    }
+
+    public void lessCashierSpeedAction() {
+        System.out.println("The lessCashierSpeedAction button has been pressed");
+    }
+
+    public void moreCashierSpeedAction() {
+        System.out.println("The moreCashierSpeedAction button has been pressed");
     }
 }
-*/
