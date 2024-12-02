@@ -1,9 +1,11 @@
 package simu.framework;
 
 public abstract class Engine {
-    protected EventList eventList;        // events to be processed are stored here
+    protected EventList eventList;
     private double simulationTime = 0;    // time when the simulation will be stopped
     private Clock clock;                // to simplify the code (clock.getClock() instead Clock.getInstance().getClock())
+
+
     // Flags for start,resume, stop and pause
     private volatile boolean running = false;
     private volatile boolean paused = false;
@@ -18,38 +20,6 @@ public abstract class Engine {
 
     public void setSimulationTime(double time) {    // define how long we will run the simulation
         simulationTime = time;
-    }
-
-    public void startSimulation() {
-        running = true;
-        paused = false;
-        stopped = false;
-        run(); // Run the simulation in the current thread
-    }
-
-    public void pauseSimulation() {
-        paused = true;
-    }
-
-    public void resumeSimulation() {
-        paused = false;
-    }
-
-    public void stopSimulation() {
-        stopped = true;
-        running = false;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
-
-    public void setStopped(boolean stopped) {
-        this.stopped = stopped;
     }
 
 
@@ -104,4 +74,54 @@ public abstract class Engine {
     protected abstract void initialize();        // Defined in simu.model-package's class who is inheriting the Engine class
 
     protected abstract void results();            // Defined in simu.model-package's class who is inheriting the Engine class
+
+
+    public void startSimulation() {
+        running = true;
+        paused = false;
+        stopped = false;
+        run(); // Run the simulation in the current thread
+    }
+
+    public void pauseSimulation() {
+        paused = true;
+    }
+
+    public void resumeSimulation() {
+        paused = false;
+    }
+
+    public void stopSimulation() {
+        stopped = true;
+        running = false;
+    }
+
+    // Getter and Setter
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+
+        this.running = running;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+
+        this.paused = paused;
+    }
+
+    public boolean isStopped() {
+        return stopped;
+    }
+
+    public void setStopped(boolean stopped) {
+
+        this.stopped = stopped;
+    }
 }

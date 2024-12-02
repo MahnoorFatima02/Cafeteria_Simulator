@@ -9,10 +9,13 @@ import java.util.Random;
 
 
 public class MyEngine extends Engine {
-    private SimulationAdjustments adjustments;
     Customer customer;
-    private double simulationTime;
-    private double delayTime;
+    public int totalCustomersServed;
+    public double averageTimeSpent;
+    public double avgVeganServiceTime;
+    public double avgNonVeganServiceTime;
+    public double avgCashierServiceTime;
+    public double avgSelfCheckoutServiceTime;
     private ArrivalProcess arrivalProcess;
     private ServicePoint veganFoodStation;
     private ServicePoint[] nonVeganFoodStation;
@@ -24,17 +27,12 @@ public class MyEngine extends Engine {
     private boolean assignByQueueLength;
 
 
-    // TODO: Average service time should include customer remove from list or total served?
     // TODO: put variables in database
-    // TODO: where to put "this" and where not?
 
 
     public MyEngine() {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
-        adjustments = new SimulationAdjustments();
-        adjustments.setAdjustStimulationSpeedFlag(false);
-        adjustments.setAdjustStudentArrivalFlag(false);
 
     /*
       ======  Random Number Generator =======
@@ -78,10 +76,10 @@ public class MyEngine extends Engine {
 
     @Override
     protected void runEvent(Event t) {
-        System.out.println("Simulation speed" + delayTime);
+        System.out.println("Simulation speed" + SimulationConstants.DELAY_TIME);
         // Implement delay
         try {
-            Thread.sleep((long) (delayTime * 1000));
+            Thread.sleep((long) (SimulationConstants.DELAY_TIME * 1000));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -173,7 +171,7 @@ public class MyEngine extends Engine {
 
 
         // Total number of customers served
-        int totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
+        totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
         System.out.println("Total customers served by Cashier 1: " + cashierServicePoints[0].getTotalCustomersRemoved());
         System.out.println("Total customers served by Cashier 2: " + cashierServicePoints[1].getTotalCustomersRemoved());
         System.out.println("Total customers served by Self CheckOut: " + selfCheckoutServicePoint.getTotalCustomersRemoved() + "\n");
@@ -186,15 +184,17 @@ public class MyEngine extends Engine {
 
 
         // Average service times
-        double avgVeganServiceTime = veganFoodStation.getAverageServiceTime();
-        double avgNonVeganServiceTime = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
-        double avgCashierServiceTime = ServicePoint.getAverageServiceTime(cashierServicePoints);
-        double avgSelfCheckoutServiceTime = selfCheckoutServicePoint.getAverageServiceTime();
+        avgVeganServiceTime = veganFoodStation.getAverageServiceTime();
+        avgNonVeganServiceTime = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
+        avgCashierServiceTime = ServicePoint.getAverageServiceTime(cashierServicePoints);
+        avgSelfCheckoutServiceTime = selfCheckoutServicePoint.getAverageServiceTime();
+        averageTimeSpent = (avgVeganServiceTime + avgNonVeganServiceTime + avgCashierServiceTime + avgSelfCheckoutServiceTime) / totalCustomersServed;
 
         System.out.println("Average time spent at Vegan Service Point: " + String.format("%.2f", avgVeganServiceTime));
         System.out.println("Average time spent at Non-Vegan Service Points: " + String.format("%.2f", avgNonVeganServiceTime));
         System.out.println("Average time spent at Cashier Service Points: " + String.format("%.2f", avgCashierServiceTime));
         System.out.println("Average time spent at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutServiceTime) + "\n");
+        System.out.println("Average Service time at for all service including vegan, non vegan, cashier and self checkout as per al customers served:  " + averageTimeSpent);
 
         // Average waiting times
         double avgVeganWaitingTime = veganFoodStation.getAverageWaitingTime();
@@ -366,29 +366,41 @@ public class MyEngine extends Engine {
         ====== Adjustments =======
     */
     private void checkAdjustments() {
-        SimulationConstants.ARRIVAL_MEAN *= adjustments.adjustStudentArrival();
-        System.out.println("Student Arrival value coming from adjustment " + adjustments.adjustStudentArrival());
+        SimulationConstants.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
+        System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
         System.out.println("Student Arrival rate mean " + SimulationConstants.ARRIVAL_MEAN);
 
-        SimulationConstants.MEAN_VEGAN_SERVICE  *= adjustments.adjustFoodLineServiceSpeed();
-        SimulationConstants.MEAN_NON_VEGAN_SERVICE *= adjustments.adjustFoodLineServiceSpeed();
+        SimulationConstants.MEAN_VEGAN_SERVICE  *= SimulationAdjustments.adjustFoodLineServiceSpeed();
+        SimulationConstants.MEAN_NON_VEGAN_SERVICE *= SimulationAdjustments.adjustFoodLineServiceSpeed();
         System.out.println("Mean Vegan Service is " + SimulationConstants.MEAN_VEGAN_SERVICE);
 
-        SimulationConstants.MEAN_CASHIER *= adjustments.adjustCashierServiceSpeed();
-        SimulationConstants.MEAN_SELF_CHECKOUT *= adjustments.adjustCashierServiceSpeed();
+        SimulationConstants.MEAN_CASHIER *= SimulationAdjustments.adjustCashierServiceSpeed();
+        SimulationConstants.MEAN_SELF_CHECKOUT *= SimulationAdjustments.adjustCashierServiceSpeed();
         System.out.println("Mean cashier is " + SimulationConstants.MEAN_CASHIER);
 
-        this.delayTime *= adjustments.adjustStimulationSpeed();
-        System.out.println("Delay rate is " + this.delayTime);
+        SimulationConstants.DELAY_TIME *= SimulationAdjustments.adjustStimulationSpeed();
+        System.out.println("Delay rate is " + SimulationConstants.DELAY_TIME);
     }
 
     public void setDelayTime(double simulationTime) {
-        this.delayTime = simulationTime;
+        SimulationConstants.DELAY_TIME = simulationTime;
     }
 
+    // setter method
     public void setAssignByQueueLength(boolean assignByQueueLength) {
         this.assignByQueueLength = assignByQueueLength;
     }
+
+    // Getter method
+    public boolean isAssignByQueueLength() {
+        return assignByQueueLength;
+    }
+
+
+    public int getTotalCustomersServed() {
+        return totalCustomersServed;
+    }
+
 }
 
 /*
