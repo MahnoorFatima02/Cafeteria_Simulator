@@ -170,6 +170,14 @@ public class CafeteriaController {
         queueLengthButton1.setDisable(false);
         messageBox.setText("Simulation stopped. Press START to start a new simulation.");
         engine.stopSimulation();
+        engine.resetVariables();
+        totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
+        averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
+        normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
+        veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
+        staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
+        selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
+
     }
 
     public void initialStartButtonAction() {
@@ -183,13 +191,13 @@ public class CafeteriaController {
 
     public void lessSimulationSpeedAction() {
         System.out.println("The lessSimulationSpeedAction button has been pressed");
-        SimulationAdjustments.setAdjustStimulationSpeedFlag(true);
+        SimulationAdjustments.setAdjustStimulationSpeedFlag(false);
 
     }
 
     public void moreSimulationSpeedAction() {
         System.out.println("The moreSimulationSpeedAction button has been pressed");
-        SimulationAdjustments.setAdjustStimulationSpeedFlag(false);
+        SimulationAdjustments.setAdjustStimulationSpeedFlag(true);
     }
 
     public void lessArrivalRateAction() {

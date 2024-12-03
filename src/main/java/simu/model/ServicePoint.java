@@ -135,5 +135,14 @@ public class ServicePoint {
         return totalCustomersRemoved;
     }
 
+    public void reset() {
+        // Reset all relevant variables to their initial state
+        this.queue.clear();
+        this.totalCustomersRemoved = 0;
+        this.totalServiceTime = 0.0;
+        this.totalWaitingTime = 0.0;
+        this.reserved = false;
+        this.isActive = true; // Assuming the service point is active by default
+    }
 
 }

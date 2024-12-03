@@ -42,19 +42,20 @@ public abstract class Engine {
             if (!simulate()) {
                 break;
             }
+                Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
+                clock.setClock(currentTime());
 
-            Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
-            clock.setClock(currentTime());
+                Trace.out(Trace.Level.INFO, "\nB-phase:");
+                runBEvents();
 
-            Trace.out(Trace.Level.INFO, "\nB-phase:");
-            runBEvents();
-
-            Trace.out(Trace.Level.INFO, "\nC-phase:");
-            tryCEvents();
-
+                Trace.out(Trace.Level.INFO, "\nC-phase:");
+                tryCEvents();
         }
 
         results();
+        clock.setClock(0); // Reset the clock
+        eventList.clear(); // Clear the event list
+        resetVariables(); // Reset all simulation variables
     }
 
     private void runBEvents() {
@@ -98,7 +99,10 @@ public abstract class Engine {
     public void stopSimulation() {
         stopped = true;
         running = false;
+        paused = false;
     }
+
+    public abstract void resetVariables();
 
     // Getter and Setter
 
