@@ -1,3 +1,4 @@
+
 package simu.framework;
 
 public abstract class Engine {
@@ -28,6 +29,9 @@ public abstract class Engine {
 
         while (running && !stopped) {
             while (paused) {
+                if (stopped) {
+                    break;
+                }
                 try {
                     Thread.sleep(100); // Sleep for a short period to avoid busy-waiting
                 } catch (InterruptedException e) {

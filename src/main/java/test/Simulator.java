@@ -1,3 +1,4 @@
+
 package test;
 
 import eduni.distributions.ContinuousGenerator;
@@ -69,7 +70,7 @@ public class Simulator {
         // Toggle simulation flags of start, resume, pause and stop using getter and setter methods
         engine.setRunning(true);
         engine.setPaused(false);
-        engine.setStopped(false);
+        //engine.setStopped(false);
 
         // Retrieve and print the customer IDs for simulation
         System.out.println("Vegan Customer ID: " + engine.getVeganCustomerId());

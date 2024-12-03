@@ -17,6 +17,12 @@ public class SimulationConstants {
     public static final double  SIMULATION_UPPER_SPEED = 1.1;
     public static final double  SIMULATION_LOWER_SPEED = 0.9;
     public static double DELAY_TIME = 0;
+    public static int TOTAL_CUSTOMERS_SERVED;
+    public static double AVERAGE_TIME_SPENT;
+    public static double AVG_VEGAN_SERVICE_TIME;
+    public static double AVG_NON_VEGAN_SERVICE_TIME;
+    public static double AVG_CASHIER_SERVICE_TIME;
+    public static double AVG_SELF_CHECKOUT_SERVICE_TIME;
 
     public static double getFoodServiceSpeed() {
         return MEAN_VEGAN_SERVICE; // or MEAN_NON_VEGAN_SERVICE
