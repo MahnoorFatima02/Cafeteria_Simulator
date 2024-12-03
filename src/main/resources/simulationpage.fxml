@@ -13,9 +13,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.PieChart?>
 <SplitPane dividerPositions="0.45252225519287836" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CafeteriaController">
-  <items>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+   <items>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
          <children>
             <StackPane layoutY="12.0" prefHeight="76.0" prefWidth="607.0">
                <children>
@@ -333,7 +338,7 @@
                </children>
             </AnchorPane>
          </children></AnchorPane>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="698.0" prefWidth="20.0">
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="698.0" prefWidth="20.0">
          <children>
             <VBox alignment="TOP_CENTER" layoutY="6.0" prefHeight="698.0" prefWidth="735.0">
                <children>
@@ -413,146 +418,29 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </StackPane>
-                  <StackPane prefHeight="322.0" prefWidth="671.0">
-                     <children>
-                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="326.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
-                        <VBox prefHeight="324.0" prefWidth="666.0">
-                           <children>
-                              <Label text="Average time spent on each service station:">
-                                 <font>
-                                    <Font size="25.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" left="90.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <HBox prefHeight="69.0" prefWidth="607.0">
-                                 <children>
-                                    <Label prefHeight="38.0" prefWidth="252.0" text="Normal Food Line:">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="90.0" top="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="normalFoodLineTimeSpent" prefHeight="51.0" prefWidth="147.0">
-                                       <HBox.margin>
-                                          <Insets left="20.0" right="20.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font name="System Bold" size="25.0" />
-                                       </font>
-                                    </Label>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets top="10.0" />
-                                       </HBox.margin>
-                                    </Text>
-                                 </children>
-                              </HBox>
-                              <HBox layoutX="10.0" layoutY="10.0" prefHeight="69.0" prefWidth="607.0">
-                                 <children>
-                                    <Label prefHeight="38.0" prefWidth="250.0" text="Vegan Food Line:">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="90.0" top="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="veganFoodLineTimeSpent" prefHeight="50.0" prefWidth="149.0">
-                                       <HBox.margin>
-                                          <Insets left="20.0" right="20.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font name="System Bold" size="25.0" />
-                                       </font>
-                                    </Label>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets top="10.0" />
-                                       </HBox.margin>
-                                    </Text>
-                                 </children>
-                              </HBox>
-                              <HBox prefHeight="69.0" prefWidth="607.0">
-                                 <children>
-                                    <Label prefHeight="38.0" prefWidth="251.0" text="Staffed Cashier:">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="90.0" top="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="staffedCashierTimeSpent" prefHeight="51.0" prefWidth="149.0">
-                                       <HBox.margin>
-                                          <Insets left="20.0" right="20.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font name="System Bold" size="25.0" />
-                                       </font>
-                                    </Label>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets top="10.0" />
-                                       </HBox.margin>
-                                    </Text>
-                                 </children>
-                              </HBox>
-                              <HBox layoutX="10.0" layoutY="148.0" prefHeight="69.0" prefWidth="607.0">
-                                 <children>
-                                    <Label prefHeight="38.0" prefWidth="253.0" text="Self-service Cashier:">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets left="90.0" top="10.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                    <Label fx:id="selfServiceCashierTimeSpent" prefHeight="49.0" prefWidth="147.0">
-                                       <HBox.margin>
-                                          <Insets left="20.0" right="20.0" />
-                                       </HBox.margin>
-                                       <font>
-                                          <Font name="System Bold" size="25.0" />
-                                       </font>
-                                    </Label>
-                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
-                                       <font>
-                                          <Font size="25.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets top="10.0" />
-                                       </HBox.margin>
-                                    </Text>
-                                 </children>
-                              </HBox>
-                           </children>
-                           <StackPane.margin>
-                              <Insets left="5.0" top="15.0" />
-                           </StackPane.margin>
-                        </VBox>
-                     </children>
-                     <VBox.margin>
-                        <Insets top="10.0" />
-                     </VBox.margin>
-                  </StackPane>
+                  <BarChart fx:id="outputchart" style="-fx-padding: 10;">
+                     <xAxis>
+                        <CategoryAxis side="BOTTOM" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                     </yAxis>
+                  </BarChart>
+                  <LineChart fx:id="outputline" style="-fx-background-color: white; -fx-padding: 10;">
+                     <xAxis>
+                        <NumberAxis side="BOTTOM" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                     </xAxis>
+                     <yAxis>
+                        <NumberAxis side="LEFT" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                     </yAxis>
+                  </LineChart>
+                  <PieChart fx:id="outputpie" style="-fx-padding: 10;" />
+
                </children>
                <padding>
                   <Insets top="20.0" />
                </padding>
             </VBox>
          </children></AnchorPane>
-  </items>
+   </items>
 </SplitPane>

@@ -2,6 +2,7 @@ package controller;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -27,7 +28,18 @@ public class CafeteriaController {
     private TextField simulationTime1, delayTime1;
     @FXML
     private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent;
+    @FXML
+    private BarChart outputchart;
+    @FXML
+    private PieChart outputpie;
+    @FXML
+    private LineChart<Number, Number> outputline; // Access the LineChart via fx:id
 
+    @FXML
+    private CategoryAxis xAxis;
+
+    @FXML
+    private NumberAxis yAxis;
 
     public void setMainApp(CafeteriaGUI mainApp) {
         this.mainApp = mainApp;
@@ -123,6 +135,41 @@ public class CafeteriaController {
                 engine.startSimulation();
             }).start();
 
+            // BarChart
+            XYChart.Series<String, Number> dataSeries1 = new XYChart.Series<>();
+            dataSeries1.getData().add(new XYChart.Data<>("Normal Food Line", 0));
+            dataSeries1.getData().add(new XYChart.Data<>("Vegan Food Line", 0));
+            dataSeries1.getData().add(new XYChart.Data<>("Staffed Cashier", 0));
+            dataSeries1.getData().add(new XYChart.Data<>("Self Service Cashier", 0));
+
+            outputchart.getData().add(dataSeries1);
+
+
+            // makes LineChart line, not dots
+            outputline.setCreateSymbols(false);
+            outputline.setAnimated(true);
+
+            // LineChart for Total Students Served
+            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
+            series1.setName("Sample Data");
+            series1.getData().add(new XYChart.Data<>(0, 0));
+            outputline.getData().add(series1);
+
+            int[] iterationStep = {0};
+
+            //PieChart
+            PieChart.Data slice1 = new PieChart.Data("Normal Food Line", 0);
+            PieChart.Data slice2 = new PieChart.Data("Vegan Food Line"  , 0);
+            PieChart.Data slice3 = new PieChart.Data("Staffed Cashier" , 0);
+            PieChart.Data slice4 = new PieChart.Data("Self Service Cashier" , 0);
+
+
+            outputpie.getData().add(slice1);
+            outputpie.getData().add(slice2);
+            outputpie.getData().add(slice3);
+            outputpie.getData().add(slice4);
+
+
             // Create a Timeline to update the GUI elements periodically
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                 if (engine.isRunning() && !engine.isStopped()) {
@@ -132,14 +179,32 @@ public class CafeteriaController {
                     cashierSpeed1.setText(String.format("%.2f", SimulationConstants.MEAN_CASHIER));
                     totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
                     averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
-                    normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
+
+                    // BarChart
+                    dataSeries1.getData().get(0).setYValue(SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME);
+                    dataSeries1.getData().get(1).setYValue(SimulationConstants.AVG_VEGAN_SERVICE_TIME);
+                    dataSeries1.getData().get(2).setYValue(SimulationConstants.AVG_CASHIER_SERVICE_TIME);
+                    dataSeries1.getData().get(3).setYValue(SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME);
+
+                    // LineChart
+                    series1.getData().add(new XYChart.Data<>(iterationStep[0], SimulationConstants.TOTAL_CUSTOMERS_SERVED));
+                    iterationStep[0]++;
+
+                    // PieChart
+                    slice1.setPieValue(SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME);
+                    slice2.setPieValue(SimulationConstants.AVG_VEGAN_SERVICE_TIME);
+                    slice3.setPieValue(SimulationConstants.AVG_CASHIER_SERVICE_TIME);
+                    slice4.setPieValue(SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME);
+
+                    /*normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
                     veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
                     staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
-                    selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
+                    selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME)); */
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
             timeline.play();
+
         }
     }
 
