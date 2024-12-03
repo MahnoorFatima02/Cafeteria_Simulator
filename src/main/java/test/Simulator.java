@@ -58,12 +58,12 @@ public class Simulator {
         System.out.println("Current arrival speed: " + arrivalSpeed);
 
         // Output Results
-        int totalStudentsServed = engine.totalCustomersServed;
-        double averageTimeSpent = engine.averageTimeSpent;
-        double averageNonVeganServiceTime = engine.avgNonVeganServiceTime;
-        double averageVeganServiceTime = engine.avgVeganServiceTime;
-        double averageCashierTime = engine.avgCashierServiceTime;
-        double averageSelfCheckoutTime = engine.avgSelfCheckoutServiceTime;
+//        int totalStudentsServed = engine.totalCustomersServed;
+//        double averageTimeSpent = engine.averageTimeSpent;
+//        double averageNonVeganServiceTime = engine.avgNonVeganServiceTime;
+//        double averageVeganServiceTime = engine.avgVeganServiceTime;
+//        double averageCashierTime = engine.avgCashierServiceTime;
+//        double averageSelfCheckoutTime = engine.avgSelfCheckoutServiceTime;
 
 
         // Toggle simulation flags of start, resume, pause and stop using getter and setter methods
