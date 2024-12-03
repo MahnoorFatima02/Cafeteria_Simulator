@@ -23,6 +23,9 @@ public class EventList {
 		return eventlist.peek().getTime();
 	}
 
+	public void clear() {
+		eventlist.clear();
+	}
 //	public double getNextEventTime() {
 //		Event nextEvent = eventlist.peek();
 //		if (nextEvent == null) {

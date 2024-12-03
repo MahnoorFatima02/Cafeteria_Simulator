@@ -2,14 +2,14 @@ package simu.model;
 
 public class SimulationAdjustments {
 
-    // Flags to indicate if adjustments are needed and their direction
-    public Boolean adjustStudentArrivalFlag = null;
-    public Boolean adjustFoodLineServiceSpeedFlag = null;
-    public Boolean adjustCashierServiceSpeedFlag = null;
-    public Boolean adjustStimulationSpeedFlag = null;
+    // Flags that may change during the simulation to adjust various parameters dynamically.
+    private static Boolean adjustStudentArrivalFlag = null;
+    private static Boolean adjustFoodLineServiceSpeedFlag = null;
+    private static Boolean adjustCashierServiceSpeedFlag = null;
+    private static Boolean adjustStimulationSpeedFlag = null;
 
 
-    private double adjustSpeed(Boolean flag) {
+    private static double adjustSpeed(Boolean flag) {
         if (flag == null) {
             return 1.0; // No adjustment
         }
@@ -17,25 +17,25 @@ public class SimulationAdjustments {
         return flag ? SimulationConstants.SIMULATION_UPPER_SPEED : SimulationConstants.SIMULATION_LOWER_SPEED;
     }
 
-    public double adjustStimulationSpeed() {
+    public static double adjustStimulationSpeed() {
         var currentFlag = adjustStimulationSpeedFlag;
         adjustStimulationSpeedFlag = null;
        return  adjustSpeed(currentFlag);
     }
 
-    public double adjustStudentArrival() {
+    public static double adjustStudentArrival() {
         var currentFlag = adjustStudentArrivalFlag;
         adjustStudentArrivalFlag = null;
         return adjustSpeed(currentFlag);
     }
 
-    public double adjustFoodLineServiceSpeed() {
+    public static double adjustFoodLineServiceSpeed() {
         var currentFlag = adjustFoodLineServiceSpeedFlag;
         adjustFoodLineServiceSpeedFlag = null;
         return  adjustSpeed(currentFlag);
     }
 
-    public double adjustCashierServiceSpeed() {
+    public static double adjustCashierServiceSpeed() {
         var currentFlag = adjustCashierServiceSpeedFlag;
         adjustCashierServiceSpeedFlag = null;
         return  adjustSpeed(currentFlag);
@@ -44,20 +44,39 @@ public class SimulationAdjustments {
 
 
     // Setter methods
-    public void setAdjustStudentArrivalFlag(Boolean adjustStudentArrivalFlag) {
-        this.adjustStudentArrivalFlag = adjustStudentArrivalFlag;
+    public static void setAdjustStudentArrivalFlag(Boolean adjustStudentArrival) {
+        adjustStudentArrivalFlag = adjustStudentArrival;
     }
 
-    public void setAdjustFoodLineServiceSpeedFlag(Boolean adjustFoodLineServiceSpeedFlag) {
-        this.adjustFoodLineServiceSpeedFlag = adjustFoodLineServiceSpeedFlag;
+    public static void setAdjustFoodLineServiceSpeedFlag(Boolean adjustFoodLineServiceSpeed) {
+        adjustFoodLineServiceSpeedFlag = adjustFoodLineServiceSpeed;
     }
 
-    public void setAdjustCashierServiceSpeedFlag(Boolean adjustCashierServiceSpeedFlag) {
-        this.adjustCashierServiceSpeedFlag = adjustCashierServiceSpeedFlag;
+    public static void setAdjustCashierServiceSpeedFlag(Boolean adjustCashierServiceSpeed) {
+        adjustCashierServiceSpeedFlag = adjustCashierServiceSpeed;
     }
 
-    public void setAdjustStimulationSpeedFlag(Boolean adjustStimulationSpeedFlag) {
-        this.adjustStimulationSpeedFlag = adjustStimulationSpeedFlag;
+    public static void setAdjustStimulationSpeedFlag(Boolean adjustStimulationSpeed) {
+        adjustStimulationSpeedFlag = adjustStimulationSpeed;
     }
+
+    // make the getters
+
+    public static Boolean getAdjustStudentArrivalFlag() {
+        return adjustStudentArrivalFlag;
+    }
+
+    public static Boolean getAdjustFoodLineServiceSpeedFlag() {
+        return adjustFoodLineServiceSpeedFlag;
+    }
+
+    public static Boolean getAdjustCashierServiceSpeedFlag() {
+        return adjustCashierServiceSpeedFlag;
+    }
+
+    public static Boolean getAdjustStimulationSpeedFlag() {
+        return adjustStimulationSpeedFlag;
+    }
+
 
     }

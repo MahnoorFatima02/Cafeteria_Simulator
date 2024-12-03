@@ -81,4 +81,8 @@ public class Customer {
     public void setServiceStartTime(double serviceStartTime) {
         this.serviceStartTime = serviceStartTime;
     }
+
+    public static void resetTotalCustomers() {
+        i = 1;
+    }
 }
