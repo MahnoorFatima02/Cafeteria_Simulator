@@ -15,11 +15,6 @@ import java.util.Map;
 public class MyEngine extends Engine {
     Customer customer;
     public int totalCustomersServed;
-    public double averageTimeSpent;
-    public double avgVeganServiceTime;
-    public double avgNonVeganServiceTime;
-    public double avgCashierServiceTime;
-    public double avgSelfCheckoutServiceTime;
     private ArrivalProcess arrivalProcess;
     private ServicePoint veganFoodStation;
     private ServicePoint[] nonVeganFoodStation;
@@ -168,20 +163,17 @@ public class MyEngine extends Engine {
         }
 
         totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
-        avgVeganServiceTime = veganFoodStation.getAverageServiceTime();
-        avgNonVeganServiceTime = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
-        avgCashierServiceTime = ServicePoint.getAverageServiceTime(cashierServicePoints);
-        avgSelfCheckoutServiceTime = selfCheckoutServicePoint.getAverageServiceTime();
+        SimulationConstants.AVG_VEGAN_SERVICE_TIME  = veganFoodStation.getAverageServiceTime();
+        SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
+        SimulationConstants.AVG_CASHIER_SERVICE_TIME = ServicePoint.getAverageServiceTime(cashierServicePoints);
+        SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME  = selfCheckoutServicePoint.getAverageServiceTime();
         SimulationConstants.TOTAL_CUSTOMERS_SERVED = totalCustomersServed;
-        if (totalCustomersServed > 0){
-            averageTimeSpent = (avgVeganServiceTime + avgNonVeganServiceTime)/2 + (avgCashierServiceTime + avgSelfCheckoutServiceTime)/2;
-            SimulationConstants.AVERAGE_TIME_SPENT = averageTimeSpent;}
+        if (totalCustomersServed > 0) {
+            SimulationConstants.AVERAGE_TIME_SPENT = (SimulationConstants.AVG_VEGAN_SERVICE_TIME  + SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME) / 2 + (SimulationConstants.AVG_CASHIER_SERVICE_TIME  + SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME ) / 2;
+        }
         else{
-            SimulationConstants.AVERAGE_TIME_SPENT = 0.0;}
-        SimulationConstants.AVG_VEGAN_SERVICE_TIME = avgVeganServiceTime;
-        SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME = avgNonVeganServiceTime;
-        SimulationConstants.AVG_CASHIER_SERVICE_TIME = avgCashierServiceTime;
-        SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME = avgSelfCheckoutServiceTime;
+            SimulationConstants.AVERAGE_TIME_SPENT = 0.0;
+        }
     }
      /*
         ====== Results =======
@@ -212,21 +204,22 @@ public class MyEngine extends Engine {
 
 
         // Average service times
-        avgVeganServiceTime = veganFoodStation.getAverageServiceTime();
-        avgNonVeganServiceTime = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
-        avgCashierServiceTime = ServicePoint.getAverageServiceTime(cashierServicePoints);
-        avgSelfCheckoutServiceTime = selfCheckoutServicePoint.getAverageServiceTime();
+        SimulationConstants.AVG_VEGAN_SERVICE_TIME = veganFoodStation.getAverageServiceTime();
+        SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
+        SimulationConstants.AVG_CASHIER_SERVICE_TIME = ServicePoint.getAverageServiceTime(cashierServicePoints);
+        SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME = selfCheckoutServicePoint.getAverageServiceTime();
         if (totalCustomersServed > 0) {
-            averageTimeSpent = (avgVeganServiceTime + avgNonVeganServiceTime)/2 + (avgCashierServiceTime + avgSelfCheckoutServiceTime)/2;}
+            SimulationConstants.AVERAGE_TIME_SPENT = (SimulationConstants.AVG_VEGAN_SERVICE_TIME + SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME)/2 + (SimulationConstants.AVG_CASHIER_SERVICE_TIME + SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME)/2;}
         else {
-            averageTimeSpent = 0.0;
+            SimulationConstants.AVERAGE_TIME_SPENT = 0.0;
         }
 
-        System.out.println("Average time spent at Vegan Service Point: " + String.format("%.2f", avgVeganServiceTime));
-        System.out.println("Average time spent at Non-Vegan Service Points: " + String.format("%.2f", avgNonVeganServiceTime));
-        System.out.println("Average time spent at Cashier Service Points: " + String.format("%.2f", avgCashierServiceTime));
-        System.out.println("Average time spent at Self-Checkout: " + String.format("%.2f", avgSelfCheckoutServiceTime) + "\n");
-        System.out.println("Average Service time at for all service including vegan, non vegan, cashier and self checkout as per al customers served:  " + averageTimeSpent);
+        System.out.println("Average time spent at Vegan Service Point: " + String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
+        System.out.println("Average time spent at Non-Vegan Service Points: " + String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
+        System.out.println("Average time spent at Cashier Service Points: " + String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
+        System.out.println("Average time spent at Self-Checkout: " + String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME) + "\n");
+        System.out.println("Average Service time at for all service including vegan, non vegan, cashier and self checkout as per al customers served:  " + SimulationConstants.AVERAGE_TIME_SPENT);
+
 
         // Average waiting times
         double avgVeganWaitingTime = veganFoodStation.getAverageWaitingTime();
@@ -398,11 +391,12 @@ public class MyEngine extends Engine {
     @Override
     public void resetVariables() {
         totalCustomersServed = 0;
-        averageTimeSpent = 0.0;
-        avgVeganServiceTime = 0.0;
-        avgNonVeganServiceTime = 0.0;
-        avgCashierServiceTime = 0.0;
-        avgSelfCheckoutServiceTime = 0.0;
+        SimulationConstants.AVERAGE_TIME_SPENT = 0.0;
+        SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME = 0.0;
+        SimulationConstants.AVG_VEGAN_SERVICE_TIME = 0.0;
+        SimulationConstants.AVG_CASHIER_SERVICE_TIME = 0.0;
+        SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME= 0.0;
+
         veganFoodStation.reset();
         for (ServicePoint sp : nonVeganFoodStation) {
             sp.reset();
@@ -411,13 +405,19 @@ public class MyEngine extends Engine {
             sp.reset();
         }
         selfCheckoutServicePoint.reset();
+
         SimulationConstants.TOTAL_CUSTOMERS_SERVED = 0;
         SimulationConstants.AVERAGE_TIME_SPENT = 0.0;
         SimulationConstants.AVG_VEGAN_SERVICE_TIME = 0.0;
         SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME = 0.0;
         SimulationConstants.AVG_CASHIER_SERVICE_TIME = 0.0;
         SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME = 0.0;
+
+        // Reset the total number of customers created
+        Customer.resetTotalCustomers();
     }
+
+
     private void checkAdjustments() {
         SimulationConstants.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
         System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
