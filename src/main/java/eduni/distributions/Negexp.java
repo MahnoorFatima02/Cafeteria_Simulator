@@ -28,7 +28,7 @@ public class Negexp extends Generator implements ContinuousGenerator {
         set(mean);
     }
 
-    private void set(double mean) {
+    public void set(double mean) {
         if (mean<=0)
             throw new ParameterException("Negexp: The mean must be greater than 0.");
         this.mean = mean;

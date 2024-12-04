@@ -2,6 +2,7 @@
 package simu.framework;
 
 import eduni.distributions.ContinuousGenerator;
+import eduni.distributions.Negexp;
 
 public class ArrivalProcess {
 	private ContinuousGenerator generator;
@@ -19,5 +20,9 @@ public class ArrivalProcess {
 		Event t = new Event(type, Clock.getInstance().getClock() + generator.sample());
 		System.out.println("Event Type " + t.getType());
 		eventList.add(t);
+	}
+
+	public void setGenerator(Negexp generator) {
+		this.generator = generator;
 	}
 }
