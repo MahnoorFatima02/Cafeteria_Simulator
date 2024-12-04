@@ -1,21 +1,17 @@
 package controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import simu.framework.Trace;
-import simu.model.SimulationConstants;
+import simu.utility.SimulationVariables;
 import view.CafeteriaGUI;
 import simu.model.MyEngine;
 import simu.model.SimulationAdjustments;
-import simu.model.SimulationConstants;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import java.util.List;
-import java.util.Arrays;
 
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
@@ -126,16 +122,16 @@ public class CafeteriaController {
             // Create a Timeline to update the GUI elements periodically
             Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
                 if (engine.isRunning() && !engine.isStopped()) {
-                    simulationSpeed1.setText(String.format("%.2f", SimulationConstants.DELAY_TIME));
-                    arrivalRate1.setText(String.format("%.2f", SimulationConstants.ARRIVAL_MEAN));
-                    foodLineSpeed1.setText(String.format("%.2f", SimulationConstants.MEAN_NON_VEGAN_SERVICE));
-                    cashierSpeed1.setText(String.format("%.2f", SimulationConstants.MEAN_CASHIER));
-                    totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
-                    averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
-                    normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
-                    veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
-                    staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
-                    selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
+                    simulationSpeed1.setText(String.format("%.2f", SimulationVariables.DELAY_TIME));
+                    arrivalRate1.setText(String.format("%.2f", SimulationVariables.ARRIVAL_MEAN));
+                    foodLineSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_NON_VEGAN_SERVICE));
+                    cashierSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_CASHIER));
+                    totalStudentsServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_SERVED));
+                    averageTimeSpent.setText(String.format("%.2f", SimulationVariables.AVERAGE_TIME_SPENT));
+                    normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME));
+                    veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
+                    staffedCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_CASHIER_SERVICE_TIME));
+                    selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -170,13 +166,6 @@ public class CafeteriaController {
         queueLengthButton1.setDisable(false);
         messageBox.setText("Simulation stopped. Press START to start a new simulation.");
         engine.stopSimulation();
-        engine.resetVariables();
-        totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
-        averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
-        normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
-        veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
-        staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
-        selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
 
     }
 
