@@ -3,9 +3,13 @@ CREATE DATABASE IF NOT EXISTS simulation_db;
 USE simulation_db;
 
 DROP USER IF EXISTS 'sim_user'@'localhost';
+
 CREATE USER 'sim_user'@'localhost' IDENTIFIED BY 'password';
+
 GRANT ALL PRIVILEGES ON simulation_db.* TO 'sim_user'@'localhost';
 FLUSH PRIVILEGES;
+
+DROP TABLE IF EXISTS Constants;
 
 CREATE TABLE Constants (
     name VARCHAR(255) PRIMARY KEY,
