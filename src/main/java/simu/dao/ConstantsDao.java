@@ -12,9 +12,6 @@ import java.util.Map;
 public class ConstantsDao {
 
     public Map<String, Double> loadConstants() {
-        System.out.println("*******");
-        System.out.println("IN LOAD CONSTANTS");
-        System.out.println("*******");
         String query = "SELECT name, value FROM Constants";
         Map<String, Double> constantsMap = new HashMap<>();
 
@@ -27,10 +24,6 @@ public class ConstantsDao {
                 double value = rs.getDouble("value");
                 constantsMap.put(name, value);
             }
-            System.out.println("*******");
-            System.out.println(constantsMap);
-            System.out.println("*******");
-
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -12,80 +12,55 @@ public class CafeteriaController {
     private CafeteriaGUI mainApp;
 
 
-public CafeteriaController() {
-    this.engine = new MyEngine();
-}
+    public CafeteriaController() {
+        this.engine = new MyEngine();
+    }
 
     public void preferenceButtonAction() {
-    engine.setAssignByQueueLength(false);
-//    checkStartConditions();
-}
-
-//    public void setView(CafeteriaView view) {
-//        this.view = view;
-//    }
+        engine.setAssignByQueueLength(false);
+    }
 
     public void queueLengthButtonAction() {
-    engine.setAssignByQueueLength(true);
-//    checkStartConditions();
-}
+        engine.setAssignByQueueLength(true);
+    }
 
     public void setMainApp(CafeteriaGUI mainApp) {
         this.mainApp = mainApp;
     }
 
-
-//private void checkStartConditions() {
-//    if (validateInputs()) {
-//        view.setMessageBoxText("Press START to begin the simulation.");
-//    }
-//}
+    public void pauseButtonAction() {
+        engine.pauseSimulation();
+    }
 
 
-public void pauseButtonAction() {
-//    view.setMessageBoxText("Simulation paused. Press RESUME to continue.");
-    engine.pauseSimulation();
-}
+    public void resumeButtonAction() {
+        engine.resumeSimulation();
+    }
 
 
-public void resumeButtonAction() {
-    engine.resumeSimulation();
-}
+    public void stopButtonAction() {
+        engine.stopSimulation();
 
-
-public void stopButtonAction() {
-    engine.stopSimulation();
-
-}
+    }
 
     public void startSimulation(String simulationTime, String delayTime) throws InterruptedException {
-            engine.setSimulationTime(Double.parseDouble(simulationTime));
-            engine.setDelayTime(Double.parseDouble(delayTime));
-            Trace.setTraceLevel(Trace.Level.INFO);
+        engine.setSimulationTime(Double.parseDouble(simulationTime));
+        engine.setDelayTime(Double.parseDouble(delayTime));
+        Trace.setTraceLevel(Trace.Level.INFO);
 
-            new Thread(() -> {
-                engine.startSimulation();
-            }).start();
+        new Thread(() -> {
+            engine.startSimulation();
+        }).start();
 
-            // Create a Timeline to update the GUI elements periodically
-            javafx.animation.Timeline timeline = new javafx.animation.Timeline(new javafx.animation.KeyFrame(javafx.util.Duration.millis(100), event -> {
-                if (engine.isRunning() && !engine.isStopped()) {
+        // Create a Timeline to update the GUI elements periodically
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline(new javafx.animation.KeyFrame(javafx.util.Duration.millis(100), event -> {
+            if (engine.isRunning() && !engine.isStopped()) {
 
-//                    view.updateSimulationSpeed(String.format("%.2f", SimulationVariables.DELAY_TIME));
-//                    view.updateArrivalRate(String.format("%.2f", SimulationVariables.ARRIVAL_MEAN));
-//                    view.updateFoodLineSpeed(String.format("%.2f", SimulationVariables.MEAN_NON_VEGAN_SERVICE));
-//                    view.updateCashierSpeed(String.format("%.2f", SimulationVariables.MEAN_CASHIER));
-//                    view.updateTotalStudentsServed(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_SERVED));
-//                    view.updateAverageTimeSpent(String.format("%.2f", SimulationVariables.AVERAGE_TIME_SPENT));
-//                    view.updateNormalFoodLineTimeSpent(String.format("%.2f", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME));
-//                    view.updateVeganFoodLineTimeSpent(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
-//                    view.updateStaffedCashierTimeSpent(String.format("%.2f", SimulationVariables.AVG_CASHIER_SERVICE_TIME));
-//                    view.updateSelfServiceCashierTimeSpent(String.format("%.2f", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
-                }
-            }));
-            timeline.setCycleCount(javafx.animation.Timeline.INDEFINITE);
-            timeline.play();
-        }
+            }
+        }));
+        timeline.setCycleCount(javafx.animation.Timeline.INDEFINITE);
+        timeline.play();
+    }
 
 
     public void pauseSimulation() {
@@ -141,30 +116,23 @@ public void stopButtonAction() {
         SimulationAdjustments.setAdjustCashierServiceSpeedFlag(true);
     }
 
-//    private boolean isInteger(String str) {
-//        try {
-//            Integer.parseInt(str);
-//            return true;
-//        } catch (NumberFormatException e) {
-//            return false;
-//        }
-//    }
-
     public double getSimulationSpeed() {
         return SimulationVariables.DELAY_TIME;
     }
 
 
     public double getArrivalRate() {
-    return SimulationVariables.ARRIVAL_MEAN;
-}
-public double getFoodLineSpeed() {
-    return SimulationVariables.MEAN_NON_VEGAN_SERVICE;
-}
+        return SimulationVariables.ARRIVAL_MEAN;
+    }
+
+    public double getFoodLineSpeed() {
+        return SimulationVariables.MEAN_NON_VEGAN_SERVICE;
+    }
 
     public double getCashierSpeed() {
         return SimulationVariables.MEAN_CASHIER;
     }
+
     public int getTotalStudentsServed() {
         return SimulationVariables.TOTAL_CUSTOMERS_SERVED;
     }
@@ -190,6 +158,6 @@ public double getFoodLineSpeed() {
         return SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME;
     }
 
-    }
+}
 
 

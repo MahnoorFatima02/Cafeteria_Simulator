@@ -18,8 +18,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 
-import static org.hibernate.type.descriptor.jdbc.JdbcType.isInteger;
-
 
 public class CafeteriaGUI extends Application implements CafeteriaView {
     private CafeteriaController cafeController;
@@ -37,33 +35,9 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
 
     public void loadScene(String fxmlFile) throws Exception {
         System.out.println("IN LOAD SCENE....");
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-//        fxmlLoader.setController(this); // Set this class as the controller
-//        Parent root = fxmlLoader.load(); // Load the FXML file
-////        cafeController = fxmlLoader.getController();
-////        cafeController = new CafeteriaController();
-////        System.out.println("********");
-////        System.out.println(cafeController);
-////        cafeController.setView(this);
-//        primaryStage.setTitle("Cafeteria Simulator");
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.show();
-
-
-//        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-//        Parent root = fxmlLoader.load();
-//        cafeController = fxmlLoader.getController();
-//        cafeController.setMainApp(this);
-//        primaryStage.setTitle("Cafeteria Simulator");
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.show();
-
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         fxmlLoader.setController(this);
-//        fxmlLoader.setController(this); // Set this class as the controller
         Parent root = fxmlLoader.load(); // Load the FXML file
-//        cafeController = new CafeteriaController();
-//        cafeController.setMainApp(this);
         primaryStage.setTitle("Cafeteria Simulator");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
@@ -153,18 +127,6 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
 
 
     private void updateView() {
-
-//        updateSimulationSpeed(String.format("%.2f", cafeController.getSimulationSpeed()));
-//        updateArrivalRate(String.format("%.2f", cafeController.getArrivalRate()));
-//        updateFoodLineSpeed(String.format("%.2f", cafeController.getFoodLineSpeed()));
-//        updateCashierSpeed(String.format("%.2f", cafeController.getCashierSpeed()));
-//        updateTotalStudentsServed(String.format("%d", cafeController.getTotalStudentsServed()));
-//        updateAverageTimeSpent(String.format("%.2f", cafeController.getAverageTimeSpent()));
-//        updateNormalFoodLineTimeSpent(String.format("%.2f", cafeController.getNormalFoodLineTimeSpent()));
-//        updateVeganFoodLineTimeSpent(String.format("%.2f", cafeController.getVeganFoodLineTimeSpent()));
-//        updateStaffedCashierTimeSpent(String.format("%.2f", cafeController.getStaffedCashierTimeSpent()));
-//        updateSelfServiceCashierTimeSpent(String.format("%.2f", cafeController.getSelfServiceCashierTimeSpent()));
-
         simulationSpeed1.setText(String.format("%.2f", cafeController.getSimulationSpeed()));
         arrivalRate1.setText(String.format("%.2f", cafeController.getArrivalRate()));
         foodLineSpeed1.setText(String.format("%.2f", cafeController.getFoodLineSpeed()));
@@ -306,56 +268,6 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
         queueLengthButton1.setDisable(disabled);
     }
 
-
-//    @Override
-//    public void updateSimulationSpeed(String speed) {
-//        simulationSpeed1.setText(speed);
-//    }
-
-//    @Override
-//    public void updateArrivalRate(String rate) {
-//        arrivalRate1.setText(rate);
-//    }
-
-//    @Override
-//    public void updateFoodLineSpeed(String speed) {
-//        foodLineSpeed1.setText(speed);
-//    }
-//
-//    @Override
-//    public void updateCashierSpeed(String speed) {
-//        cashierSpeed1.setText(speed);
-//    }
-//
-//    @Override
-//    public void updateTotalStudentsServed(String total) {
-//        totalStudentsServed.setText(total);
-//    }
-
-//    @Override
-//    public void updateAverageTimeSpent(String time) {
-//        averageTimeSpent.setText(time);
-//    }
-
-//    @Override
-//    public void updateNormalFoodLineTimeSpent(String time) {
-//        normalFoodLineTimeSpent.setText(time);
-//    }
-//
-//    @Override
-//    public void updateVeganFoodLineTimeSpent(String time) {
-//        veganFoodLineTimeSpent.setText(time);
-//    }
-
-//    @Override
-//    public void updateStaffedCashierTimeSpent(String time) {
-//        staffedCashierTimeSpent.setText(time);
-//    }
-//
-//    @Override
-//    public void updateSelfServiceCashierTimeSpent(String time) {
-//        selfServiceCashierTimeSpent.setText(time);
-//    }
 
     @Override
     public void showMessage(String message) {
