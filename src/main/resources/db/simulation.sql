@@ -1,0 +1,27 @@
+CREATE DATABASE IF NOT EXISTS simulation_db;
+
+USE simulation_db;
+
+DROP USER IF EXISTS 'sim_user'@'localhost';
+CREATE USER 'sim_user'@'localhost' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON simulation_db.* TO 'sim_user'@'localhost';
+FLUSH PRIVILEGES;
+
+CREATE TABLE Constants (
+    name VARCHAR(255) PRIMARY KEY,
+    value DOUBLE
+);
+
+INSERT INTO Constants (name, value) VALUES
+('IS_VEGAN_PROBABILITY', 0.2),
+('STD_DEV_VEGAN_SERVICE', 5),
+('STD_DEV_NON_VEGAN_SERVICE', 5),
+('STD_DEV_CASHIER', 5),
+('STD_DEV_SELF_CHECKOUT', 5),
+('CASHIER_UPPER_LIMIT', 6),
+('CASHIER_LOWER_LIMIT', 4),
+('CUSTOMER_PREFERENCE', 0.3),
+('SIMULATION_UPPER_SPEED', 1.1),
+('SIMULATION_LOWER_SPEED', 0.9);
+
+

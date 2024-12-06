@@ -78,17 +78,6 @@ public class ServicePoint {
         return customer;
     }
 
-//    public void beginService() { // Begins a new service, customer is on the queue during the service
-//        Customer customer = queue.peek();
-//        if (customer != null) {
-//            customer.setServiceStartTime(Clock.getInstance().getClock());
-//            Trace.out(Trace.Level.INFO, "ServicePoint: Starting a new service for the customer #" + customer.getId());
-//            reserved = true;
-//            double serviceTime = generator.sample();
-//            customer.setExpectedDepartureTime(Clock.getInstance().getClock() + serviceTime);
-//            eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
-//        }
-//    }
 
     public Customer beginService() {
         Customer customer = queue.peek();
@@ -101,6 +90,10 @@ public class ServicePoint {
             eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
         }
         return customer;
+    }
+
+    public void setGenerator(ContinuousGenerator generator) {
+        this.generator = generator;
     }
 
     public Customer peekQueue() {
@@ -135,5 +128,14 @@ public class ServicePoint {
         return totalCustomersRemoved;
     }
 
+    public void reset() {
+        // Reset all relevant variables to their initial state
+        this.queue.clear();
+        this.totalCustomersRemoved = 0;
+        this.totalServiceTime = 0.0;
+        this.totalWaitingTime = 0.0;
+        this.reserved = false;
+        this.isActive = true; // Assuming the service point is active by default
+    }
 
 }

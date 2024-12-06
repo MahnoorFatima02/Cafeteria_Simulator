@@ -1,3 +1,4 @@
+
 package simu.framework;
 
 public abstract class Engine {
@@ -24,10 +25,14 @@ public abstract class Engine {
 
 
     public void run() {
+        resetVariables(); // Reset all simulation variables
         initialize(); // creating, e.g., the first event
 
         while (running && !stopped) {
             while (paused) {
+                if (stopped) {
+                    break;
+                }
                 try {
                     Thread.sleep(100); // Sleep for a short period to avoid busy-waiting
                 } catch (InterruptedException e) {
@@ -38,19 +43,19 @@ public abstract class Engine {
             if (!simulate()) {
                 break;
             }
+                Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
+                clock.setClock(currentTime());
 
-            Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
-            clock.setClock(currentTime());
+                Trace.out(Trace.Level.INFO, "\nB-phase:");
+                runBEvents();
 
-            Trace.out(Trace.Level.INFO, "\nB-phase:");
-            runBEvents();
-
-            Trace.out(Trace.Level.INFO, "\nC-phase:");
-            tryCEvents();
-
+                Trace.out(Trace.Level.INFO, "\nC-phase:");
+                tryCEvents();
         }
 
         results();
+        clock.setClock(0); // Reset the clock
+        eventList.clear(); // Clear the event list
     }
 
     private void runBEvents() {
@@ -94,7 +99,10 @@ public abstract class Engine {
     public void stopSimulation() {
         stopped = true;
         running = false;
+        paused = false;
     }
+
+    public abstract void resetVariables();
 
     // Getter and Setter
 

@@ -1,3 +1,4 @@
+
 package simu.framework;
 
 import java.util.PriorityQueue;
@@ -23,6 +24,9 @@ public class EventList {
 		return eventlist.peek().getTime();
 	}
 
+	public void clear() {
+		eventlist.clear();
+	}
 //	public double getNextEventTime() {
 //		Event nextEvent = eventlist.peek();
 //		if (nextEvent == null) {

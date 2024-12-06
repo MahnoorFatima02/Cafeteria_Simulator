@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<SplitPane dividerPositions="0.45252225519287836" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="860.0" prefWidth="1350.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CafeteriaController">
+  <items>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+         <children>
+            <StackPane layoutY="12.0" prefHeight="76.0" prefWidth="607.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ff5000" height="65.0" stroke="WHITE" strokeType="INSIDE" width="545.0" />
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Cafeteria Management System" textAlignment="CENTER" wrappingWidth="606.13671875">
+                     <font>
+                        <Font name="System Bold" size="30.0" />
+                     </font>
+                  </Text>
+               </children>
+            </StackPane>
+            <StackPane layoutX="10.0" layoutY="92.0" prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="134.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <HBox prefHeight="59.0" prefWidth="607.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Simulation Time: " wrappingWidth="215.13671875">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <TextField fx:id="simulationTime1" prefHeight="5.0" prefWidth="199.0">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="minutes">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="59.0" prefWidth="607.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delay Time: " wrappingWidth="215.13671875">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                              <TextField fx:id="delayTime1" prefHeight="0.0" prefWidth="199.0">
+                                 <font>
+                                    <Font name="System Bold" size="22.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="5.0" />
+                                 </HBox.margin>
+                              </TextField>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Text>
+                           </children>
+                        </HBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="15.0" top="15.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+            <StackPane layoutX="9.0" layoutY="256.0" prefHeight="359.0" prefWidth="586.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="369.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                  <VBox prefHeight="330.0" prefWidth="581.0">
+                     <children>
+                        <HBox prefHeight="69.0" prefWidth="607.0">
+                           <children>
+                              <Button fx:id="preferenceButton1" mnemonicParsing="false" onAction="#preferenceButtonAction" style="-fx-background-color: #ff5000;" text="Preference" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="15.0" top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label prefHeight="38.0" prefWidth="178.0" text="Choosing Type">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="10.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="queueLengthButton1" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#queueLengthButtonAction" style="-fx-background-color: #ff5000;" text="Queue Length" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="69.0" prefWidth="607.0">
+                           <children>
+                              <Label prefHeight="38.0" prefWidth="203.0" text="Simulation Speed">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="lessSimulationSpeed1" disable="true" mnemonicParsing="false" onAction="#lessSimulationSpeedAction" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="simulationSpeed1" prefHeight="62.0" prefWidth="101.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="moreSimulationSpeed1" disable="true" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreSimulationSpeedAction" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="69.0" prefWidth="607.0">
+                           <children>
+                              <Label prefHeight="38.0" prefWidth="203.0" text="Arrival Rate">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="lessArrivalRate1" disable="true" mnemonicParsing="false" onAction="#lessArrivalRateAction" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="arrivalRate1" prefHeight="62.0" prefWidth="101.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="moreArrivalRate1" disable="true" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreArrivalRateAction" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="69.0" prefWidth="607.0">
+                           <children>
+                              <Label prefHeight="38.0" prefWidth="203.0" text="Food Line Speed">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="lessFoodLineSpeed1" disable="true" mnemonicParsing="false" onAction="#lessFoodLineSpeedAction" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="foodLineSpeed1" prefHeight="62.0" prefWidth="101.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="moreFoodLineSpeed1" disable="true" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreFoodLineSpeedAction" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="148.0" prefHeight="69.0" prefWidth="607.0">
+                           <children>
+                              <Label prefHeight="38.0" prefWidth="203.0" text="Cashier Speed">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="20.0" top="10.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="lessCashierSpeed1" disable="true" mnemonicParsing="false" onAction="#lessCashierSpeedAction" style="-fx-background-color: #ff5000;" text="-10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets left="10.0" top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Label fx:id="cashierSpeed1" prefHeight="62.0" prefWidth="100.0">
+                                 <HBox.margin>
+                                    <Insets left="20.0" right="20.0" />
+                                 </HBox.margin>
+                                 <font>
+                                    <Font name="System Bold" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="moreCashierSpeed1" disable="true" layoutX="243.0" layoutY="13.0" mnemonicParsing="false" onAction="#moreCashierSpeedAction" style="-fx-background-color: #ff5000;" text="+10%" textFill="WHITE">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                        </HBox>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="5.0" top="15.0" />
+                     </StackPane.margin>
+                  </VBox>
+               </children>
+            </StackPane>
+            <StackPane layoutX="14.0" layoutY="619.0" prefHeight="150.0" prefWidth="577.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="98.0" stroke="WHITE" strokeType="INSIDE" width="577.0" />
+                  <HBox prefHeight="155.0" prefWidth="604.0">
+                     <children>
+                        <Button fx:id="startButton1" disable="true" mnemonicParsing="false" onAction="#startButtonAction" style="-fx-background-color: #ff5000;" text="START" textFill="WHITE">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="35.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="pauseButton1" disable="true" layoutX="30.0" layoutY="20.0" mnemonicParsing="false" onAction="#pauseButtonAction" style="-fx-background-color: #ff5000;" text="PAUSE" textFill="WHITE">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="resumeButton1" disable="true" layoutX="135.0" layoutY="10.0" mnemonicParsing="false" onAction="#resumeButtonAction" style="-fx-background-color: #ff5000;" text="RESUME" textFill="WHITE">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="stopButton1" disable="true" mnemonicParsing="false" onAction="#stopButtonAction" style="-fx-background-color: #ff5000;" text="STOP" textFill="WHITE">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <StackPane.margin>
+                        <Insets left="3.0" top="37.0" />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+            </StackPane>
+            <AnchorPane layoutX="15.0" layoutY="762.0" prefHeight="76.0" prefWidth="577.0">
+               <children>
+                  <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="76.0" stroke="WHITE" strokeType="INSIDE" width="577.0" />
+                  <Label fx:id="messageBox" alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="52.0" prefWidth="545.0" text="Fill in Simulation Time, Delay Time, and select Choosing Type before starting simulation." textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
+         </children></AnchorPane>
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="698.0" prefWidth="20.0">
+         <children>
+            <VBox alignment="TOP_CENTER" layoutY="6.0" prefHeight="698.0" prefWidth="735.0">
+               <children>
+                  <StackPane prefHeight="76.0" prefWidth="607.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ff5000" height="65.0" stroke="WHITE" strokeType="INSIDE" width="201.0" />
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Output" textAlignment="CENTER" wrappingWidth="606.13671875">
+                           <font>
+                              <Font name="System Bold" size="30.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane prefHeight="150.0" prefWidth="200.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="134.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <HBox prefHeight="59.0" prefWidth="607.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Total students served:" wrappingWidth="274.13671875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <Label fx:id="totalStudentsServed" prefHeight="46.0" prefWidth="216.0">
+                                       <HBox.margin>
+                                          <Insets top="5.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="59.0" prefWidth="607.0">
+                                 <children>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Average time spent:" wrappingWidth="241.13671875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="80.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                    <Label fx:id="averageTimeSpent" prefHeight="49.0" prefWidth="149.0">
+                                       <HBox.margin>
+                                          <Insets left="30.0" top="5.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <StackPane.margin>
+                              <Insets left="15.0" top="15.0" />
+                           </StackPane.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </StackPane>
+                  <StackPane prefHeight="322.0" prefWidth="671.0">
+                     <children>
+                        <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ffa07b" height="326.0" stroke="WHITE" strokeType="INSIDE" width="586.0" />
+                        <VBox prefHeight="324.0" prefWidth="666.0">
+                           <children>
+                              <Label text="Average time spent on each service station:">
+                                 <font>
+                                    <Font size="25.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="90.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="252.0" text="Normal Food Line:">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="90.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="normalFoodLineTimeSpent" prefHeight="51.0" prefWidth="147.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="10.0" prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="250.0" text="Vegan Food Line:">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="90.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="veganFoodLineTimeSpent" prefHeight="50.0" prefWidth="149.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="251.0" text="Staffed Cashier:">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="90.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="staffedCashierTimeSpent" prefHeight="51.0" prefWidth="149.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                              <HBox layoutX="10.0" layoutY="148.0" prefHeight="69.0" prefWidth="607.0">
+                                 <children>
+                                    <Label prefHeight="38.0" prefWidth="253.0" text="Self-service Cashier:">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets left="90.0" top="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                    <Label fx:id="selfServiceCashierTimeSpent" prefHeight="49.0" prefWidth="147.0">
+                                       <HBox.margin>
+                                          <Insets left="20.0" right="20.0" />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="System Bold" size="25.0" />
+                                       </font>
+                                    </Label>
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="109.35546875">
+                                       <font>
+                                          <Font size="25.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets top="10.0" />
+                                       </HBox.margin>
+                                    </Text>
+                                 </children>
+                              </HBox>
+                           </children>
+                           <StackPane.margin>
+                              <Insets left="5.0" top="15.0" />
+                           </StackPane.margin>
+                        </VBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </StackPane>
+               </children>
+               <padding>
+                  <Insets top="20.0" />
+               </padding>
+            </VBox>
+         </children></AnchorPane>
+  </items>
+</SplitPane>
