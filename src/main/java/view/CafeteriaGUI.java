@@ -1,5 +1,7 @@
 package view;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import controller.CafeteriaController;
+import javafx.util.Duration;
 import simu.model.SimulationAdjustments;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 
 import static org.hibernate.type.descriptor.jdbc.JdbcType.isInteger;
 
@@ -18,6 +24,7 @@ import static org.hibernate.type.descriptor.jdbc.JdbcType.isInteger;
 public class CafeteriaGUI extends Application implements CafeteriaView {
     private CafeteriaController cafeController;
     private Stage primaryStage;
+    private Timeline timeline;
 
 
     @Override
@@ -95,6 +102,7 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
         queueLengthButton1.setDisable(false);
         resumeButton1.setDisable(true);
         cafeController.preferenceButtonAction();
+        checkStartConditions();
 
     }
 
@@ -104,6 +112,7 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
         preferenceButton1.setDisable(false);
         resumeButton1.setDisable(true);
         cafeController.queueLengthButtonAction();
+        checkStartConditions();
     }
 
     private void checkStartConditions() {
@@ -125,21 +134,47 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
             resumeButton1.setDisable(true);
             messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
             cafeController.startSimulation(getSimulationTime(), getDelayTime());
-            updateView();
+            startUpdatingView();
         }
     }
 
+
+    private void startUpdatingView() {
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> updateView()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
+    private void stopUpdatingView() {
+        if (timeline != null) {
+            timeline.stop();
+        }
+    }
+
+
     private void updateView() {
-        updateSimulationSpeed(String.format("%.2f", cafeController.getSimulationSpeed()));
-        updateArrivalRate(String.format("%.2f", cafeController.getArrivalRate()));
-        updateFoodLineSpeed(String.format("%.2f", cafeController.getFoodLineSpeed()));
-        updateCashierSpeed(String.format("%.2f", cafeController.getCashierSpeed()));
-        updateTotalStudentsServed(String.format("%d", cafeController.getTotalStudentsServed()));
-        updateAverageTimeSpent(String.format("%.2f", cafeController.getAverageTimeSpent()));
-        updateNormalFoodLineTimeSpent(String.format("%.2f", cafeController.getNormalFoodLineTimeSpent()));
-        updateVeganFoodLineTimeSpent(String.format("%.2f", cafeController.getVeganFoodLineTimeSpent()));
-        updateStaffedCashierTimeSpent(String.format("%.2f", cafeController.getStaffedCashierTimeSpent()));
-        updateSelfServiceCashierTimeSpent(String.format("%.2f", cafeController.getSelfServiceCashierTimeSpent()));
+
+//        updateSimulationSpeed(String.format("%.2f", cafeController.getSimulationSpeed()));
+//        updateArrivalRate(String.format("%.2f", cafeController.getArrivalRate()));
+//        updateFoodLineSpeed(String.format("%.2f", cafeController.getFoodLineSpeed()));
+//        updateCashierSpeed(String.format("%.2f", cafeController.getCashierSpeed()));
+//        updateTotalStudentsServed(String.format("%d", cafeController.getTotalStudentsServed()));
+//        updateAverageTimeSpent(String.format("%.2f", cafeController.getAverageTimeSpent()));
+//        updateNormalFoodLineTimeSpent(String.format("%.2f", cafeController.getNormalFoodLineTimeSpent()));
+//        updateVeganFoodLineTimeSpent(String.format("%.2f", cafeController.getVeganFoodLineTimeSpent()));
+//        updateStaffedCashierTimeSpent(String.format("%.2f", cafeController.getStaffedCashierTimeSpent()));
+//        updateSelfServiceCashierTimeSpent(String.format("%.2f", cafeController.getSelfServiceCashierTimeSpent()));
+
+        simulationSpeed1.setText(String.format("%.2f", cafeController.getSimulationSpeed()));
+        arrivalRate1.setText(String.format("%.2f", cafeController.getArrivalRate()));
+        foodLineSpeed1.setText(String.format("%.2f", cafeController.getFoodLineSpeed()));
+        cashierSpeed1.setText(String.format("%.2f",  cafeController.getCashierSpeed()));
+        totalStudentsServed.setText(String.format("%d", cafeController.getTotalStudentsServed()));
+        averageTimeSpent.setText(String.format("%.2f", cafeController.getAverageTimeSpent()));
+        normalFoodLineTimeSpent.setText(String.format("%.2f",cafeController.getNormalFoodLineTimeSpent()));
+        veganFoodLineTimeSpent.setText(String.format("%.2f", cafeController.getVeganFoodLineTimeSpent()));
+        staffedCashierTimeSpent.setText(String.format("%.2f", cafeController.getStaffedCashierTimeSpent()));
+        selfServiceCashierTimeSpent.setText(String.format("%.2f", cafeController.getSelfServiceCashierTimeSpent()));
     }
 
 
@@ -150,6 +185,7 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
         stopButton1.setDisable(false);
         messageBox.setText("Simulation paused. Press RESUME to continue.");
         cafeController.pauseButtonAction();
+        startUpdatingView();
     }
 
     @FXML
@@ -170,6 +206,7 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
         queueLengthButton1.setDisable(false);
         messageBox.setText("Simulation stopped. Press START to start a new simulation.");
         cafeController.stopButtonAction();
+        stopButtonAction();
 
     }
     @FXML
@@ -270,55 +307,55 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
     }
 
 
-    @Override
-    public void updateSimulationSpeed(String speed) {
-        simulationSpeed1.setText(speed);
-    }
+//    @Override
+//    public void updateSimulationSpeed(String speed) {
+//        simulationSpeed1.setText(speed);
+//    }
 
-    @Override
-    public void updateArrivalRate(String rate) {
-        arrivalRate1.setText(rate);
-    }
+//    @Override
+//    public void updateArrivalRate(String rate) {
+//        arrivalRate1.setText(rate);
+//    }
 
-    @Override
-    public void updateFoodLineSpeed(String speed) {
-        foodLineSpeed1.setText(speed);
-    }
+//    @Override
+//    public void updateFoodLineSpeed(String speed) {
+//        foodLineSpeed1.setText(speed);
+//    }
+//
+//    @Override
+//    public void updateCashierSpeed(String speed) {
+//        cashierSpeed1.setText(speed);
+//    }
+//
+//    @Override
+//    public void updateTotalStudentsServed(String total) {
+//        totalStudentsServed.setText(total);
+//    }
 
-    @Override
-    public void updateCashierSpeed(String speed) {
-        cashierSpeed1.setText(speed);
-    }
+//    @Override
+//    public void updateAverageTimeSpent(String time) {
+//        averageTimeSpent.setText(time);
+//    }
 
-    @Override
-    public void updateTotalStudentsServed(String total) {
-        totalStudentsServed.setText(total);
-    }
+//    @Override
+//    public void updateNormalFoodLineTimeSpent(String time) {
+//        normalFoodLineTimeSpent.setText(time);
+//    }
+//
+//    @Override
+//    public void updateVeganFoodLineTimeSpent(String time) {
+//        veganFoodLineTimeSpent.setText(time);
+//    }
 
-    @Override
-    public void updateAverageTimeSpent(String time) {
-        averageTimeSpent.setText(time);
-    }
-
-    @Override
-    public void updateNormalFoodLineTimeSpent(String time) {
-        normalFoodLineTimeSpent.setText(time);
-    }
-
-    @Override
-    public void updateVeganFoodLineTimeSpent(String time) {
-        veganFoodLineTimeSpent.setText(time);
-    }
-
-    @Override
-    public void updateStaffedCashierTimeSpent(String time) {
-        staffedCashierTimeSpent.setText(time);
-    }
-
-    @Override
-    public void updateSelfServiceCashierTimeSpent(String time) {
-        selfServiceCashierTimeSpent.setText(time);
-    }
+//    @Override
+//    public void updateStaffedCashierTimeSpent(String time) {
+//        staffedCashierTimeSpent.setText(time);
+//    }
+//
+//    @Override
+//    public void updateSelfServiceCashierTimeSpent(String time) {
+//        selfServiceCashierTimeSpent.setText(time);
+//    }
 
     @Override
     public void showMessage(String message) {
@@ -357,6 +394,8 @@ public class CafeteriaGUI extends Application implements CafeteriaView {
             showMessage("Please select Choosing Type.");
             valid = false;
         }
+        System.out.println("Dealy Timr" + getDelayTime());
+        System.out.println("Simulation " + getSimulationTime());
         return valid;
     }
     private boolean isInteger(String str) {
