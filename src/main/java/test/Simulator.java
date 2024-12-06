@@ -10,6 +10,10 @@ import simu.utility.SimulationVariables;
 // Comma separated file on Excel at the end
 
 
+/**
+ * The {@code Simulator} class serves as the command-line interface for running the simulation.
+ * It initializes the simulation engine, sets various parameters, and starts the simulation.
+ */
 public class Simulator {
     public static void main(String[] args) {
 

@@ -15,8 +15,6 @@ import java.util.Map;
  * This class interacts with a MariaDB database to fetch key-value pairs of constants stored in the "Constants" table.
  * The constants are returned as a map with their names as keys and corresponding double values.
  *
- * @author Mahnoor Fatima
- * @version 1.0
  */
 public class ConstantsDao {
 
