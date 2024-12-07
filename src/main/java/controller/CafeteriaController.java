@@ -1,33 +1,35 @@
 package controller;
 
-import javafx.application.Platform;
+import javafx.animation.PauseTransition;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import simu.framework.Trace;
-import simu.model.SimulationConstants;
+import simu.utility.SimulationVariables;
 import view.CafeteriaGUI;
 import simu.model.MyEngine;
 import simu.model.SimulationAdjustments;
-import simu.model.SimulationConstants;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
-import java.util.List;
-import java.util.Arrays;
+import javafx.scene.shape.Circle;
 
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
     private MyEngine engine;
+    private Timeline timeline;
 
     @FXML
     private Button lessSimulationSpeed1, moreSimulationSpeed1, lessArrivalRate1, moreArrivalRate1, lessFoodLineSpeed1, moreFoodLineSpeed1, lessCashierSpeed1, moreCashierSpeed1, startButton1, pauseButton1, resumeButton1, preferenceButton1, queueLengthButton1, stopButton1;
     @FXML
     private TextField simulationTime1, delayTime1;
     @FXML
-    private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent;
-
+    private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent, queue1, queue2, queue3, queue4, veganStationServing, veganStationServed, nonVeganStation1Serving, nonVeganStation1Served, nonVeganStation2Serving, nonVeganStation2Served, cashier1Serving, cashier1Served, cashier2Serving, cashier2Served, selfCashierServing, selfCashierServed;
+    @FXML
+    private Circle ball1, ball2, ball2extra, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, ball11, ball12, ball13, ball14, ball15, ball16, ball17;
+    private TranslateTransition transition1, transition2, transition2extra, transition3, transition4, transition5, transition6, transition7, transition8, transition9, transition10, transition11, transition12, transition13, transition14, transition15, transition16, transition17;
 
     public void setMainApp(CafeteriaGUI mainApp) {
         this.mainApp = mainApp;
@@ -37,47 +39,9 @@ public class CafeteriaController {
         this.engine = new MyEngine();
     }
 
-    private void setButtonsDisabled(boolean disabled) {
-        lessSimulationSpeed1.setDisable(disabled);
-        moreSimulationSpeed1.setDisable(disabled);
-        lessArrivalRate1.setDisable(disabled);
-        moreArrivalRate1.setDisable(disabled);
-        lessFoodLineSpeed1.setDisable(disabled);
-        moreFoodLineSpeed1.setDisable(disabled);
-        lessCashierSpeed1.setDisable(disabled);
-        moreCashierSpeed1.setDisable(disabled);
-        startButton1.setDisable(disabled);
-        pauseButton1.setDisable(disabled);
-        resumeButton1.setDisable(disabled);
-        stopButton1.setDisable(disabled);
-        preferenceButton1.setDisable(disabled);
-        queueLengthButton1.setDisable(disabled);
-    }
-
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private boolean validateInputs() {
-        boolean valid = true;
-        if (!isInteger(simulationTime1.getText()) || !isInteger(delayTime1.getText())) {
-            messageBox.setText("Simulation Time and Delay Time must be an integer.");
-            valid = false;
-        } else if (Integer.parseInt(simulationTime1.getText()) < 1 || Integer.parseInt(delayTime1.getText()) < 1) {
-            messageBox.setText("Simulation Time and Delay Time must be greater than 0.");
-            valid = false;
-        } else if (!preferenceButton1.isDisable() && !queueLengthButton1.isDisable()) {
-            messageBox.setText("Please select Choosing Type.");
-            valid = false;
-        }
-        return valid;
-    }
-
+    /*
+        ====== OnActions =======
+    */
     @FXML
     private void preferenceButtonAction() {
         preferenceButton1.setDisable(true);
@@ -96,16 +60,10 @@ public class CafeteriaController {
         checkStartConditions();
     }
 
-    private void checkStartConditions() {
-        if (validateInputs()) {
-            startButton1.setDisable(false);
-            messageBox.setText("Press START to begin the simulation.");
-        }
-    }
-
     @FXML
     private void startButtonAction() throws InterruptedException {
         if (validateInputs()) {
+            setupBalls();
             setButtonsDisabled(false);
             startButton1.setDisable(true);
             preferenceButton1.setDisable(true);
@@ -124,18 +82,11 @@ public class CafeteriaController {
             }).start();
 
             // Create a Timeline to update the GUI elements periodically
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
+            timeline = new Timeline(new KeyFrame(Duration.millis(SimulationVariables.DELAY_TIME*1000), event -> {
                 if (engine.isRunning() && !engine.isStopped()) {
-                    simulationSpeed1.setText(String.format("%.2f", SimulationConstants.DELAY_TIME));
-                    arrivalRate1.setText(String.format("%.2f", SimulationConstants.ARRIVAL_MEAN));
-                    foodLineSpeed1.setText(String.format("%.2f", SimulationConstants.MEAN_NON_VEGAN_SERVICE));
-                    cashierSpeed1.setText(String.format("%.2f", SimulationConstants.MEAN_CASHIER));
-                    totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
-                    averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
-                    normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
-                    veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
-                    staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
-                    selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
+                    setTexts();
+                    ballControllers();
+                    updateLabels();
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -162,7 +113,6 @@ public class CafeteriaController {
         messageBox.setText("Simulation resumed.");
         engine.resumeSimulation();
     }
-
     @FXML
     private void stopButtonAction() {
         setButtonsDisabled(true);
@@ -170,14 +120,10 @@ public class CafeteriaController {
         queueLengthButton1.setDisable(false);
         messageBox.setText("Simulation stopped. Press START to start a new simulation.");
         engine.stopSimulation();
-        engine.resetVariables();
-        totalStudentsServed.setText(String.format("%d", SimulationConstants.TOTAL_CUSTOMERS_SERVED));
-        averageTimeSpent.setText(String.format("%.2f", SimulationConstants.AVERAGE_TIME_SPENT));
-        normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME));
-        veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_VEGAN_SERVICE_TIME));
-        staffedCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_CASHIER_SERVICE_TIME));
-        selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME));
-
+        if (timeline != null) {
+            timeline.stop();
+        }
+        resetElements();
     }
 
     public void initialStartButtonAction() {
@@ -229,4 +175,830 @@ public class CafeteriaController {
         System.out.println("The moreCashierSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustCashierServiceSpeedFlag(true);
     }
+    /*
+        ====== OnActions =======
+    */
+
+    /*
+        ====== Update Labesls =======
+    */
+    public void updateVeganStationServing() {
+        if (engine.veganFoodStation.isReserved()) {
+            veganStationServing.setText(String.format("%d", engine.veganFoodStation.getCurrentCustomerID()));
+        } else {
+            veganStationServing.setText("None");
+        }
+    }
+
+    public void updateVeganStationServed() {
+        veganStationServed.setText(String.format("%d", engine.veganFoodStation.getTotalCustomersRemoved()));
+    }
+
+    public void updateNonVeganStation1Serving() {
+        if (engine.nonVeganFoodStation[0].isReserved()) {
+            nonVeganStation1Serving.setText(String.format("%d", engine.nonVeganFoodStation[0].getCurrentCustomerID()));
+        } else {
+            nonVeganStation1Serving.setText("None");
+        }
+    }
+
+    public void updateNonVeganStation1Served() {
+        nonVeganStation1Served.setText(String.format("%d", engine.nonVeganFoodStation[0].getTotalCustomersRemoved()));
+    }
+
+    public void updateNonVeganStation2Serving() {
+        if (engine.nonVeganFoodStation[1].isReserved()) {
+            nonVeganStation2Serving.setText(String.format("%d", engine.nonVeganFoodStation[1].getCurrentCustomerID()));
+        } else {
+            nonVeganStation2Serving.setText("None");
+        }
+    }
+
+    public void updateNonVeganStation2Served() {
+        nonVeganStation2Served.setText(String.format("%d", engine.nonVeganFoodStation[1].getTotalCustomersRemoved()));
+    }
+
+    public void updateCashier1Serving() {
+        if (engine.cashierServicePoints[0].isReserved()) {
+            cashier1Serving.setText(String.format("%d", engine.cashierServicePoints[0].getCurrentCustomerID()));
+        } else {
+            cashier1Serving.setText("None");
+        }
+    }
+
+    public void updateCashier1Served() {
+        cashier1Served.setText(String.format("%d", engine.cashierServicePoints[0].getTotalCustomersRemoved()));
+    }
+
+    public void updateCashier2Serving() {
+        if (engine.cashierServicePoints[1].isReserved()) {
+            cashier2Serving.setText(String.format("%d", engine.cashierServicePoints[1].getCurrentCustomerID()));
+        } else {
+            cashier2Serving.setText("None");
+        }
+    }
+
+    public void updateCashier2Served() {
+        cashier2Served.setText(String.format("%d", engine.cashierServicePoints[1].getTotalCustomersRemoved()));
+    }
+
+    public void updateSelfCashierServing() {
+        if (engine.selfCheckoutServicePoint.isReserved()) {
+            selfCashierServing.setText(String.format("%d", engine.selfCheckoutServicePoint.getCurrentCustomerID()));
+        } else {
+            selfCashierServing.setText("None");
+        }
+    }
+
+    public void updateSelfCashierServed() {
+        selfCashierServed.setText(String.format("%d", engine.selfCheckoutServicePoint.getTotalCustomersRemoved()));
+    }
+    /*
+        ====== Update Labesls =======
+    */
+
+    /*
+        ====== Utilities =======
+    */
+    public void resetElements(){
+        SimulationVariables.VEGAN_QUEUE = 0;
+        SimulationVariables.NON_VEGAN_QUEUE1 = 0;
+        SimulationVariables.NON_VEGAN_QUEUE2 = 0;
+        SimulationVariables.CASHIER_QUEUE1 = 0;
+        SimulationVariables.CASHIER_QUEUE2 = 0;
+        SimulationVariables.SELF_CHECKOUT_QUEUE = 0;
+        queue1.setText("0");
+        queue2.setText("0");
+        queue3.setText("0");
+        queue4.setText("0");
+        veganStationServed.setText("0");
+        veganStationServing.setText("0");
+        nonVeganStation1Served.setText("0");
+        nonVeganStation1Serving.setText("0");
+        nonVeganStation2Served.setText("0");
+        nonVeganStation2Serving.setText("0");
+        cashier1Served.setText("0");
+        cashier1Serving.setText("0");
+        cashier2Served.setText("0");
+        cashier2Serving.setText("0");
+        selfCashierServing.setText("0");
+        selfCashierServed.setText("0");
+    }
+
+    public void updateLabels(){
+        updateVeganStationServed();
+        updateVeganStationServing();
+        updateNonVeganStation1Served();
+        updateNonVeganStation1Serving();
+        updateNonVeganStation2Served();
+        updateNonVeganStation2Serving();
+        updateCashier1Served();
+        updateCashier1Serving();
+        updateCashier2Served();
+        updateCashier2Serving();
+        updateSelfCashierServing();
+        updateSelfCashierServed();
+    }
+
+    public void ballControllers(){
+        controlBall1();
+        controlBall2();
+        controlBall2extra();
+        controlBall3();
+        controlBall4();
+        controlBall5();
+        controlBall6();
+        controlBall7();
+        controlBall8();
+        controlBall9();
+        controlBall10();
+        controlBall11();
+        controlBall12();
+        controlBall13();
+        controlBall14();
+        controlBall15();
+        controlBall16();
+        controlBall17();
+    }
+
+    public void setTexts(){
+        simulationSpeed1.setText(String.format("%.2f", SimulationVariables.DELAY_TIME));
+        arrivalRate1.setText(String.format("%.2f", SimulationVariables.ARRIVAL_MEAN));
+        foodLineSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_NON_VEGAN_SERVICE));
+        cashierSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_CASHIER));
+        totalStudentsServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_SERVED));
+        averageTimeSpent.setText(String.format("%.2f", SimulationVariables.AVERAGE_TIME_SPENT));
+        normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME));
+        veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
+        staffedCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_CASHIER_SERVICE_TIME));
+        selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
+        queue1.setText(String.format("%d", SimulationVariables.VEGAN_QUEUE));
+        queue2.setText(String.format("%d", (SimulationVariables.NON_VEGAN_QUEUE1 + SimulationVariables.NON_VEGAN_QUEUE2)));
+        queue3.setText(String.format("%d", (SimulationVariables.CASHIER_QUEUE1 + SimulationVariables.CASHIER_QUEUE2)));
+        queue4.setText(String.format("%d", SimulationVariables.SELF_CHECKOUT_QUEUE));
+    }
+
+    public void setupBalls(){
+        setupBall1();
+        setupBall2();
+        setupBall2extra();
+        setupBall3();
+        setupBall4();
+        setupBall5();
+        setupBall6();
+        setupBall7();
+        setupBall8();
+        setupBall9();
+        setupBall10();
+        setupBall11();
+        setupBall12();
+        setupBall13();
+        setupBall14();
+        setupBall15();
+        setupBall16();
+        setupBall17();
+    }
+
+    private void setButtonsDisabled(boolean disabled) {
+        lessSimulationSpeed1.setDisable(disabled);
+        moreSimulationSpeed1.setDisable(disabled);
+        lessArrivalRate1.setDisable(disabled);
+        moreArrivalRate1.setDisable(disabled);
+        lessFoodLineSpeed1.setDisable(disabled);
+        moreFoodLineSpeed1.setDisable(disabled);
+        lessCashierSpeed1.setDisable(disabled);
+        moreCashierSpeed1.setDisable(disabled);
+        startButton1.setDisable(disabled);
+        pauseButton1.setDisable(disabled);
+        resumeButton1.setDisable(disabled);
+        stopButton1.setDisable(disabled);
+        preferenceButton1.setDisable(disabled);
+        queueLengthButton1.setDisable(disabled);
+    }
+
+    private boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private boolean validateInputs() {
+        boolean valid = true;
+        if (!isInteger(simulationTime1.getText()) || !isInteger(delayTime1.getText())) {
+            messageBox.setText("Simulation Time and Delay Time must be an integer.");
+            valid = false;
+        } else if (Integer.parseInt(simulationTime1.getText()) < 1 || Integer.parseInt(delayTime1.getText()) < 1) {
+            messageBox.setText("Simulation Time and Delay Time must be greater than 0.");
+            valid = false;
+        } else if (!preferenceButton1.isDisable() && !queueLengthButton1.isDisable()) {
+            messageBox.setText("Please select Choosing Type.");
+            valid = false;
+        }
+        return valid;
+    }
+
+    private void checkStartConditions() {
+        if (validateInputs()) {
+            startButton1.setDisable(false);
+            messageBox.setText("Press START to begin the simulation.");
+        }
+    }
+    /*
+        ====== Utilities =======
+    */
+
+    /*
+       ====== Setup Balls =======
+   */
+    public void setupBall1(){
+        transition1 = new TranslateTransition();
+        transition1.setNode(ball1);
+        transition1.setToX(114);
+        transition1.setToY(72);
+        transition1.setCycleCount(1);
+    }
+    public void setupBall2(){
+        transition2 = new TranslateTransition();
+        transition2.setNode(ball2);
+        transition2.setToX(-116);
+        transition2.setToY(72);
+        transition2.setCycleCount(1);
+    }
+
+    public void setupBall2extra(){
+        transition2extra = new TranslateTransition();
+        transition2extra.setNode(ball2extra);
+        transition2extra.setToX(-116);
+        transition2extra.setToY(72);
+        transition2extra.setCycleCount(1);
+    }
+
+    public void setupBall3(){
+        transition3 = new TranslateTransition();
+        transition3.setNode(ball3);
+        transition3.setToX(85);
+        transition3.setToY(193);
+        transition3.setCycleCount(1);
+    }
+
+    public void setupBall4(){
+        transition4 = new TranslateTransition();
+        transition4.setNode(ball4);
+        transition4.setToX(91);
+        transition4.setToY(193);
+        transition4.setCycleCount(1);
+    }
+
+    public void setupBall5(){
+        transition5 = new TranslateTransition();
+        transition5.setNode(ball5);
+        transition5.setToX(-135);
+        transition5.setToY(193);
+        transition5.setCycleCount(1);
+    }
+
+    public void setupBall6() {
+        transition6 = new TranslateTransition();
+        transition6.setNode(ball6);
+        transition6.setToX(-87);
+        transition6.setToY(197);
+        transition6.setCycleCount(1);
+    }
+
+    public void setupBall7() {
+        transition7 = new TranslateTransition();
+        transition7.setNode(ball7);
+        transition7.setToX(-318);
+        transition7.setToY(197);
+        transition7.setCycleCount(1);
+    }
+
+    public void setupBall8() {
+        transition8 = new TranslateTransition();
+        transition8.setNode(ball8);
+        transition8.setToX(138);
+        transition8.setToY(198);
+        transition8.setCycleCount(1);
+    }
+
+
+    public void setupBall9() {
+        transition9 = new TranslateTransition();
+        transition9.setNode(ball9);
+        transition9.setToX(-92);
+        transition9.setToY(199);
+        transition9.setCycleCount(1);
+    }
+
+    public void setupBall10(){
+        transition10 = new TranslateTransition();
+        transition10.setNode(ball10);
+        transition10.setToX(365);
+        transition10.setToY(195);
+        transition10.setCycleCount(1);
+    }
+
+    public void setupBall11() {
+        transition11 = new TranslateTransition();
+        transition11.setNode(ball11);
+        transition11.setToX(135);
+        transition11.setToY(196);
+        transition11.setCycleCount(1);
+    }
+
+    public void setupBall12(){
+        transition12 = new TranslateTransition();
+        transition12.setNode(ball12);
+        transition12.setToX(84);
+        transition12.setToY(187);
+        transition12.setCycleCount(1);
+    }
+
+
+    public void setupBall13() {
+        transition13 = new TranslateTransition();
+        transition13.setNode(ball13);
+        transition13.setToX(-140);
+        transition13.setToY(189);
+        transition13.setCycleCount(1);
+    }
+
+
+    public void setupBall14() {
+        transition14 = new TranslateTransition();
+        transition14.setNode(ball14);
+        transition14.setToX(-135);
+        transition14.setToY(186);
+        transition14.setCycleCount(1);
+    }
+
+
+    public void setupBall15() {
+        transition15 = new TranslateTransition();
+        transition15.setNode(ball15);
+        transition15.setToX(-94);
+        transition15.setToY(184);
+        transition15.setCycleCount(1);
+    }
+
+
+    public void setupBall16() {
+        transition16 = new TranslateTransition();
+        transition16.setNode(ball16);
+        transition16.setToX(131);
+        transition16.setToY(183);
+        transition16.setCycleCount(1);
+    }
+
+
+    public void setupBall17() {
+        transition17 = new TranslateTransition();
+        transition17.setNode(ball17);
+        transition17.setToX(353);
+        transition17.setToY(183);
+        transition17.setCycleCount(1);
+    }
+
+    /*
+        ====== Setup Balls =======
+    */
+
+    /*
+        ====== Setup Ball Controlllers =======
+    */
+    public void controlBall17() {
+        if (!engine.selfCashierDeparture) {
+            ball17.setOpacity(0.0);
+            transition17.stop();
+            ball17.setTranslateX(0);
+            ball17.setTranslateY(0);
+            ball17.setLayoutX(68);
+            ball17.setLayoutY(754);
+        } else if (engine.selfCashierDeparture) {
+            ball17.setOpacity(1.0);
+            transition17.stop();
+            ball17.setTranslateX(0);
+            ball17.setTranslateY(0);
+            transition17.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition17.play();
+            engine.selfCashierDeparture = false;
+        }
+    }
+
+    public void controlBall16() {
+        if (!engine.cashierDeparture2) {
+            ball16.setOpacity(0.0);
+            transition16.stop();
+            ball16.setTranslateX(0);
+            ball16.setTranslateY(0);
+            ball16.setLayoutX(290);
+            ball16.setLayoutY(754);
+        } else if (engine.cashierDeparture2) {
+            ball16.setOpacity(1.0);
+            transition16.stop();
+            ball16.setTranslateX(0);
+            ball16.setTranslateY(0);
+            transition16.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition16.play();
+            engine.cashierDeparture2 = false;
+        }
+    }
+
+    public void controlBall15(){
+        if (!engine.cashierDeparture1) {
+            ball15.setOpacity(0.0);
+            transition15.stop();
+            ball15.setTranslateX(0);
+            ball15.setTranslateY(0);
+            ball15.setLayoutX(515);
+            ball15.setLayoutY(753);
+        } else if (engine.cashierDeparture1) {
+            ball15.setOpacity(1.0);
+            transition15.stop();
+            ball15.setTranslateX(0);
+            ball15.setTranslateY(0);
+            transition15.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition15.play();
+            engine.cashierDeparture1 = false;
+        }
+    }
+
+    public void controlBall14() {
+        if (!engine.selfCashierQueueDeparture || !engine.selfCashierArrival) {
+            ball14.setOpacity(0.0);
+            transition14.stop();
+            ball14.setTranslateX(0);
+            ball14.setTranslateY(0);
+            ball14.setLayoutX(203);
+            ball14.setLayoutY(566);
+        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && SimulationVariables.SELF_CHECKOUT_QUEUE > 1) {
+            ball14.setOpacity(1.0);
+            transition14.stop();
+            ball14.setTranslateX(0);
+            ball14.setTranslateY(0);
+            transition14.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition14.play();
+            engine.selfCashierQueueDeparture = false;
+            engine.selfCashierArrival = false;
+        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && SimulationVariables.SELF_CHECKOUT_QUEUE <= 1) {
+            ball14.setOpacity(1.0);
+            transition14.stop();
+            ball14.setTranslateX(0);
+            ball14.setTranslateY(0);
+            transition14.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause8 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME *500)); // Adjust the delay as needed
+            pause8.setOnFinished(event -> {
+                transition14.play();
+            });
+            pause8.play();
+            engine.selfCashierQueueDeparture = false;
+            engine.selfCashierArrival = false;
+        }
+    }
+
+    public void controlBall13() {
+        if (!engine.cashierQueueDeparture2 || !engine.cashierArrival2) {
+            ball13.setOpacity(0.0);
+            transition13.stop();
+            ball13.setTranslateX(0);
+            ball13.setTranslateY(0);
+            ball13.setLayoutX(431);
+            ball13.setLayoutY(565);
+        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && SimulationVariables.CASHIER_QUEUE2 > 1) {
+            ball13.setOpacity(1.0);
+            transition13.stop();
+            ball13.setTranslateX(0);
+            ball13.setTranslateY(0);
+            transition13.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition13.play();
+            engine.cashierQueueDeparture2 = false;
+            engine.cashierArrival2 = false;
+        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && SimulationVariables.CASHIER_QUEUE2 <= 1) {
+            ball13.setOpacity(1.0);
+            transition13.stop();
+            ball13.setTranslateX(0);
+            ball13.setTranslateY(0);
+            transition13.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause7 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME *500)); // Adjust the delay as needed
+            pause7.setOnFinished(event -> {
+                transition13.play();
+            });
+            pause7.play();
+            engine.cashierQueueDeparture2 = false;
+            engine.cashierArrival2 = false;
+        }
+    }
+
+    public void controlBall12() {
+        if (!engine.cashierQueueDeparture1 || !engine.cashierArrival1) {
+            ball12.setOpacity(0.0);
+            transition12.stop();
+            ball12.setTranslateX(0);
+            ball12.setTranslateY(0);
+            ball12.setLayoutX(431);
+            ball12.setLayoutY(565);
+        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && SimulationVariables.CASHIER_QUEUE1 > 1) {
+            ball12.setOpacity(1.0);
+            transition12.stop();
+            ball12.setTranslateX(0);
+            ball12.setTranslateY(0);
+            transition12.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition12.play();
+            engine.cashierQueueDeparture1 = false;
+            engine.cashierArrival1 = false;
+        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && SimulationVariables.CASHIER_QUEUE1 <= 1) {
+            ball12.setOpacity(1.0);
+            transition12.stop();
+            ball12.setTranslateX(0);
+            ball12.setTranslateY(0);
+            transition12.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause6 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME *500)); // Adjust the delay as needed
+            pause6.setOnFinished(event -> {
+                transition12.play();
+            });
+            pause6.play();
+            engine.cashierQueueDeparture1 = false;
+            engine.cashierArrival1 = false;
+        }
+    }
+
+    public void controlBall11() {
+        if (!engine.nonVeganDeparture2 || !engine.selfCashierQueueArrival) {
+            ball11.setOpacity(0.0);
+            transition11.stop();
+            ball11.setTranslateX(0);
+            ball11.setTranslateY(0);
+            ball11.setLayoutX(68);
+            ball11.setLayoutY(370);
+        } else if (engine.nonVeganDeparture2 && engine.selfCashierQueueArrival) {
+            ball11.setOpacity(1.0);
+            transition11.stop();
+            ball11.setTranslateX(0);
+            ball11.setTranslateY(0);
+            transition11.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition11.play();
+            engine.nonVeganDeparture2 = false;
+            engine.selfCashierQueueArrival = false;
+        }
+    }
+
+    public void controlBall10(){
+        if (!engine.nonVeganDeparture2 || !engine.cashierQueueArrival1) {
+            ball10.setOpacity(0.0);
+            transition10.stop();
+            ball10.setTranslateX(0);
+            ball10.setTranslateY(0);
+            ball10.setLayoutX(68);
+            ball10.setLayoutY(370);
+        } else if (engine.nonVeganDeparture2 && engine.cashierQueueArrival1) {
+            ball10.setOpacity(1.0);
+            transition10.stop();
+            ball10.setTranslateX(0);
+            ball10.setTranslateY(0);
+            transition10.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition10.play();
+            engine.nonVeganDeparture2 = false;
+            engine.cashierQueueArrival1 = false;
+        }
+    }
+
+    public void controlBall9(){
+        if (!engine.nonVeganDeparture1 || !engine.selfCashierQueueArrival) {
+            ball9.setOpacity(0.0);
+            transition9.stop();
+            ball9.setTranslateX(0);
+            ball9.setTranslateY(0);
+            ball9.setLayoutX(295);
+            ball9.setLayoutY(367);
+        } else if (engine.nonVeganDeparture1 && engine.selfCashierQueueArrival) {
+            ball9.setOpacity(1.0);
+            transition9.stop();
+            ball9.setTranslateX(0);
+            ball9.setTranslateY(0);
+            transition9.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition9.play();
+            engine.nonVeganDeparture1 = false;
+            engine.selfCashierQueueArrival = false;
+        }
+    }
+    public void controlBall8(){
+        if (!engine.nonVeganDeparture1 || !engine.cashierQueueArrival1) {
+            ball8.setOpacity(0.0);
+            transition8.stop();
+            ball8.setTranslateX(0);
+            ball8.setTranslateY(0);
+            ball8.setLayoutX(295);
+            ball8.setLayoutY(367);
+        } else if (engine.nonVeganDeparture1 && engine.cashierQueueArrival1) {
+            ball8.setOpacity(1.0);
+            transition8.stop();
+            ball8.setTranslateX(0);
+            ball8.setTranslateY(0);
+            transition8.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition8.play();
+            engine.nonVeganDeparture1 = false;
+            engine.cashierQueueArrival1 = false;
+        }
+    }
+    public void controlBall7(){
+        if (!engine.veganDeparture || !engine.selfCashierQueueArrival) {
+            ball7.setOpacity(0.0);
+            transition7.stop();
+            ball7.setTranslateX(0);
+            ball7.setTranslateY(0);
+            ball7.setLayoutX(520);
+            ball7.setLayoutY(368);
+        } else if (engine.veganDeparture && engine.selfCashierQueueArrival) {
+            ball7.setOpacity(1.0);
+            transition7.stop();
+            ball7.setTranslateX(0);
+            ball7.setTranslateY(0);
+            transition7.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition7.play();
+            engine.veganDeparture = false;
+            engine.selfCashierQueueArrival = false;
+        }
+    }
+    public void controlBall6(){
+        if (!engine.veganDeparture || !engine.cashierQueueArrival1) {
+            ball6.setOpacity(0.0);
+            transition6.stop();
+            ball6.setTranslateX(0);
+            ball6.setTranslateY(0);
+            ball6.setLayoutX(520);
+            ball6.setLayoutY(368);
+        } else if (engine.veganDeparture && engine.cashierQueueArrival1) {
+            ball6.setOpacity(1.0);
+            transition6.stop();
+            ball6.setTranslateX(0);
+            ball6.setTranslateY(0);
+            transition6.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition6.play();
+            engine.veganDeparture = false;
+            engine.cashierQueueArrival1 = false;
+        }
+    }
+
+    public void controlBall5() {
+        if (!engine.nonVeganFoodServe2 || !engine.nonVeganQueueDeparture2) {
+            ball5.setOpacity(0.0);
+            transition5.stop();
+            ball5.setTranslateX(0);
+            ball5.setTranslateY(0);
+            ball5.setLayoutX(203);
+            ball5.setLayoutY(174);
+        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && SimulationVariables.NON_VEGAN_QUEUE2 > 1) {
+            ball5.setOpacity(1.0);
+            transition5.stop();
+            ball5.setTranslateX(0);
+            ball5.setTranslateY(0);
+            transition5.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition5.play();
+            engine.nonVeganFoodServe2 = false;
+            engine.nonVeganQueueDeparture2 = false;
+        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && SimulationVariables.NON_VEGAN_QUEUE2 <= 1) {
+            transition5.stop();
+            ball5.setOpacity(1.0);
+            ball5.setTranslateX(0);
+            ball5.setTranslateY(0);
+            transition5.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause5 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            pause5.setOnFinished(event -> {
+                transition5.play();
+            });
+            pause5.play();
+            engine.nonVeganFoodServe2 = false;
+            engine.nonVeganQueueDeparture2 = false;
+        }
+    }
+
+    public void controlBall4() {
+        if (!engine.nonVeganFoodServe1 || !engine.nonVeganQueueDeparture1) {
+            ball4.setOpacity(0.0);
+            transition4.stop();
+            ball4.setTranslateX(0);
+            ball4.setTranslateY(0);
+            ball4.setLayoutX(203);
+            ball4.setLayoutY(174);
+        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && SimulationVariables.NON_VEGAN_QUEUE1 > 1) {
+            ball4.setOpacity(1.0);
+            transition4.stop();
+            ball4.setTranslateX(0);
+            ball4.setTranslateY(0);
+            transition4.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition4.play();
+            engine.nonVeganFoodServe1 = false;
+            engine.nonVeganQueueDeparture1 = false;
+        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && SimulationVariables.NON_VEGAN_QUEUE1 <= 1) {
+            transition4.stop();
+            ball4.setOpacity(1.0);
+            ball4.setTranslateX(0);
+            ball4.setTranslateY(0);
+            transition4.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause4 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            pause4.setOnFinished(event -> {
+                transition4.play();
+            });
+            pause4.play();
+            engine.nonVeganFoodServe1 = false;
+            engine.nonVeganQueueDeparture1 = false;
+        }
+    }
+
+    public void controlBall3() {
+        if (!engine.veganFoodServe || !engine.veganQueueDeparture) {
+            ball3.setOpacity(0.0);
+            transition3.stop();
+            ball3.setTranslateX(0);
+            ball3.setTranslateY(0);
+            ball3.setLayoutX(433);
+            ball3.setLayoutY(174);
+        } else if (engine.veganFoodServe && engine.veganQueueDeparture && SimulationVariables.VEGAN_QUEUE > 1) {
+            ball3.setOpacity(1.0);
+            transition3.stop();
+            ball3.setTranslateX(0);
+            ball3.setTranslateY(0);
+            transition3.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition3.play();
+            engine.veganFoodServe = false;
+            engine.veganQueueDeparture = false;
+        } else if (engine.veganFoodServe && engine.veganQueueDeparture && SimulationVariables.VEGAN_QUEUE <= 1) {
+            transition3.stop();
+            ball3.setOpacity(1.0);
+            ball3.setTranslateX(0);
+            ball3.setTranslateY(0);
+            transition3.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            PauseTransition pause3 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME *500)); // Adjust the delay as needed
+            pause3.setOnFinished(event -> {
+                transition3.play();
+            });
+            pause3.play();
+            engine.veganFoodServe = false;
+            engine.veganQueueDeparture = false;
+        }
+    }
+
+    public void controlBall2extra(){
+        if (!engine.nonVeganQueueArrival2) {
+            ball2extra.setOpacity(0.0);
+            transition2extra.stop();
+            ball2extra.setTranslateX(0);
+            ball2extra.setTranslateY(0);
+            ball2extra.setLayoutX(319);
+            ball2extra.setLayoutY(102);
+        } else {
+            ball2extra.setOpacity(1.0);
+            transition2extra.stop();
+            ball2extra.setTranslateX(0);
+            ball2extra.setTranslateY(0);
+            transition2extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition2extra.play();
+            engine.nonVeganQueueArrival2 = false;
+        }
+
+    }
+
+    public void controlBall2(){
+        if (!engine.nonVeganQueueArrival1) {
+            ball2.setOpacity(0.0);
+            transition2.stop();
+            ball2.setTranslateX(0);
+            ball2.setTranslateY(0);
+            ball2.setLayoutX(319);
+            ball2.setLayoutY(102);
+        } else {
+            ball2.setOpacity(1.0);
+            transition2.stop();
+            ball2.setTranslateX(0);
+            ball2.setTranslateY(0);
+            transition2.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition2.play();
+            engine.nonVeganQueueArrival1 = false;
+        }
+    }
+    public void controlBall1(){
+        if (!engine.veganQueueArrival) {
+            ball1.setOpacity(0.0);
+            transition1.stop();
+            ball1.setTranslateX(0);
+            ball1.setTranslateY(0);
+            ball1.setLayoutX(319);
+            ball1.setLayoutY(102);
+        }
+        else {
+            ball1.setOpacity(1.0);
+            transition1.stop();
+            ball1.setTranslateX(0);
+            ball1.setTranslateY(0);
+            transition1.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition1.play();
+            engine.veganQueueArrival = false;
+        }
+    }
+    /*
+        ====== Setup Ball Controlllers =======
+    */
 }
