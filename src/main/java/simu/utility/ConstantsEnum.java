@@ -2,6 +2,10 @@ package simu.utility;
 
 import java.util.Map;
 
+/**
+ * The {@code ConstantsEnum} enum defines various constants used in the simulation.
+ * Each constant can be initialized with a value from a provided map.
+ */
 public enum ConstantsEnum {
     IS_VEGAN_PROBABILITY,
     STD_DEV_VEGAN_SERVICE,
@@ -16,10 +20,20 @@ public enum ConstantsEnum {
 
     private double value;
 
+    /**
+     * Gets the value of the constant.
+     *
+     * @return The value of the constant
+     */
     public double getValue() {
         return value;
     }
 
+    /**
+     * Initializes the constants with values from the provided map.
+     *
+     * @param constantsMap A map containing the values for the constants
+     */
     public static void initialize(Map<String, Double> constantsMap) {
         for (ConstantsEnum constant : ConstantsEnum.values()) {
             if (constantsMap.containsKey(constant.name())) {
