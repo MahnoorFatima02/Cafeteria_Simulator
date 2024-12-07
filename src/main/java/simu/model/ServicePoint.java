@@ -12,7 +12,6 @@ public class ServicePoint {
     private ContinuousGenerator generator;
     private EventList eventList;
     private EventType eventTypeScheduled;
-    //Queuestrategy strategy; // option: ordering of the customer
     private boolean reserved = false;
     private boolean isActive;
     private double totalServiceTime = 0;

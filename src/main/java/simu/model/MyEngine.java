@@ -46,6 +46,7 @@ public class MyEngine extends Engine {
     public MyEngine() {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
+        System.out.println("ENGINE STARTING...");
         ConstantsEnum.initialize(constantsDao.loadConstants());
 
 
@@ -434,7 +435,7 @@ public class MyEngine extends Engine {
     }
 
 
-    private void checkAdjustments() {
+    public void checkAdjustments() {
         SimulationVariables.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
         System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
         System.out.println("Student Arrival rate mean " + SimulationVariables.ARRIVAL_MEAN);

@@ -27,6 +27,7 @@ public class EventList {
 	public void clear() {
 		eventlist.clear();
 	}
+
 //	public double getNextEventTime() {
 //		Event nextEvent = eventlist.peek();
 //		if (nextEvent == null) {
