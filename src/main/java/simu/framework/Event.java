@@ -1,6 +1,10 @@
 
 package simu.framework;
 
+/**
+ * The {@code Event} class represents an event in the simulation.
+ * It implements the {@code Comparable} interface to allow events to be sorted by time.
+ */
 public class Event implements Comparable<Event> {
 	private IEventType type;
 	private double time;
