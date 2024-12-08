@@ -783,7 +783,7 @@
             <Circle fx:id="ball16" fill="#ff9b70" layoutX="290.0" layoutY="754.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball17" fill="#ff9b70" layoutX="68.0" layoutY="754.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball2extra" fill="#ff9b70" layoutX="319.0" layoutY="102.0" opacity="0.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
-            <Circle fx:id="cashier2Active" fill="RED" layoutX="373.0" layoutY="673.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="cashier2Active" fill="RED" layoutX="373.0" layoutY="673.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball6extra" fill="#ff9b70" layoutX="519.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball8extra" fill="#ff9b70" layoutX="296.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball10extra" fill="#ff9b70" layoutX="70.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
