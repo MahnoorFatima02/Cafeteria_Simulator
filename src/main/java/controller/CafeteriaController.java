@@ -44,15 +44,13 @@ public class CafeteriaController {
     @FXML
     private ImageView image1, image2, image3, image4, image5, image6;
     @FXML
-    private PieChart servedPieChart;
+    private NumberAxis horizontalAxisLineChart, verticalAxisLineChart, timeAxis;
+    @FXML
+    private CategoryAxis categoryAxis;
     @FXML
     private LineChart<Number, Number> averagetimeLineChart;
     @FXML
-    private NumberAxis horizontalAxisLineChart;
-    @FXML
-    private NumberAxis verticalAxisLineChart, timeAxis;
-    @FXML
-    private CategoryAxis categoryAxis;
+    private PieChart servedPieChart;
     @FXML
     private BarChart<String, Number> foodlineBarChart;
 
@@ -208,7 +206,7 @@ public class CafeteriaController {
     */
 
     /*
-        ====== Update Labesls =======
+        ====== Update Labels =======
     */
     public void updateVeganStationServing() {
         if (engine.veganFoodStation.isReserved()) {
@@ -282,7 +280,7 @@ public class CafeteriaController {
         selfCashierServed.setText(String.format("%d", engine.selfCheckoutServicePoint.getTotalCustomersRemoved()));
     }
     /*
-        ====== Update Labesls =======
+        ====== Update Labels =======
     */
 
     /*
