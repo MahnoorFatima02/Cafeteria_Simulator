@@ -342,7 +342,7 @@
          <children>
             <VBox alignment="TOP_CENTER" prefHeight="858.0" prefWidth="728.0">
                <children>
-                  <StackPane prefHeight="72.0" prefWidth="931.0">
+                  <StackPane prefHeight="72.0" prefWidth="931.0" >
                      <children>
                         <Rectangle arcHeight="20.0" arcWidth="20.0" fill="#ff5000" height="66.0" stroke="WHITE" strokeType="INSIDE" width="201.0" />
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Output" textAlignment="CENTER" wrappingWidth="606.13671875">
@@ -352,12 +352,12 @@
                         </Text>
                      </children>
                      <VBox.margin>
-                        <Insets top="20.0" />
+                        <Insets bottom="15.0" />
                      </VBox.margin>
                   </StackPane>
                   <SplitPane dividerPositions="0.5909090909090909" prefHeight="246.0" prefWidth="785.0">
                      <items>
-                        <LineChart fx:id="servedLineChart"  prefHeight="244.0" prefWidth="393.0" style="-fx-background-color: white; -fx-padding: 10;">
+                        <LineChart fx:id="servedLineChart" stylesheets="@/chart-styles.css" prefHeight="244.0" prefWidth="393.0" style="-fx-background-color: white; -fx-padding: 10;">
                            <xAxis>
                               <NumberAxis side="BOTTOM" label="Time (s) " style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
                            </xAxis>
@@ -365,12 +365,12 @@
                               <NumberAxis side="LEFT" label="Customers Served " style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
                            </yAxis>
                         </LineChart>
-                        <PieChart fx:id="servedPieChart" prefHeight="244.0" prefWidth="387.0" />
+                        <PieChart fx:id="servedPieChart" prefHeight="244.0" prefWidth="387.0" stylesheets="@/chart-styles.css" />
                      </items>
                   </SplitPane>
                   <SplitPane prefHeight="265.0" prefWidth="931.0">
                      <items>
-                        <LineChart fx:id="averagetimeLineChart" prefHeight="256.0" prefWidth="491.0">
+                        <LineChart fx:id="averagetimeLineChart" stylesheets="@/chart-styles.css" prefHeight="256.0" prefWidth="491.0">
                            <xAxis>
                               <NumberAxis side="BOTTOM" label="Time (s) "/>
                            </xAxis>
@@ -382,15 +382,15 @@
                   </SplitPane>
                   <SplitPane dividerPositions="0.5909090909090909" prefHeight="255.0" prefWidth="931.0">
                      <items>
-                        <BarChart fx:id="foodlineBarChart" prefHeight="188.0" prefWidth="363.0" style="-fx-padding: 10;">
+                        <BarChart fx:id="foodlineBarChart" stylesheets="@/chart-styles.css" prefHeight="188.0" prefWidth="363.0" style="-fx-padding: 10;">
                            <xAxis>
-                              <CategoryAxis side="BOTTOM" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                              <CategoryAxis side="BOTTOM" />
                            </xAxis>
                            <yAxis>
-                              <NumberAxis side="LEFT" label="Average Time (s)" style="-fx-tick-label-fill: black; -fx-font-size: 14px;" />
+                              <NumberAxis side="LEFT" label="Average Time (s)" />
                            </yAxis>
                         </BarChart>
-                        <PieChart fx:id="foodlinePieChart" prefHeight="248.0" prefWidth="313.0" style="-fx-padding: 10;" />
+                        <PieChart fx:id="foodlinePieChart" stylesheets="@/chart-styles.css" prefHeight="248.0" prefWidth="313.0" style="-fx-padding: 10;" />
                      </items>
                   </SplitPane>
 
