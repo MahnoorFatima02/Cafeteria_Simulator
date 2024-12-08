@@ -78,7 +78,6 @@ public class ServicePoint {
         return customer;
     }
 
-
     public Customer beginService() {
         Customer customer = queue.peek();
         if (customer != null) {

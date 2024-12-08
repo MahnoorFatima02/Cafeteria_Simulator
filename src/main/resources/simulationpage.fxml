@@ -560,32 +560,32 @@
       </AnchorPane>
       <AnchorPane layoutX="1250.0" prefHeight="1000.0" prefWidth="650.0">
          <children>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="104.0" layoutY="328.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image3" fitHeight="80.0" fitWidth="80.0" layoutX="104.0" layoutY="328.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@meat.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="331.0" layoutY="334.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image2" fitHeight="80.0" fitWidth="80.0" layoutX="331.0" layoutY="334.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@fish.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="551.0" layoutY="330.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image1" fitHeight="80.0" fitWidth="80.0" layoutX="551.0" layoutY="330.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@salad.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="110.0" layoutY="712.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image6" fitHeight="80.0" fitWidth="80.0" layoutX="110.0" layoutY="712.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@self.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="546.0" layoutY="712.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image4" fitHeight="80.0" fitWidth="80.0" layoutX="546.0" layoutY="712.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@cashier.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="80.0" fitWidth="80.0" layoutX="325.0" layoutY="713.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="image5" fitHeight="80.0" fitWidth="80.0" layoutX="325.0" layoutY="713.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@cashier.png" />
                </image>
@@ -783,6 +783,10 @@
             <Circle fx:id="ball16" fill="#ff9b70" layoutX="290.0" layoutY="754.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball17" fill="#ff9b70" layoutX="68.0" layoutY="754.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
             <Circle fx:id="ball2extra" fill="#ff9b70" layoutX="319.0" layoutY="102.0" opacity="0.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="cashier2Active" fill="RED" layoutX="373.0" layoutY="673.0" radius="16.0" stroke="BLACK" strokeType="INSIDE" />
+            <Circle fx:id="ball6extra" fill="#ff9b70" layoutX="519.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="ball8extra" fill="#ff9b70" layoutX="296.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
+            <Circle fx:id="ball10extra" fill="#ff9b70" layoutX="70.0" layoutY="369.0" radius="25.0" stroke="WHITE" strokeType="INSIDE" strokeWidth="0.0" />
          </children>
       </AnchorPane>
    </children>

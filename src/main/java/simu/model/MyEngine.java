@@ -18,7 +18,7 @@ public class MyEngine extends Engine {
     Customer customer;
 //    private Map<String, Double> constants;
     ConstantsDao constantsDao = new ConstantsDao();
-    public int totalCustomersServed;
+    private int totalCustomersServed;
     private ArrivalProcess arrivalProcess;
     public ServicePoint veganFoodStation;
     public ServicePoint[] nonVeganFoodStation;
@@ -32,6 +32,8 @@ public class MyEngine extends Engine {
 
     /*
         ====== Flags for moving balls =======
+        ====== These values dont necessarily affect the simulation system,
+         it only helps to move the balls, so can be public values ======
     */
     public boolean veganQueueArrival;
     public boolean nonVeganQueueArrival1;
@@ -59,6 +61,8 @@ public class MyEngine extends Engine {
     public boolean selfCashierDeparture;
     /*
         ====== Flags for moving balls =======
+        ====== These values dont necessarily affect the simulation system,
+         it only helps to move the balls, so can be public values ======
     */
 
     private int veganCustomerId;
@@ -177,7 +181,6 @@ public class MyEngine extends Engine {
 
             Customer customer = veganFoodStation.beginService();
             veganCustomerId = customer.getId();
-            SimulationVariables.VEGAN_QUEUE = Math.max(0, SimulationVariables.VEGAN_QUEUE - 1);
             veganFoodServe = true;
         }
 
@@ -190,10 +193,8 @@ public class MyEngine extends Engine {
                 nonVeganCustomerId = customer.getId();
                 if (i == 0) {
                     nonVeganFoodServe1 = true;
-                    SimulationVariables.NON_VEGAN_QUEUE1 = Math.max(0, SimulationVariables.NON_VEGAN_QUEUE1 - 1);
                 } else if (i == 1) {
                     nonVeganFoodServe2 = true;
-                    SimulationVariables.NON_VEGAN_QUEUE2 = Math.max(0, SimulationVariables.NON_VEGAN_QUEUE2 - 1);
                 }
             }
         }
@@ -206,10 +207,8 @@ public class MyEngine extends Engine {
                 Customer customer = p.beginService();
                 cashierCustomerId = customer.getId();
                 if (i == 0) {
-                    SimulationVariables.CASHIER_QUEUE1 = Math.max(0, SimulationVariables.CASHIER_QUEUE1 - 1);
                     cashierArrival1 = true;
                 } else if (i == 1) {
-                    SimulationVariables.CASHIER_QUEUE2 = Math.max(0, SimulationVariables.CASHIER_QUEUE2 - 1);
                     cashierArrival2 = true;
                 }
             }
@@ -221,7 +220,6 @@ public class MyEngine extends Engine {
             Customer customer =  selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
             selfCheckoutCustomerId = customer.getId();
             selfCashierArrival = true;
-            SimulationVariables.SELF_CHECKOUT_QUEUE = Math.max(0, SimulationVariables.SELF_CHECKOUT_QUEUE - 1);
         }
 
         totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
@@ -315,19 +313,16 @@ public class MyEngine extends Engine {
             veganQueueArrival = true;
             veganQueueDeparture = true;
             veganFoodStation.addQueue(customer);
-            SimulationVariables.VEGAN_QUEUE += 1;
         } else {
             // Assign to the shorter non-vegan queue
             if (nonVeganFoodStation[0].getQueueSize() <= nonVeganFoodStation[1].getQueueSize()) {
                 nonVeganQueueArrival1 = true;
                 nonVeganQueueDeparture1 = true;
                 nonVeganFoodStation[0].addQueue(customer);
-                SimulationVariables.NON_VEGAN_QUEUE1 += 1;
             } else {
                 nonVeganQueueArrival2 = true;
                 nonVeganQueueDeparture2 = true;
                 nonVeganFoodStation[1].addQueue(customer);
-                SimulationVariables.NON_VEGAN_QUEUE2 += 1;
             }
         }
         arrivalProcess.generateNextEvent();
@@ -354,7 +349,7 @@ public class MyEngine extends Engine {
                     } else if (i == 1) {
                         nonVeganDeparture2 = true;
                     }
-                    break; // Process only one customer per event
+                    //break; // Process only one customer per event //This was the problem why events get skipped
                 }
             }
         }
@@ -369,13 +364,11 @@ public class MyEngine extends Engine {
                 servedCustomer.setRemovalTime(Clock.getInstance().getClock());
                 servedCustomer.reportResults();
                 if (i == 0) {
-                    SimulationVariables.CASHIER_QUEUE1 = Math.max(0, SimulationVariables.CASHIER_QUEUE1 - 1);
                     cashierDeparture1 = true;
                 } else if (i == 1) {
-                    SimulationVariables.CASHIER_QUEUE1 = Math.max(0, SimulationVariables.CASHIER_QUEUE1 - 1);
                     cashierDeparture2 = true;
                 }
-                break;
+                //break; //This was the problem that makes the dynamic cashier not work
             }
         }
     }
@@ -410,16 +403,11 @@ public class MyEngine extends Engine {
 
             // Assign customer to the appropriate queue
             if (firstCashierQueueSize <= selfServiceQueueSize) {
-                cashierServicePoints[0].addQueue(customer);
-                cashierQueueArrival1 = true;
-                cashierQueueDeparture1 = true;
-                SimulationVariables.CASHIER_QUEUE1 += 1;
-
+                assignToCashier();
             } else {
                 selfCheckoutServicePoint.addQueue(customer);
                 selfCashierQueueArrival = true;
                 selfCashierQueueDeparture = true;
-                SimulationVariables.SELF_CHECKOUT_QUEUE += 1;
                 System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
                 System.out.println("Self Service Cash Counter Activated");
             }
@@ -430,23 +418,14 @@ public class MyEngine extends Engine {
                 selfCheckoutServicePoint.addQueue(customer);
                 selfCashierQueueArrival = true;
                 selfCashierQueueDeparture = true;
-                SimulationVariables.SELF_CHECKOUT_QUEUE += 1;
                 System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
                 System.out.println("Self Service Cash Counter Activated");
             } else {
-                cashierServicePoints[0].addQueue(customer);
-                cashierQueueArrival1 = true;
-                cashierQueueDeparture1 = true;
-                SimulationVariables.CASHIER_QUEUE1 += 1;
+                assignToCashier();
             }
-
         }
 
-        // Check and update the status of the second cashier
         checkAndUpdateSecondCashierStatus();
-
-        // Assign customers to the shortest queue between the two cashiers if the second cashier is active
-        assignToShortestCashierQueue(customer);
 
         // Update the queue sizes
         int updatedFirstCashierQueueSize = cashierServicePoints[0].getQueueSize();
@@ -473,26 +452,21 @@ public class MyEngine extends Engine {
         }
     }
 
-    private void assignToShortestCashierQueue(Customer customer) {
+    public void assignToCashier() {
         if (cashierServicePoints[1].isActive()) {
-            int firstCashierQueueSize = cashierServicePoints[0].getQueueSize();
-            int secondCashierQueueSize = cashierServicePoints[1].getQueueSize();
-            System.out.println("The second is active: " + secondCashierQueueSize);
-
-            var remainingCustomers = firstCashierQueueSize - ConstantsEnum.CASHIER_UPPER_LIMIT.getValue();
-
-            for (int i = 0; i < remainingCustomers; i++) {
-                System.out.println("Adding a customer in second cashier queue ");
-                System.out.println("Customer " + customer.getId() + " assigned to Cashier 2");
-                Customer customerToBeServed = cashierServicePoints[0].removeQueue();
-                cashierServicePoints[1].addQueue(customerToBeServed);
-                cashierQueueArrival1 = false;
-                cashierQueueDeparture1 = false;
+            if (cashierServicePoints[1].getQueueSize() < cashierServicePoints[0].getQueueSize()) {
+                cashierServicePoints[1].addQueue(customer);
                 cashierQueueArrival2 = true;
                 cashierQueueDeparture2 = true;
-                SimulationVariables.CASHIER_QUEUE1 -= 1;
-                SimulationVariables.CASHIER_QUEUE2 += 1;
+            } else {
+                cashierServicePoints[0].addQueue(customer);
+                cashierQueueArrival1 = true;
+                cashierQueueDeparture1 = true;
             }
+        } else {
+            cashierServicePoints[0].addQueue(customer);
+            cashierQueueArrival1 = true;
+            cashierQueueDeparture1 = true;
         }
     }
 

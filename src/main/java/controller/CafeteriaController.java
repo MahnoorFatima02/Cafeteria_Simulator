@@ -2,6 +2,7 @@ package controller;
 
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.animation.RotateTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +16,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.image.ImageView;
 
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
@@ -28,8 +31,11 @@ public class CafeteriaController {
     @FXML
     private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent, queue1, queue2, queue3, queue4, veganStationServing, veganStationServed, nonVeganStation1Serving, nonVeganStation1Served, nonVeganStation2Serving, nonVeganStation2Served, cashier1Serving, cashier1Served, cashier2Serving, cashier2Served, selfCashierServing, selfCashierServed;
     @FXML
-    private Circle ball1, ball2, ball2extra, ball3, ball4, ball5, ball6, ball7, ball8, ball9, ball10, ball11, ball12, ball13, ball14, ball15, ball16, ball17;
-    private TranslateTransition transition1, transition2, transition2extra, transition3, transition4, transition5, transition6, transition7, transition8, transition9, transition10, transition11, transition12, transition13, transition14, transition15, transition16, transition17;
+    private Circle ball1, ball2, ball2extra, ball3, ball4, ball5, ball6, ball6extra, ball7, ball8, ball8extra, ball9, ball10, ball10extra, ball11, ball12, ball13, ball14, ball15, ball16, ball17, cashier2Active;
+    @FXML
+    private ImageView image1, image2, image3, image4, image5, image6;
+    private TranslateTransition transition1, transition2, transition2extra, transition3, transition4, transition5, transition6, transition6extra, transition7, transition8, transition8extra, transition9, transition10, transition10extra, transition11, transition12, transition13, transition14, transition15, transition16, transition17;
+    private RotateTransition rotateTransition1, rotateTransition2, rotateTransition3, rotateTransition4, rotateTransition5, rotateTransition6;
 
     public void setMainApp(CafeteriaGUI mainApp) {
         this.mainApp = mainApp;
@@ -63,6 +69,8 @@ public class CafeteriaController {
     @FXML
     private void startButtonAction() throws InterruptedException {
         if (validateInputs()) {
+            setupWiggleAnimation();
+            startRotateImage();
             setupBalls();
             setButtonsDisabled(false);
             startButton1.setDisable(true);
@@ -84,9 +92,9 @@ public class CafeteriaController {
             // Create a Timeline to update the GUI elements periodically
             timeline = new Timeline(new KeyFrame(Duration.millis(SimulationVariables.DELAY_TIME*1000), event -> {
                 if (engine.isRunning() && !engine.isStopped()) {
-                    setTexts();
                     ballControllers();
                     updateLabels();
+                    setTexts();
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -96,6 +104,7 @@ public class CafeteriaController {
 
     @FXML
     private void pauseButtonAction() {
+        stopRotateImage();
         pauseButton1.setDisable(true);
         resumeButton1.setDisable(false);
         stopButton1.setDisable(false);
@@ -105,6 +114,7 @@ public class CafeteriaController {
 
     @FXML
     private void resumeButtonAction() {
+        startRotateImage();
         resumeButton1.setDisable(true);
         pauseButton1.setDisable(false);
         preferenceButton1.setDisable(true);
@@ -115,6 +125,7 @@ public class CafeteriaController {
     }
     @FXML
     private void stopButtonAction() {
+        stopRotateImage();
         setButtonsDisabled(true);
         preferenceButton1.setDisable(false);
         queueLengthButton1.setDisable(false);
@@ -260,13 +271,25 @@ public class CafeteriaController {
     /*
         ====== Utilities =======
     */
+    public void startRotateImage(){
+        rotateTransition1.play();
+        rotateTransition2.play();
+        rotateTransition3.play();
+        rotateTransition4.play();
+        rotateTransition5.play();
+        rotateTransition6.play();
+    }
+
+    public void stopRotateImage() {
+        rotateTransition1.stop();
+        rotateTransition2.stop();
+        rotateTransition3.stop();
+        rotateTransition4.stop();
+        rotateTransition5.stop();
+        rotateTransition6.stop();
+    }
+
     public void resetElements(){
-        SimulationVariables.VEGAN_QUEUE = 0;
-        SimulationVariables.NON_VEGAN_QUEUE1 = 0;
-        SimulationVariables.NON_VEGAN_QUEUE2 = 0;
-        SimulationVariables.CASHIER_QUEUE1 = 0;
-        SimulationVariables.CASHIER_QUEUE2 = 0;
-        SimulationVariables.SELF_CHECKOUT_QUEUE = 0;
         queue1.setText("0");
         queue2.setText("0");
         queue3.setText("0");
@@ -308,10 +331,13 @@ public class CafeteriaController {
         controlBall4();
         controlBall5();
         controlBall6();
+        controlBall6extra();
         controlBall7();
         controlBall8();
+        controlBall8extra();
         controlBall9();
         controlBall10();
+        controlBall10extra();
         controlBall11();
         controlBall12();
         controlBall13();
@@ -319,6 +345,15 @@ public class CafeteriaController {
         controlBall15();
         controlBall16();
         controlBall17();
+        checkCashier2Active();
+    }
+
+    public void checkCashier2Active(){
+        if (engine.cashierServicePoints[1].isActive()) {
+            cashier2Active.setFill(Color.GREEN);
+        } else {
+            cashier2Active.setFill(Color.RED);
+        }
     }
 
     public void setTexts(){
@@ -332,10 +367,10 @@ public class CafeteriaController {
         veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
         staffedCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_CASHIER_SERVICE_TIME));
         selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
-        queue1.setText(String.format("%d", SimulationVariables.VEGAN_QUEUE));
-        queue2.setText(String.format("%d", (SimulationVariables.NON_VEGAN_QUEUE1 + SimulationVariables.NON_VEGAN_QUEUE2)));
-        queue3.setText(String.format("%d", (SimulationVariables.CASHIER_QUEUE1 + SimulationVariables.CASHIER_QUEUE2)));
-        queue4.setText(String.format("%d", SimulationVariables.SELF_CHECKOUT_QUEUE));
+        queue1.setText(String.format("%d", engine.veganFoodStation.getQueueSize()));
+        queue2.setText(String.format("%d", engine.nonVeganFoodStation[0].getQueueSize()+ engine.nonVeganFoodStation[1].getQueueSize()));
+        queue3.setText(String.format("%d", engine.cashierServicePoints[0].getQueueSize()+ engine.cashierServicePoints[1].getQueueSize()));
+        queue4.setText(String.format("%d", engine.selfCheckoutServicePoint.getQueueSize()));
     }
 
     public void setupBalls(){
@@ -346,10 +381,13 @@ public class CafeteriaController {
         setupBall4();
         setupBall5();
         setupBall6();
+        setupBall6extra();
         setupBall7();
         setupBall8();
+        setupBall8extra();
         setupBall9();
         setupBall10();
+        setupBall10extra();
         setupBall11();
         setupBall12();
         setupBall13();
@@ -468,6 +506,14 @@ public class CafeteriaController {
         transition6.setCycleCount(1);
     }
 
+    public void setupBall6extra() {
+        transition6extra = new TranslateTransition();
+        transition6extra.setNode(ball6extra);
+        transition6extra.setToX(-87);
+        transition6extra.setToY(197);
+        transition6extra.setCycleCount(1);
+    }
+
     public void setupBall7() {
         transition7 = new TranslateTransition();
         transition7.setNode(ball7);
@@ -484,6 +530,13 @@ public class CafeteriaController {
         transition8.setCycleCount(1);
     }
 
+    public void setupBall8extra() {
+        transition8extra = new TranslateTransition();
+        transition8extra.setNode(ball8extra);
+        transition8extra.setToX(138);
+        transition8extra.setToY(198);
+        transition8extra.setCycleCount(1);
+    }
 
     public void setupBall9() {
         transition9 = new TranslateTransition();
@@ -499,6 +552,14 @@ public class CafeteriaController {
         transition10.setToX(365);
         transition10.setToY(195);
         transition10.setCycleCount(1);
+    }
+
+    public void setupBall10extra() {
+        transition10extra = new TranslateTransition();
+        transition10extra.setNode(ball10extra);
+        transition10extra.setToX(365);
+        transition10extra.setToY(195);
+        transition10extra.setCycleCount(1);
     }
 
     public void setupBall11() {
@@ -567,7 +628,7 @@ public class CafeteriaController {
     */
 
     /*
-        ====== Setup Ball Controlllers =======
+        ====== Setup Ball Controlllers & Wiggle Animations =======
     */
     public void controlBall17() {
         if (!engine.selfCashierDeparture) {
@@ -634,7 +695,7 @@ public class CafeteriaController {
             ball14.setTranslateY(0);
             ball14.setLayoutX(203);
             ball14.setLayoutY(566);
-        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && SimulationVariables.SELF_CHECKOUT_QUEUE > 1) {
+        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && engine.selfCheckoutServicePoint.getQueueSize() > 1) {
             ball14.setOpacity(1.0);
             transition14.stop();
             ball14.setTranslateX(0);
@@ -643,7 +704,7 @@ public class CafeteriaController {
             transition14.play();
             engine.selfCashierQueueDeparture = false;
             engine.selfCashierArrival = false;
-        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && SimulationVariables.SELF_CHECKOUT_QUEUE <= 1) {
+        } else if (engine.selfCashierQueueDeparture && engine.selfCashierArrival && engine.selfCheckoutServicePoint.getQueueSize() <= 1) {
             ball14.setOpacity(1.0);
             transition14.stop();
             ball14.setTranslateX(0);
@@ -667,7 +728,7 @@ public class CafeteriaController {
             ball13.setTranslateY(0);
             ball13.setLayoutX(431);
             ball13.setLayoutY(565);
-        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && SimulationVariables.CASHIER_QUEUE2 > 1) {
+        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && engine.cashierServicePoints[1].getQueueSize() > 1) {
             ball13.setOpacity(1.0);
             transition13.stop();
             ball13.setTranslateX(0);
@@ -676,7 +737,7 @@ public class CafeteriaController {
             transition13.play();
             engine.cashierQueueDeparture2 = false;
             engine.cashierArrival2 = false;
-        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && SimulationVariables.CASHIER_QUEUE2 <= 1) {
+        } else if (engine.cashierQueueDeparture2 && engine.cashierArrival2 && engine.cashierServicePoints[1].getQueueSize() <= 1) {
             ball13.setOpacity(1.0);
             transition13.stop();
             ball13.setTranslateX(0);
@@ -700,7 +761,7 @@ public class CafeteriaController {
             ball12.setTranslateY(0);
             ball12.setLayoutX(431);
             ball12.setLayoutY(565);
-        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && SimulationVariables.CASHIER_QUEUE1 > 1) {
+        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && engine.cashierServicePoints[0].getQueueSize() > 1) {
             ball12.setOpacity(1.0);
             transition12.stop();
             ball12.setTranslateX(0);
@@ -709,7 +770,7 @@ public class CafeteriaController {
             transition12.play();
             engine.cashierQueueDeparture1 = false;
             engine.cashierArrival1 = false;
-        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && SimulationVariables.CASHIER_QUEUE1 <= 1) {
+        } else if (engine.cashierQueueDeparture1 && engine.cashierArrival1 && engine.cashierServicePoints[0].getQueueSize() <= 1) {
             ball12.setOpacity(1.0);
             transition12.stop();
             ball12.setTranslateX(0);
@@ -742,6 +803,26 @@ public class CafeteriaController {
             transition11.play();
             engine.nonVeganDeparture2 = false;
             engine.selfCashierQueueArrival = false;
+        }
+    }
+
+    public void controlBall10extra() {
+        if (!engine.nonVeganDeparture2 || !engine.cashierQueueArrival2) {
+            ball10extra.setOpacity(0.0);
+            transition10extra.stop();
+            ball10extra.setTranslateX(0);
+            ball10extra.setTranslateY(0);
+            ball10extra.setLayoutX(68);
+            ball10extra.setLayoutY(370);
+        } else if (engine.nonVeganDeparture2 && engine.cashierQueueArrival2) {
+            ball10extra.setOpacity(1.0);
+            transition10extra.stop();
+            ball10extra.setTranslateX(0);
+            ball10extra.setTranslateY(0);
+            transition10extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition10extra.play();
+            engine.nonVeganDeparture2 = false;
+            engine.cashierQueueArrival2 = false;
         }
     }
 
@@ -784,6 +865,27 @@ public class CafeteriaController {
             engine.selfCashierQueueArrival = false;
         }
     }
+
+    public void controlBall8extra() {
+        if (!engine.nonVeganDeparture1 || !engine.cashierQueueArrival2) {
+            ball8extra.setOpacity(0.0);
+            transition8extra.stop();
+            ball8extra.setTranslateX(0);
+            ball8extra.setTranslateY(0);
+            ball8extra.setLayoutX(295);
+            ball8extra.setLayoutY(367);
+        } else if (engine.nonVeganDeparture1 && engine.cashierQueueArrival2) {
+            ball8extra.setOpacity(1.0);
+            transition8extra.stop();
+            ball8extra.setTranslateX(0);
+            ball8extra.setTranslateY(0);
+            transition8extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition8extra.play();
+            engine.nonVeganDeparture1 = false;
+            engine.cashierQueueArrival2 = false;
+        }
+    }
+
     public void controlBall8(){
         if (!engine.nonVeganDeparture1 || !engine.cashierQueueArrival1) {
             ball8.setOpacity(0.0);
@@ -822,6 +924,27 @@ public class CafeteriaController {
             engine.selfCashierQueueArrival = false;
         }
     }
+
+    public void controlBall6extra() {
+        if (!engine.veganDeparture || !engine.cashierQueueArrival2) {
+            ball6extra.setOpacity(0.0);
+            transition6extra.stop();
+            ball6extra.setTranslateX(0);
+            ball6extra.setTranslateY(0);
+            ball6extra.setLayoutX(520);
+            ball6extra.setLayoutY(368);
+        } else if (engine.veganDeparture && engine.cashierQueueArrival2) {
+            ball6extra.setOpacity(1.0);
+            transition6extra.stop();
+            ball6extra.setTranslateX(0);
+            ball6extra.setTranslateY(0);
+            transition6extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition6extra.play();
+            engine.veganDeparture = false;
+            engine.cashierQueueArrival2 = false;
+        }
+    }
+
     public void controlBall6(){
         if (!engine.veganDeparture || !engine.cashierQueueArrival1) {
             ball6.setOpacity(0.0);
@@ -850,7 +973,7 @@ public class CafeteriaController {
             ball5.setTranslateY(0);
             ball5.setLayoutX(203);
             ball5.setLayoutY(174);
-        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && SimulationVariables.NON_VEGAN_QUEUE2 > 1) {
+        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && engine.nonVeganFoodStation[1].getQueueSize() > 1) {
             ball5.setOpacity(1.0);
             transition5.stop();
             ball5.setTranslateX(0);
@@ -859,7 +982,7 @@ public class CafeteriaController {
             transition5.play();
             engine.nonVeganFoodServe2 = false;
             engine.nonVeganQueueDeparture2 = false;
-        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && SimulationVariables.NON_VEGAN_QUEUE2 <= 1) {
+        } else if (engine.nonVeganFoodServe2 && engine.nonVeganQueueDeparture2 && engine.nonVeganFoodStation[1].getQueueSize() <= 1) {
             transition5.stop();
             ball5.setOpacity(1.0);
             ball5.setTranslateX(0);
@@ -883,7 +1006,7 @@ public class CafeteriaController {
             ball4.setTranslateY(0);
             ball4.setLayoutX(203);
             ball4.setLayoutY(174);
-        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && SimulationVariables.NON_VEGAN_QUEUE1 > 1) {
+        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && engine.nonVeganFoodStation[0].getQueueSize() > 1) {
             ball4.setOpacity(1.0);
             transition4.stop();
             ball4.setTranslateX(0);
@@ -892,7 +1015,7 @@ public class CafeteriaController {
             transition4.play();
             engine.nonVeganFoodServe1 = false;
             engine.nonVeganQueueDeparture1 = false;
-        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && SimulationVariables.NON_VEGAN_QUEUE1 <= 1) {
+        } else if (engine.nonVeganFoodServe1 && engine.nonVeganQueueDeparture1 && engine.nonVeganFoodStation[0].getQueueSize() <= 1) {
             transition4.stop();
             ball4.setOpacity(1.0);
             ball4.setTranslateX(0);
@@ -916,7 +1039,7 @@ public class CafeteriaController {
             ball3.setTranslateY(0);
             ball3.setLayoutX(433);
             ball3.setLayoutY(174);
-        } else if (engine.veganFoodServe && engine.veganQueueDeparture && SimulationVariables.VEGAN_QUEUE > 1) {
+        } else if (engine.veganFoodServe && engine.veganQueueDeparture && engine.veganFoodStation.getQueueSize() > 1) {
             ball3.setOpacity(1.0);
             transition3.stop();
             ball3.setTranslateX(0);
@@ -925,7 +1048,7 @@ public class CafeteriaController {
             transition3.play();
             engine.veganFoodServe = false;
             engine.veganQueueDeparture = false;
-        } else if (engine.veganFoodServe && engine.veganQueueDeparture && SimulationVariables.VEGAN_QUEUE <= 1) {
+        } else if (engine.veganFoodServe && engine.veganQueueDeparture && engine.veganFoodStation.getQueueSize() <= 1) {
             transition3.stop();
             ball3.setOpacity(1.0);
             ball3.setTranslateX(0);
@@ -998,7 +1121,25 @@ public class CafeteriaController {
             engine.veganQueueArrival = false;
         }
     }
+
+    private void setupWiggleAnimation() {
+        rotateTransition1 = createRotateTransition(image1);
+        rotateTransition2 = createRotateTransition(image2);
+        rotateTransition3 = createRotateTransition(image3);
+        rotateTransition4 = createRotateTransition(image4);
+        rotateTransition5 = createRotateTransition(image5);
+        rotateTransition6 = createRotateTransition(image6);
+    }
+
+    private RotateTransition createRotateTransition(ImageView imageView) {
+        RotateTransition rotateTransition = new RotateTransition(Duration.seconds(0.5), imageView);
+        rotateTransition.setFromAngle(-5);
+        rotateTransition.setToAngle(5);
+        rotateTransition.setCycleCount(RotateTransition.INDEFINITE);
+        rotateTransition.setAutoReverse(true);
+        return rotateTransition;
+    }
     /*
-        ====== Setup Ball Controlllers =======
+        ====== Setup Ball Controlllers & Wiggle Animations =======
     */
 }
