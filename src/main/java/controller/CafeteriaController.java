@@ -69,17 +69,7 @@ public class CafeteriaController {
     @FXML
     private void startButtonAction() throws InterruptedException {
         if (validateInputs()) {
-            setupWiggleAnimation();
-            startRotateImage();
-            setupBalls();
-            setButtonsDisabled(false);
-            startButton1.setDisable(true);
-            preferenceButton1.setDisable(true);
-            queueLengthButton1.setDisable(true);
-            pauseButton1.setDisable(false);
-            stopButton1.setDisable(false);
-            resumeButton1.setDisable(true);
-            messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
+            initialSetup();
 
             engine.setSimulationTime(Double.parseDouble(simulationTime1.getText()));
             engine.setDelayTime(Double.parseDouble(delayTime1.getText()));
@@ -271,6 +261,23 @@ public class CafeteriaController {
     /*
         ====== Utilities =======
     */
+    public void initialSetup() {
+        setupWiggleAnimation();
+        startRotateImage();
+        rotateTransition5.stop();
+        image5.setOpacity(0.4);
+        cashier2Active.setFill(Color.RED);
+        setupBalls();
+        setButtonsDisabled(false);
+        startButton1.setDisable(true);
+        preferenceButton1.setDisable(true);
+        queueLengthButton1.setDisable(true);
+        pauseButton1.setDisable(false);
+        stopButton1.setDisable(false);
+        resumeButton1.setDisable(true);
+        messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
+    }
+
     public void startRotateImage(){
         rotateTransition1.play();
         rotateTransition2.play();
@@ -351,8 +358,12 @@ public class CafeteriaController {
     public void checkCashier2Active(){
         if (engine.cashierServicePoints[1].isActive()) {
             cashier2Active.setFill(Color.GREEN);
+            rotateTransition5.play();
+            image5.setOpacity(1.0);
         } else {
             cashier2Active.setFill(Color.RED);
+            rotateTransition5.stop();
+            image5.setOpacity(0.4);
         }
     }
 

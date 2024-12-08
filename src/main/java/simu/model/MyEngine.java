@@ -125,6 +125,7 @@ public class MyEngine extends Engine {
 
     @Override
     protected void runEvent(Event t) {
+        checkAndUpdateSecondCashierStatus();
         System.out.println("Simulation speed" + SimulationVariables.DELAY_TIME);
         // Implement delay
         try {
@@ -424,8 +425,6 @@ public class MyEngine extends Engine {
                 assignToCashier();
             }
         }
-
-        checkAndUpdateSecondCashierStatus();
 
         // Update the queue sizes
         int updatedFirstCashierQueueSize = cashierServicePoints[0].getQueueSize();
