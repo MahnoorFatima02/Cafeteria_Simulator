@@ -25,6 +25,7 @@ public abstract class Engine {
 
     public void run() {
         resetVariables(); // Reset all simulation variables
+        clock.setClock(0); // Reset the clock
         initialize(); // creating, e.g., the first event
 
         while (running && !stopped) {
@@ -53,7 +54,6 @@ public abstract class Engine {
         }
 
         results();
-        clock.setClock(0); // Reset the clock
         eventList.clear(); // Clear the event list
     }
 

@@ -18,7 +18,10 @@ public class MyEngine extends Engine {
     Customer customer;
 //    private Map<String, Double> constants;
     ConstantsDao constantsDao = new ConstantsDao();
+    private int totalCustomers;
     private int totalCustomersServed;
+    private int totalCustomersNotServed;
+    private double serveEfficiency;
     private ArrivalProcess arrivalProcess;
     public ServicePoint veganFoodStation;
     public ServicePoint[] nonVeganFoodStation;
@@ -229,6 +232,12 @@ public class MyEngine extends Engine {
         SimulationVariables.AVG_CASHIER_SERVICE_TIME = ServicePoint.getAverageServiceTime(cashierServicePoints);
         SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME  = selfCheckoutServicePoint.getAverageServiceTime();
         SimulationVariables.TOTAL_CUSTOMERS_SERVED = totalCustomersServed;
+        totalCustomers = Customer.getTotalCustomers();
+        SimulationVariables.TOTAL_CUSTOMERS_ARRIVED = totalCustomers;
+        totalCustomersNotServed = totalCustomers - totalCustomersServed;
+        SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED = totalCustomersNotServed;
+        serveEfficiency = (totalCustomersServed / (double) totalCustomers) * 100;
+        SimulationVariables.SERVE_EFFICIENCY = serveEfficiency;
         if (totalCustomersServed > 0 && (SimulationVariables.AVG_CASHIER_SERVICE_TIME != 0 || SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME != 0) && (SimulationVariables.AVG_VEGAN_SERVICE_TIME != 0 || SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME != 0)) {
             SimulationVariables.AVERAGE_TIME_SPENT = (SimulationVariables.AVG_VEGAN_SERVICE_TIME  + SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME) / 2 + (SimulationVariables.AVG_CASHIER_SERVICE_TIME  + SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME ) / 2;
         }
@@ -589,6 +598,22 @@ public class MyEngine extends Engine {
 
     public int getSelfCheckoutQueueSize() {
         return selfCheckoutServicePoint.getQueueSize();
+    }
+
+    public void setTotalCustomers(int totalCustomers) {
+        this.totalCustomers = totalCustomers;
+    }
+
+    public int getTotalCustomers() {
+        return totalCustomers;
+    }
+
+    public int getTotalCustomersNotServed() {
+        return totalCustomersNotServed;
+    }
+
+    public void setTotalCustomersNotServed(int totalCustomersNotServed) {
+        this.totalCustomersNotServed = totalCustomersNotServed;
     }
 
 }

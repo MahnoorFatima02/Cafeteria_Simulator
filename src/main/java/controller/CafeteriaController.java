@@ -3,6 +3,7 @@ package controller;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
 import javafx.animation.RotateTransition;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +19,14 @@ import javafx.util.Duration;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
 import javafx.scene.image.ImageView;
+import javafx.scene.chart.PieChart;
+import javafx.collections.ObservableList;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import simu.framework.Clock;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
 
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
@@ -29,11 +38,26 @@ public class CafeteriaController {
     @FXML
     private TextField simulationTime1, delayTime1;
     @FXML
-    private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent, queue1, queue2, queue3, queue4, veganStationServing, veganStationServed, nonVeganStation1Serving, nonVeganStation1Served, nonVeganStation2Serving, nonVeganStation2Served, cashier1Serving, cashier1Served, cashier2Serving, cashier2Served, selfCashierServing, selfCashierServed;
+    private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent, queue1, queue2, queue3, queue4, veganStationServing, veganStationServed, nonVeganStation1Serving, nonVeganStation1Served, nonVeganStation2Serving, nonVeganStation2Served, cashier1Serving, cashier1Served, cashier2Serving, cashier2Served, selfCashierServing, selfCashierServed, totalStudentsNotServed, serveEfficiency;
     @FXML
     private Circle ball1, ball2, ball2extra, ball3, ball4, ball5, ball6, ball6extra, ball7, ball8, ball8extra, ball9, ball10, ball10extra, ball11, ball12, ball13, ball14, ball15, ball16, ball17, cashier2Active;
     @FXML
     private ImageView image1, image2, image3, image4, image5, image6;
+    @FXML
+    private PieChart servedPieChart;
+    @FXML
+    private LineChart<Number, Number> averagetimeLineChart;
+    @FXML
+    private NumberAxis horizontalAxisLineChart;
+    @FXML
+    private NumberAxis verticalAxisLineChart, timeAxis;
+    @FXML
+    private CategoryAxis categoryAxis;
+    @FXML
+    private BarChart<String, Number> foodlineBarChart;
+
+    private XYChart.Series<Number, Number> averageTimeSeries;
+    private XYChart.Series<String, Number> foodLineSeries;
     private TranslateTransition transition1, transition2, transition2extra, transition3, transition4, transition5, transition6, transition6extra, transition7, transition8, transition8extra, transition9, transition10, transition10extra, transition11, transition12, transition13, transition14, transition15, transition16, transition17;
     private RotateTransition rotateTransition1, rotateTransition2, rotateTransition3, rotateTransition4, rotateTransition5, rotateTransition6;
 
@@ -85,6 +109,9 @@ public class CafeteriaController {
                     ballControllers();
                     updateLabels();
                     setTexts();
+                    updatePieChart();
+                    updateLineChart();
+                    updateBarChart();
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -259,6 +286,144 @@ public class CafeteriaController {
     */
 
     /*
+        ====== Chart Components =======
+    */
+    private void setupPieChart() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Total Students Served", SimulationVariables.TOTAL_CUSTOMERS_SERVED),
+                new PieChart.Data("Students Not Served", SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED)
+        );
+
+        servedPieChart.setData(pieChartData);
+        servedPieChart.setLabelsVisible(false);
+        servedPieChart.setLegendVisible(false);
+
+        // Set colors for the pie chart slices
+        for (PieChart.Data data : servedPieChart.getData()) {
+            if (data.getName().equals("Total Students Served")) {
+                data.getNode().setStyle("-fx-pie-color: #ff5000;");
+            } else if (data.getName().equals("Students Not Served")) {
+                data.getNode().setStyle("-fx-pie-color: #ffa07b;");
+            }
+        }
+    }
+    public void updatePieChart() {
+        for (PieChart.Data data : servedPieChart.getData()) {
+            if (data.getName().equals("Total Students Served")) {
+                data.setPieValue(SimulationVariables.TOTAL_CUSTOMERS_SERVED);
+            } else if (data.getName().equals("Students Not Served")) {
+                data.setPieValue(SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED);
+            }
+        }
+    }
+
+    private void setupLineChart() {
+        horizontalAxisLineChart.setLabel(null);
+        verticalAxisLineChart.setLabel(null);
+        horizontalAxisLineChart.setAutoRanging(false);
+        verticalAxisLineChart.setAutoRanging(false);
+        horizontalAxisLineChart.setLowerBound(0);
+        verticalAxisLineChart.setLowerBound(0);
+        averagetimeLineChart.setLegendVisible(false);
+        averagetimeLineChart.setHorizontalGridLinesVisible(false);
+        averagetimeLineChart.setVerticalGridLinesVisible(false);
+        averagetimeLineChart.setStyle("-fx-background-color: transparent;");
+        averagetimeLineChart.lookup(".chart-plot-background").setStyle("-fx-background-color: #ffdbcd;");
+
+        // Set tick label formatter to show only integer values
+        horizontalAxisLineChart.setTickLabelFormatter(new NumberAxis.DefaultFormatter(horizontalAxisLineChart) {
+            @Override
+            public String toString(Number object) {
+                return String.format("%d", object.intValue());
+            }
+        });
+
+        verticalAxisLineChart.setTickLabelFormatter(new NumberAxis.DefaultFormatter(verticalAxisLineChart) {
+            @Override
+            public String toString(Number object) {
+                return String.format("%d", object.intValue());
+            }
+        });
+
+        averageTimeSeries = new XYChart.Series<>();
+        averagetimeLineChart.getData().add(averageTimeSeries);
+    }
+
+    public void updateLineChart() {
+        int currentTime = (int) Clock.getInstance().getClock();
+        int averageTimeSpent = (int) SimulationVariables.AVERAGE_TIME_SPENT;
+
+        averageTimeSeries.getData().add(new XYChart.Data<>(currentTime, averageTimeSpent));
+
+        // Calculate the upper bounds for the axes
+        int horizontalUpperBound = (int) Math.ceil(currentTime / 10.0) * 10;
+        int verticalUpperBound = (int) Math.ceil(averageTimeSpent / 10.0) * 10;
+
+        // Set the upper bounds and minor tick counts
+        horizontalAxisLineChart.setUpperBound(horizontalUpperBound);
+        verticalAxisLineChart.setUpperBound(verticalUpperBound);
+
+        horizontalAxisLineChart.setTickUnit(horizontalUpperBound / 5.0);
+        verticalAxisLineChart.setTickUnit(verticalUpperBound / 4.0);
+    }
+
+    private void setupBarChart() {
+        categoryAxis.setLabel(null);
+        timeAxis.setLabel(null);
+        timeAxis.setAutoRanging(false);
+        timeAxis.setLowerBound(0);
+        foodlineBarChart.setLegendVisible(false);
+        foodlineBarChart.setHorizontalGridLinesVisible(false);
+        foodlineBarChart.setVerticalGridLinesVisible(false);
+        foodlineBarChart.lookup(".chart-plot-background").setStyle("-fx-background-color: #ffdbcd;");
+        foodlineBarChart.setAnimated(false);
+
+        // Set tick label formatter to show only integer values
+        timeAxis.setTickLabelFormatter(new NumberAxis.DefaultFormatter(timeAxis) {
+            @Override
+            public String toString(Number object) {
+                return String.format("%d", object.intValue());
+            }
+        });
+
+        // Set categories for the horizontal axis
+        categoryAxis.setCategories(FXCollections.observableArrayList(
+                "Normal Food Line", "Vegan Food Line", "Staffed Cashier", "Self-service Cashier"
+        ));
+
+        foodLineSeries = new XYChart.Series<>();
+        foodlineBarChart.getData().add(foodLineSeries);
+    }
+
+    public void updateBarChart() {
+        foodLineSeries.getData().clear();
+
+        XYChart.Data<String, Number> normalFoodLine = new XYChart.Data<>("Normal Food Line", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME);
+        XYChart.Data<String, Number> veganFoodLine = new XYChart.Data<>("Vegan Food Line", SimulationVariables.AVG_VEGAN_SERVICE_TIME);
+        XYChart.Data<String, Number> staffedCashier = new XYChart.Data<>("Staffed Cashier", SimulationVariables.AVG_CASHIER_SERVICE_TIME);
+        XYChart.Data<String, Number> selfServiceCashier = new XYChart.Data<>("Self-service Cashier", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME);
+
+        // Set different colors for each bar
+        normalFoodLine.nodeProperty().addListener((observable, oldValue, newValue) -> newValue.setStyle("-fx-bar-fill: #ff5000;"));
+        veganFoodLine.nodeProperty().addListener((observable, oldValue, newValue) -> newValue.setStyle("-fx-bar-fill: #00bf63;"));
+        staffedCashier.nodeProperty().addListener((observable, oldValue, newValue) -> newValue.setStyle("-fx-bar-fill: #0097b2;"));
+        selfServiceCashier.nodeProperty().addListener((observable, oldValue, newValue) -> newValue.setStyle("-fx-bar-fill: #5271ff;"));
+
+        foodLineSeries.getData().addAll(normalFoodLine, veganFoodLine, staffedCashier, selfServiceCashier);
+
+        // Calculate the upper bound for the vertical axis
+        double maxValue = Math.max(Math.max(SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME, SimulationVariables.AVG_VEGAN_SERVICE_TIME),
+                Math.max(SimulationVariables.AVG_CASHIER_SERVICE_TIME, SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
+        int verticalUpperBound = (int) Math.ceil(maxValue / 10.0) * 10;
+
+        timeAxis.setUpperBound(verticalUpperBound);
+        timeAxis.setTickUnit(verticalUpperBound / 4.0);
+    }
+    /*
+        ====== Chart Components =======
+    */
+
+    /*
         ====== Utilities =======
     */
     public void initialSetup() {
@@ -276,6 +441,9 @@ public class CafeteriaController {
         stopButton1.setDisable(false);
         resumeButton1.setDisable(true);
         messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
+        setupPieChart();
+        setupLineChart();
+        setupBarChart();
     }
 
     public void startRotateImage(){
@@ -373,6 +541,8 @@ public class CafeteriaController {
         foodLineSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_NON_VEGAN_SERVICE));
         cashierSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_CASHIER));
         totalStudentsServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_SERVED));
+        totalStudentsNotServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED));
+        serveEfficiency.setText(String.format("%.2f", SimulationVariables.SERVE_EFFICIENCY));
         averageTimeSpent.setText(String.format("%.2f", SimulationVariables.AVERAGE_TIME_SPENT));
         normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME));
         veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
