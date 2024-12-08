@@ -26,4 +26,6 @@ public class CafeteriaGUI extends Application {
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
+
+
 }
