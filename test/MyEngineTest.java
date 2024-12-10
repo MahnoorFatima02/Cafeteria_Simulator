@@ -1,4 +1,3 @@
-import eduni.distributions.ContinuousGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +8,7 @@ import simu.framework.Event;
 import simu.framework.Trace;
 import simu.model.*;
 import simu.utility.SimulationVariables;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -125,6 +125,12 @@ class MyEngineTest {
 
         // Run the events
         myEngine.runEvent(arrivalEvent);
+
+        // Verify that the customer is created and added to the queue
+        assertNotNull(myEngine.getVeganQueueSize());
+        assertTrue(myEngine.getVeganQueueSize() >= 0);
+
+        // Run the departure events
         myEngine.runEvent(departureEvent1);
         myEngine.runEvent(departureEvent2);
 

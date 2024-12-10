@@ -13,6 +13,7 @@ public class CafeteriaController {
     public CafeteriaController() {
         this.engine = new MyEngine();
     }
+
     /*
             ====== Main Functions =======
         */
@@ -105,6 +106,7 @@ public class CafeteriaController {
     public boolean isVeganFoodStationReserved() {
         return engine.veganFoodStation.isReserved();
     }
+
     public int getVeganFoodStationCurrentCustomerID() {
         return engine.veganFoodStation.getCurrentCustomerID();
     }
