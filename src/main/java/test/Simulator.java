@@ -1,16 +1,10 @@
 package test;
 
-import eduni.distributions.ContinuousGenerator;
-import eduni.distributions.Negexp;
-import eduni.distributions.Normal;
-import simu.framework.Engine;
 import simu.framework.Trace;
 import simu.framework.Trace.Level;
 import simu.model.MyEngine;
 import simu.model.SimulationAdjustments;
-import simu.model.SimulationConstants;
-
-import java.util.Scanner;
+import simu.utility.SimulationVariables;
 
 /* Command-line type User Interface */
 // Comma separated file on Excel at the end
@@ -47,10 +41,10 @@ public class Simulator {
         SimulationAdjustments.getAdjustStudentArrivalFlag();
 
         // Get current parameters
-        double simulationSpeed = SimulationConstants.getSimulationSpeed();
-        double foodServiceSpeed = SimulationConstants.getFoodServiceSpeed();
-        double cashierServiceSpeed = SimulationConstants.getCashierServiceSpeed();
-        double arrivalSpeed = SimulationConstants.getArrivalSpeed();
+        double simulationSpeed = SimulationVariables.getSimulationSpeed();
+        double foodServiceSpeed = SimulationVariables.getFoodServiceSpeed();
+        double cashierServiceSpeed = SimulationVariables.getCashierServiceSpeed();
+        double arrivalSpeed = SimulationVariables.getArrivalSpeed();
 
         System.out.println("Current simulation speed: " + simulationSpeed);
         System.out.println("Current food service speed: " + foodServiceSpeed);

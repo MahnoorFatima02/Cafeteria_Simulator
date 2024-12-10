@@ -1,305 +1,411 @@
 package controller;
 
-import javafx.fxml.FXML;
-import javafx.scene.chart.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import simu.framework.Trace;
-import simu.model.SimulationConstants;
 import view.CafeteriaGUI;
 import simu.model.MyEngine;
-import simu.model.Customer;
 import simu.model.SimulationAdjustments;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
-
 
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
     private MyEngine engine;
-    private Customer customer;
-
-    @FXML
-    private Button lessSimulationSpeed1, moreSimulationSpeed1, lessArrivalRate1, moreArrivalRate1, lessFoodLineSpeed1, moreFoodLineSpeed1, lessCashierSpeed1, moreCashierSpeed1, startButton1, pauseButton1, resumeButton1, preferenceButton1, queueLengthButton1, stopButton1;
-    @FXML
-    private TextField simulationTime1, delayTime1;
-    @FXML
-    private Label messageBox, simulationSpeed1, arrivalRate1, foodLineSpeed1, cashierSpeed1, totalStudentsServed, averageTimeSpent, normalFoodLineTimeSpent, veganFoodLineTimeSpent, staffedCashierTimeSpent, selfServiceCashierTimeSpent;
-    @FXML
-    private BarChart foodlineBarChart;
-    @FXML
-    private PieChart foodlinePieChart;
-    @FXML
-    private PieChart servedPieChart;
-    @FXML
-    private LineChart<Number, Number> servedLineChart;
-    @FXML
-    private LineChart<Number, Number> averagetimeLineChart;
-
-    public void setMainApp(CafeteriaGUI mainApp) {
-        this.mainApp = mainApp;
-    }
 
     public CafeteriaController() {
         this.engine = new MyEngine();
     }
-
-    private void setButtonsDisabled(boolean disabled) {
-        lessSimulationSpeed1.setDisable(disabled);
-        moreSimulationSpeed1.setDisable(disabled);
-        lessArrivalRate1.setDisable(disabled);
-        moreArrivalRate1.setDisable(disabled);
-        lessFoodLineSpeed1.setDisable(disabled);
-        moreFoodLineSpeed1.setDisable(disabled);
-        lessCashierSpeed1.setDisable(disabled);
-        moreCashierSpeed1.setDisable(disabled);
-        startButton1.setDisable(disabled);
-        pauseButton1.setDisable(disabled);
-        resumeButton1.setDisable(disabled);
-        stopButton1.setDisable(disabled);
-        preferenceButton1.setDisable(disabled);
-        queueLengthButton1.setDisable(disabled);
+    /*
+            ====== Main Functions =======
+        */
+    public void setMainApp(CafeteriaGUI mainApp) {
+        this.mainApp = mainApp;
     }
 
-    private boolean isInteger(String str) {
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
+    public void startSimulation(String simulationTime, String delayTime) throws InterruptedException {
+        engine.setSimulationTime(Double.parseDouble(simulationTime));
+        engine.setDelayTime(Double.parseDouble(delayTime));
+        Trace.setTraceLevel(Trace.Level.INFO);
+
+        new Thread(() -> {
+            engine.startSimulation();
+        }).start();
     }
 
-    private boolean validateInputs() {
-        boolean valid = true;
-        if (!isInteger(simulationTime1.getText()) || !isInteger(delayTime1.getText())) {
-            messageBox.setText("Simulation Time and Delay Time must be an integer.");
-            valid = false;
-        } else if (Integer.parseInt(simulationTime1.getText()) < 1 || Integer.parseInt(delayTime1.getText()) < 1) {
-            messageBox.setText("Simulation Time and Delay Time must be greater than 0.");
-            valid = false;
-        } else if (!preferenceButton1.isDisable() && !queueLengthButton1.isDisable()) {
-            messageBox.setText("Please select Choosing Type.");
-            valid = false;
-        }
-        return valid;
-    }
-
-    @FXML
-    private void preferenceButtonAction() {
-        preferenceButton1.setDisable(true);
-        queueLengthButton1.setDisable(false);
-        resumeButton1.setDisable(true);
-        engine.setAssignByQueueLength(false);
-        checkStartConditions();
-    }
-
-    @FXML
-    private void queueLengthButtonAction() {
-        queueLengthButton1.setDisable(true);
-        preferenceButton1.setDisable(false);
-        resumeButton1.setDisable(true);
-        engine.setAssignByQueueLength(true);
-        checkStartConditions();
-    }
-
-    private void checkStartConditions() {
-        if (validateInputs()) {
-            startButton1.setDisable(false);
-            messageBox.setText("Press START to begin the simulation.");
-        }
-    }
-
-    @FXML
-    private void startButtonAction() throws InterruptedException {
-        if (validateInputs()) {
-            setButtonsDisabled(false);
-            startButton1.setDisable(true);
-            preferenceButton1.setDisable(true);
-            queueLengthButton1.setDisable(true);
-            pauseButton1.setDisable(false);
-            stopButton1.setDisable(false);
-            resumeButton1.setDisable(true);
-            messageBox.setText("Simulation started. Use PAUSE, RESUME, and RESTART as needed.");
-
-            engine.setSimulationTime(Double.parseDouble(simulationTime1.getText()));
-            engine.setDelayTime(Double.parseDouble(delayTime1.getText()));
-            Trace.setTraceLevel(Trace.Level.INFO);
-
-
-            new Thread(() -> {
-                engine.startSimulation();
-            }).start();
-
-            //Charts
-            // Customers Served LineChart
-            servedLineChart.setCreateSymbols(false);
-            servedLineChart.setAnimated(true);
-            averagetimeLineChart.setCreateSymbols(false);
-            averagetimeLineChart.setAnimated(true);
-
-            XYChart.Series<Number, Number> series1 = new XYChart.Series<>();
-            series1.setName("The Number of Customers Served");
-            series1.getData().add(new XYChart.Data<>(0, 0));
-            servedLineChart.getData().add(series1);
-
-            int[] iterationStep = {0}; // for both LineCharts
-
-
-            //Customers Served PieChart
-            PieChart.Data slice5 = new PieChart.Data("Served Customers", 0);
-            PieChart.Data slice6 = new PieChart.Data("Total Number of Customers Arrived"  , 0);
-            servedPieChart.getData().add(slice5);
-            servedPieChart.getData().add(slice6);
-
-            // Average Time Spent LineChart
-            XYChart.Series<Number, Number> series2 = new XYChart.Series<>();
-            series2.setName("Average Time Spent in the Cafeteria Service Points");
-            series2.getData().add(new XYChart.Data<>(0, 0));
-            averagetimeLineChart.getData().add(series2);
-
-
-            // Food Lines BarChart
-            XYChart.Series<String, Number> dataSeries1 = new XYChart.Series<>();
-            dataSeries1.setName("Food Lines");
-            dataSeries1.getData().add(new XYChart.Data<>("Normal Food Line", 0));
-            dataSeries1.getData().add(new XYChart.Data<>("Vegan Food Line", 0));
-            dataSeries1.getData().add(new XYChart.Data<>("Staffed Cashier", 0));
-            dataSeries1.getData().add(new XYChart.Data<>("Self Service Cashier", 0));
-            foodlineBarChart.getData().add(dataSeries1);
-
-
-            // FoodLine PieChart
-            PieChart.Data slice1 = new PieChart.Data("Normal Food Line", 0);
-            PieChart.Data slice2 = new PieChart.Data("Vegan Food Line"  , 0);
-            PieChart.Data slice3 = new PieChart.Data("Staffed Cashier" , 0);
-            PieChart.Data slice4 = new PieChart.Data("Self Service Cashier" , 0);
-            foodlinePieChart.getData().add(slice1);
-            foodlinePieChart.getData().add(slice2);
-            foodlinePieChart.getData().add(slice3);
-            foodlinePieChart.getData().add(slice4);
-
-
-
-            // Create a Timeline to update the GUI elements periodically
-            Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), event -> {
-                if (engine.isRunning() && !engine.isStopped()) {
-
-                    // Update Charts
-                    // Customers Served LineChart
-                    series1.getData().add(new XYChart.Data<>(iterationStep[0], SimulationConstants.TOTAL_CUSTOMERS_SERVED));
-                    iterationStep[0]++;
-
-                    // Served Customers PieChart
-                    slice5.setPieValue(SimulationConstants.TOTAL_CUSTOMERS_SERVED);
-                    slice6.setPieValue(customer.getTotalCustomers());
-
-                    // Average Time LineChart
-                    series2.getData().add(new XYChart.Data<>(iterationStep[0], SimulationConstants.AVERAGE_TIME_SPENT));
-                    iterationStep[0]++;
-
-                    // FoodLine PieChart
-                    slice1.setPieValue(SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME);
-                    slice2.setPieValue(SimulationConstants.AVG_VEGAN_SERVICE_TIME);
-                    slice3.setPieValue(SimulationConstants.AVG_CASHIER_SERVICE_TIME);
-                    slice4.setPieValue(SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME);
-
-                    // FoodLine BarChart
-                    dataSeries1.getData().get(0).setYValue(SimulationConstants.AVG_NON_VEGAN_SERVICE_TIME);
-                    dataSeries1.getData().get(1).setYValue(SimulationConstants.AVG_VEGAN_SERVICE_TIME);
-                    dataSeries1.getData().get(2).setYValue(SimulationConstants.AVG_CASHIER_SERVICE_TIME);
-                    dataSeries1.getData().get(3).setYValue(SimulationConstants.AVG_SELF_CHECKOUT_SERVICE_TIME);
-
-                }
-            }));
-            timeline.setCycleCount(Timeline.INDEFINITE);
-            timeline.play();
-
-        }
-    }
-
-    @FXML
-    private void pauseButtonAction() {
-        pauseButton1.setDisable(true);
-        resumeButton1.setDisable(false);
-        stopButton1.setDisable(false);
-        messageBox.setText("Simulation paused. Press RESUME to continue.");
+    public void pauseButtonAction() {
         engine.pauseSimulation();
     }
 
-    @FXML
-    private void resumeButtonAction() {
-        resumeButton1.setDisable(true);
-        pauseButton1.setDisable(false);
-        preferenceButton1.setDisable(true);
-        queueLengthButton1.setDisable(true);
-        stopButton1.setDisable(false);
-        messageBox.setText("Simulation resumed.");
+    public void resumeButtonAction() {
         engine.resumeSimulation();
     }
 
-    @FXML
-    private void stopButtonAction() {
-        setButtonsDisabled(true);
-        preferenceButton1.setDisable(false);
-        queueLengthButton1.setDisable(false);
-        messageBox.setText("Simulation stopped. Press START to start a new simulation.");
+    public void stopButtonAction() {
         engine.stopSimulation();
-        engine.resetVariables();
-
     }
 
-    public void initialStartButtonAction() {
-        System.out.println("The initialStartButton has been pressed");
-        try {
-            mainApp.loadScene("/simulationpage.fxml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void preferenceButtonAction() {
+        engine.setAssignByQueueLength(false);
     }
 
+    public void queueLengthButtonAction() {
+        engine.setAssignByQueueLength(true);
+    }
 
+    public boolean isEngineRunning() {
+        return engine.isRunning();
+    }
 
+    public boolean isEngineStopped() {
+        return engine.isStopped();
+    }
+    /*
+            ====== Main Functions =======
+        */
+
+    /*
+            ====== Parameters Adjustments Functions =======
+        */
     public void lessSimulationSpeedAction() {
-        System.out.println("The lessSimulationSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustStimulationSpeedFlag(false);
-
     }
 
     public void moreSimulationSpeedAction() {
-        System.out.println("The moreSimulationSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustStimulationSpeedFlag(true);
     }
 
     public void lessArrivalRateAction() {
-        System.out.println("The lessArrivalRateAction button has been pressed");
         SimulationAdjustments.setAdjustStudentArrivalFlag(false);
     }
 
     public void moreArrivalRateAction() {
-        System.out.println("The moreArrivalRateAction button has been pressed");
         SimulationAdjustments.setAdjustStudentArrivalFlag(true);
     }
 
     public void lessFoodLineSpeedAction() {
-        System.out.println("The lessFoodLineSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustFoodLineServiceSpeedFlag(false);
     }
 
     public void moreFoodLineSpeedAction() {
-        System.out.println("The moreFoodLineSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustFoodLineServiceSpeedFlag(true);
     }
 
     public void lessCashierSpeedAction() {
-        System.out.println("The lessCashierSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustCashierServiceSpeedFlag(false);
     }
 
     public void moreCashierSpeedAction() {
-        System.out.println("The moreCashierSpeedAction button has been pressed");
         SimulationAdjustments.setAdjustCashierServiceSpeedFlag(true);
     }
+    /*
+            ====== Parameters Adjustments Functions =======
+        */
+
+    /*
+            ====== Labels Updating Functions =======
+        */
+    public boolean isVeganFoodStationReserved() {
+        return engine.veganFoodStation.isReserved();
+    }
+    public int getVeganFoodStationCurrentCustomerID() {
+        return engine.veganFoodStation.getCurrentCustomerID();
+    }
+
+    public int getVeganFoodStationTotalCustomersRemoved() {
+        return engine.veganFoodStation.getTotalCustomersRemoved();
+    }
+
+    public boolean isNonVeganFoodStation1Reserved() {
+        return engine.nonVeganFoodStation[0].isReserved();
+    }
+
+    public int getNonVeganFoodStation1CurrentCustomerID() {
+        return engine.nonVeganFoodStation[0].getCurrentCustomerID();
+    }
+
+    public int getNonVeganFoodStation1TotalCustomersRemoved() {
+        return engine.nonVeganFoodStation[0].getTotalCustomersRemoved();
+    }
+
+    public boolean isNonVeganFoodStation2Reserved() {
+        return engine.nonVeganFoodStation[1].isReserved();
+    }
+
+    public int getNonVeganFoodStation2CurrentCustomerID() {
+        return engine.nonVeganFoodStation[1].getCurrentCustomerID();
+    }
+
+    public int getNonVeganFoodStation2TotalCustomersRemoved() {
+        return engine.nonVeganFoodStation[1].getTotalCustomersRemoved();
+    }
+
+    public boolean isCashier1Reserved() {
+        return engine.cashierServicePoints[0].isReserved();
+    }
+
+    public int getCashier1CurrentCustomerID() {
+        return engine.cashierServicePoints[0].getCurrentCustomerID();
+    }
+
+    public int getCashier1TotalCustomersRemoved() {
+        return engine.cashierServicePoints[0].getTotalCustomersRemoved();
+    }
+
+    public boolean isCashier2Reserved() {
+        return engine.cashierServicePoints[1].isReserved();
+    }
+
+    public int getCashier2CurrentCustomerID() {
+        return engine.cashierServicePoints[1].getCurrentCustomerID();
+    }
+
+    public int getCashier2TotalCustomersRemoved() {
+        return engine.cashierServicePoints[1].getTotalCustomersRemoved();
+    }
+
+    public boolean isSelfCashierReserved() {
+        return engine.selfCheckoutServicePoint.isReserved();
+    }
+
+    public int getSelfCashierCurrentCustomerID() {
+        return engine.selfCheckoutServicePoint.getCurrentCustomerID();
+    }
+
+    public int getSelfCashierTotalCustomersRemoved() {
+        return engine.selfCheckoutServicePoint.getTotalCustomersRemoved();
+    }
+
+    public int getVeganFoodStationQueueSize() {
+        return engine.veganFoodStation.getQueueSize();
+    }
+
+    public int getNonVeganFoodStation1QueueSize() {
+        return engine.nonVeganFoodStation[0].getQueueSize();
+    }
+
+    public int getNonVeganFoodStation2QueueSize() {
+        return engine.nonVeganFoodStation[1].getQueueSize();
+    }
+
+    public int getNonVeganFoodStationQueueSize() {
+        return engine.nonVeganFoodStation[0].getQueueSize() + engine.nonVeganFoodStation[1].getQueueSize();
+    }
+
+    public int getCashier1QueueSize() {
+        return engine.cashierServicePoints[0].getQueueSize();
+    }
+
+    public int getCashier2QueueSize() {
+        return engine.cashierServicePoints[1].getQueueSize();
+    }
+
+    public int getCashierServicePointQueueSize() {
+        return engine.cashierServicePoints[0].getQueueSize() + engine.cashierServicePoints[1].getQueueSize();
+    }
+
+    public int getSelfCheckoutServicePointQueueSize() {
+        return engine.selfCheckoutServicePoint.getQueueSize();
+    }
+
+    public boolean isCashier2Active() {
+        return engine.cashierServicePoints[1].isActive();
+    }
+    /*
+            ====== Labels Updating Functions =======
+        */
+
+    /*
+                ====== Animation Updating Functions =======
+            */
+    public boolean isSelfCashierDeparture() {
+        return engine.selfCashierDeparture;
+    }
+
+    public void setSelfCashierDeparture(boolean selfCashierDeparture) {
+        engine.selfCashierDeparture = selfCashierDeparture;
+    }
+
+    public boolean isCashierDeparture2() {
+        return engine.cashierDeparture2;
+    }
+
+    public void setCashierDeparture2(boolean cashierDeparture2) {
+        engine.cashierDeparture2 = cashierDeparture2;
+    }
+
+    public boolean isCashierDeparture1() {
+        return engine.cashierDeparture1;
+    }
+
+    public void setCashierDeparture1(boolean cashierDeparture1) {
+        engine.cashierDeparture1 = cashierDeparture1;
+    }
+
+    public boolean isSelfCashierQueueDeparture() {
+        return engine.selfCashierQueueDeparture;
+    }
+
+    public void setSelfCashierQueueDeparture(boolean selfCashierQueueDeparture) {
+        engine.selfCashierQueueDeparture = selfCashierQueueDeparture;
+    }
+
+    public boolean isSelfCashierArrival() {
+        return engine.selfCashierArrival;
+    }
+
+    public void setSelfCashierArrival(boolean selfCashierArrival) {
+        engine.selfCashierArrival = selfCashierArrival;
+    }
+
+    public boolean isCashierQueueDeparture2() {
+        return engine.cashierQueueDeparture2;
+    }
+
+    public void setCashierQueueDeparture2(boolean cashierQueueDeparture2) {
+        engine.cashierQueueDeparture2 = cashierQueueDeparture2;
+    }
+
+    public boolean isCashierArrival2() {
+        return engine.cashierArrival2;
+    }
+
+    public void setCashierArrival2(boolean cashierArrival2) {
+        engine.cashierArrival2 = cashierArrival2;
+    }
+
+    public boolean isCashierQueueDeparture1() {
+        return engine.cashierQueueDeparture1;
+    }
+
+    public void setCashierQueueDeparture1(boolean cashierQueueDeparture1) {
+        engine.cashierQueueDeparture1 = cashierQueueDeparture1;
+    }
+
+    public boolean isCashierArrival1() {
+        return engine.cashierArrival1;
+    }
+
+    public void setCashierArrival1(boolean cashierArrival1) {
+        engine.cashierArrival1 = cashierArrival1;
+    }
+
+    public boolean isNonVeganDeparture2() {
+        return engine.nonVeganDeparture2;
+    }
+
+    public void setNonVeganDeparture2(boolean nonVeganDeparture2) {
+        engine.nonVeganDeparture2 = nonVeganDeparture2;
+    }
+
+    public boolean isSelfCashierQueueArrival() {
+        return engine.selfCashierQueueArrival;
+    }
+
+    public void setSelfCashierQueueArrival(boolean selfCashierQueueArrival) {
+        engine.selfCashierQueueArrival = selfCashierQueueArrival;
+    }
+
+    public boolean isNonVeganDeparture1() {
+        return engine.nonVeganDeparture1;
+    }
+
+    public void setNonVeganDeparture1(boolean nonVeganDeparture1) {
+        engine.nonVeganDeparture1 = nonVeganDeparture1;
+    }
+
+    public boolean isCashierQueueArrival2() {
+        return engine.cashierQueueArrival2;
+    }
+
+    public void setCashierQueueArrival2(boolean cashierQueueArrival2) {
+        engine.cashierQueueArrival2 = cashierQueueArrival2;
+    }
+
+    public boolean isCashierQueueArrival1() {
+        return engine.cashierQueueArrival1;
+    }
+
+    public void setCashierQueueArrival1(boolean cashierQueueArrival1) {
+        engine.cashierQueueArrival1 = cashierQueueArrival1;
+    }
+
+    public boolean isVeganDeparture() {
+        return engine.veganDeparture;
+    }
+
+    public void setVeganDeparture(boolean veganDeparture) {
+        engine.veganDeparture = veganDeparture;
+    }
+
+    public boolean isNonVeganFoodServe2() {
+        return engine.nonVeganFoodServe2;
+    }
+
+    public void setNonVeganFoodServe2(boolean nonVeganFoodServe2) {
+        engine.nonVeganFoodServe2 = nonVeganFoodServe2;
+    }
+
+    public boolean isNonVeganQueueDeparture2() {
+        return engine.nonVeganQueueDeparture2;
+    }
+
+    public void setNonVeganQueueDeparture2(boolean nonVeganQueueDeparture2) {
+        engine.nonVeganQueueDeparture2 = nonVeganQueueDeparture2;
+    }
+
+    public boolean isNonVeganFoodServe1() {
+        return engine.nonVeganFoodServe1;
+    }
+
+    public void setNonVeganFoodServe1(boolean nonVeganFoodServe1) {
+        engine.nonVeganFoodServe1 = nonVeganFoodServe1;
+    }
+
+    public boolean isNonVeganQueueDeparture1() {
+        return engine.nonVeganQueueDeparture1;
+    }
+
+    public void setNonVeganQueueDeparture1(boolean nonVeganQueueDeparture1) {
+        engine.nonVeganQueueDeparture1 = nonVeganQueueDeparture1;
+    }
+
+    public boolean isVeganFoodServe() {
+        return engine.veganFoodServe;
+    }
+
+    public void setVeganFoodServe(boolean veganFoodServe) {
+        engine.veganFoodServe = veganFoodServe;
+    }
+
+    public boolean isVeganQueueDeparture() {
+        return engine.veganQueueDeparture;
+    }
+
+    public void setVeganQueueDeparture(boolean veganQueueDeparture) {
+        engine.veganQueueDeparture = veganQueueDeparture;
+    }
+
+    public boolean isNonVeganQueueArrival2() {
+        return engine.nonVeganQueueArrival2;
+    }
+
+    public void setNonVeganQueueArrival2(boolean nonVeganQueueArrival2) {
+        engine.nonVeganQueueArrival2 = nonVeganQueueArrival2;
+    }
+
+    public boolean isNonVeganQueueArrival1() {
+        return engine.nonVeganQueueArrival1;
+    }
+
+    public void setNonVeganQueueArrival1(boolean nonVeganQueueArrival1) {
+        engine.nonVeganQueueArrival1 = nonVeganQueueArrival1;
+    }
+
+    public boolean isVeganQueueArrival() {
+        return engine.veganQueueArrival;
+    }
+
+    public void setVeganQueueArrival(boolean veganQueueArrival) {
+        engine.veganQueueArrival = veganQueueArrival;
+    }
+    /*
+                ====== Animation Updating Functions =======
+            */
 }

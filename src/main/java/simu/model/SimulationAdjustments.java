@@ -1,5 +1,8 @@
 package simu.model;
 
+import simu.utility.ConstantsEnum;
+import simu.utility.SimulationVariables;
+
 public class SimulationAdjustments {
 
     // Flags that may change during the simulation to adjust various parameters dynamically.
@@ -14,7 +17,7 @@ public class SimulationAdjustments {
             return 1.0; // No adjustment
         }
 
-        return flag ? SimulationConstants.SIMULATION_UPPER_SPEED : SimulationConstants.SIMULATION_LOWER_SPEED;
+        return flag ? ConstantsEnum.SIMULATION_UPPER_SPEED.getValue() : ConstantsEnum.SIMULATION_LOWER_SPEED.getValue();
     }
 
     public static double adjustStimulationSpeed() {
