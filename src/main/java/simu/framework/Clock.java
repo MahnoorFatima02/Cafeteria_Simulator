@@ -1,4 +1,3 @@
-
 package simu.framework;
 
 /**
@@ -6,25 +5,25 @@ package simu.framework;
  * It provides methods to set and get the current simulation time.
  */
 public class Clock {
-	private double clock;
-	private static Clock instance;
-	
-	private Clock(){
-		clock = 0;
-	}
-	
-	public static Clock getInstance(){
-		if (instance == null){
-			instance = new Clock();
-		}
-		return instance;
-	}
-	
-	public void setClock(double clock){
-		this.clock = clock;
-	}
+    private static Clock instance;
+    private double clock;
 
-	public double getClock(){
-		return clock;
-	}
+    private Clock() {
+        clock = 0;
+    }
+
+    public static Clock getInstance() {
+        if (instance == null) {
+            instance = new Clock();
+        }
+        return instance;
+    }
+
+    public double getClock() {
+        return clock;
+    }
+
+    public void setClock(double clock) {
+        this.clock = clock;
+    }
 }

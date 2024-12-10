@@ -31,7 +31,6 @@ public class SimulationAdjustments {
         return flag ? ConstantsEnum.SIMULATION_UPPER_SPEED.getValue() : ConstantsEnum.SIMULATION_LOWER_SPEED.getValue();
     }
 
-
     /**
      * Adjusts the stimulation speed based on the current flag.
      *
@@ -42,7 +41,6 @@ public class SimulationAdjustments {
         adjustStimulationSpeedFlag = null;
         return  adjustSpeed(currentFlag);
     }
-
 
     /**
      * Adjusts the student arrival speed based on the current flag.
@@ -55,7 +53,6 @@ public class SimulationAdjustments {
         return adjustSpeed(currentFlag);
     }
 
-
     /**
      * Adjusts the food line service speed based on the current flag.
      *
@@ -66,7 +63,6 @@ public class SimulationAdjustments {
         adjustFoodLineServiceSpeedFlag = null;
         return  adjustSpeed(currentFlag);
     }
-
 
     /**
      * Adjusts the cashier service speed based on the current flag.

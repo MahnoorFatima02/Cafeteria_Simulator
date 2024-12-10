@@ -103,7 +103,7 @@ public class CafeteriaGUI extends Application {
             controller.startSimulation(simulationTime1.getText(), delayTime1.getText());
 
             // Create a Timeline to update the GUI elements periodically
-            timeline = new Timeline(new KeyFrame(Duration.millis(controller.getSimulationSpeed()*1000), event -> {
+            timeline = new Timeline(new KeyFrame(Duration.millis(controller.getSimulationSpeed() * 1000), event -> {
                 if (controller.isEngineRunning() && !controller.isEngineStopped()) {
                     ballControllers();
                     updateLabels();
@@ -117,6 +117,7 @@ public class CafeteriaGUI extends Application {
             timeline.play();
         }
     }
+
     @FXML
     private void preferenceButtonAction() {
         preferenceButton1.setDisable(true);
@@ -273,7 +274,7 @@ public class CafeteriaGUI extends Application {
         queueLengthButton1.setDisable(disabled);
     }
 
-    public void setTexts(){
+    public void setTexts() {
         simulationSpeed1.setText(String.format("%.2f", controller.getSimulationSpeed()));
         arrivalRate1.setText(String.format("%.2f", controller.getArrivalRate()));
         foodLineSpeed1.setText(String.format("%.2f", controller.getFoodLineSpeed()));
@@ -312,7 +313,7 @@ public class CafeteriaGUI extends Application {
         setupBarChart();
     }
 
-    public void updateLabels(){
+    public void updateLabels() {
         updateVeganStationServed();
         updateVeganStationServing();
         updateNonVeganStation1Served();
@@ -327,7 +328,7 @@ public class CafeteriaGUI extends Application {
         updateSelfCashierServed();
     }
 
-    public void resetElements(){
+    public void resetElements() {
         queue1.setText("0");
         queue2.setText("0");
         queue3.setText("0");
@@ -346,7 +347,7 @@ public class CafeteriaGUI extends Application {
         selfCashierServed.setText("0");
     }
 
-    public void startRotateImage(){
+    public void startRotateImage() {
         rotateTransition1.play();
         rotateTransition2.play();
         rotateTransition3.play();
@@ -364,7 +365,7 @@ public class CafeteriaGUI extends Application {
         rotateTransition6.stop();
     }
 
-    public void ballControllers(){
+    public void ballControllers() {
         controlBall1();
         controlBall2();
         controlBall2extra();
@@ -389,7 +390,7 @@ public class CafeteriaGUI extends Application {
         checkCashier2Active();
     }
 
-    public void setupBalls(){
+    public void setupBalls() {
         setupBall1();
         setupBall2();
         setupBall2extra();
@@ -413,7 +414,7 @@ public class CafeteriaGUI extends Application {
         setupBall17();
     }
 
-    public void checkCashier2Active(){
+    public void checkCashier2Active() {
         if (controller.isCashier2Active()) {
             cashier2Active.setFill(Color.GREEN);
             rotateTransition5.play();
@@ -528,6 +529,7 @@ public class CafeteriaGUI extends Application {
             }
         }
     }
+
     public void updatePieChart() {
         for (PieChart.Data data : servedPieChart.getData()) {
             if (data.getName().equals("Total Students Served")) {
@@ -645,18 +647,18 @@ public class CafeteriaGUI extends Application {
             */
 
 
-
     /*
             ====== Setup Balls =======
              */
-    public void setupBall1(){
+    public void setupBall1() {
         transition1 = new TranslateTransition();
         transition1.setNode(ball1);
         transition1.setToX(114);
         transition1.setToY(72);
         transition1.setCycleCount(1);
     }
-    public void setupBall2(){
+
+    public void setupBall2() {
         transition2 = new TranslateTransition();
         transition2.setNode(ball2);
         transition2.setToX(-116);
@@ -664,7 +666,7 @@ public class CafeteriaGUI extends Application {
         transition2.setCycleCount(1);
     }
 
-    public void setupBall2extra(){
+    public void setupBall2extra() {
         transition2extra = new TranslateTransition();
         transition2extra.setNode(ball2extra);
         transition2extra.setToX(-116);
@@ -672,7 +674,7 @@ public class CafeteriaGUI extends Application {
         transition2extra.setCycleCount(1);
     }
 
-    public void setupBall3(){
+    public void setupBall3() {
         transition3 = new TranslateTransition();
         transition3.setNode(ball3);
         transition3.setToX(85);
@@ -680,7 +682,7 @@ public class CafeteriaGUI extends Application {
         transition3.setCycleCount(1);
     }
 
-    public void setupBall4(){
+    public void setupBall4() {
         transition4 = new TranslateTransition();
         transition4.setNode(ball4);
         transition4.setToX(91);
@@ -688,7 +690,7 @@ public class CafeteriaGUI extends Application {
         transition4.setCycleCount(1);
     }
 
-    public void setupBall5(){
+    public void setupBall5() {
         transition5 = new TranslateTransition();
         transition5.setNode(ball5);
         transition5.setToX(-135);
@@ -744,7 +746,7 @@ public class CafeteriaGUI extends Application {
         transition9.setCycleCount(1);
     }
 
-    public void setupBall10(){
+    public void setupBall10() {
         transition10 = new TranslateTransition();
         transition10.setNode(ball10);
         transition10.setToX(365);
@@ -768,7 +770,7 @@ public class CafeteriaGUI extends Application {
         transition11.setCycleCount(1);
     }
 
-    public void setupBall12(){
+    public void setupBall12() {
         transition12 = new TranslateTransition();
         transition12.setNode(ball12);
         transition12.setToX(84);
@@ -1144,7 +1146,7 @@ public class CafeteriaGUI extends Application {
         }
     }
 
-    public void controlBall6(){
+    public void controlBall6() {
         if (!controller.isVeganDeparture() || !controller.isCashierQueueArrival1()) {
             ball6.setOpacity(0.0);
             transition6.stop();
@@ -1253,7 +1255,7 @@ public class CafeteriaGUI extends Application {
             ball3.setTranslateX(0);
             ball3.setTranslateY(0);
             transition3.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
-            PauseTransition pause3 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() *500)); // Adjust the delay as needed
+            PauseTransition pause3 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause3.setOnFinished(event -> {
                 transition3.play();
             });
@@ -1263,7 +1265,7 @@ public class CafeteriaGUI extends Application {
         }
     }
 
-    public void controlBall2extra(){
+    public void controlBall2extra() {
         if (!controller.isNonVeganQueueArrival2()) {
             ball2extra.setOpacity(0.0);
             transition2extra.stop();
@@ -1283,7 +1285,7 @@ public class CafeteriaGUI extends Application {
 
     }
 
-    public void controlBall2(){
+    public void controlBall2() {
         if (!controller.isNonVeganQueueArrival1()) {
             ball2.setOpacity(0.0);
             transition2.stop();
@@ -1301,7 +1303,8 @@ public class CafeteriaGUI extends Application {
             controller.setNonVeganQueueArrival1(false);
         }
     }
-    public void controlBall1(){
+
+    public void controlBall1() {
         if (!controller.isVeganQueueArrival()) {
             ball1.setOpacity(0.0);
             transition1.stop();
@@ -1309,8 +1312,7 @@ public class CafeteriaGUI extends Application {
             ball1.setTranslateY(0);
             ball1.setLayoutX(319);
             ball1.setLayoutY(102);
-        }
-        else {
+        } else {
             ball1.setOpacity(1.0);
             transition1.stop();
             ball1.setTranslateX(0);

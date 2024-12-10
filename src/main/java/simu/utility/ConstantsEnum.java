@@ -21,17 +21,6 @@ public enum ConstantsEnum {
 
     private double value;
 
-
-    /**
-     * Gets the value of the constant.
-     *
-     * @return The value of the constant
-     */
-    public double getValue() {
-        return value;
-    }
-
-
     /**
      * Initializes the constants with values from the provided map.
      *
@@ -43,5 +32,14 @@ public enum ConstantsEnum {
                 constant.value = constantsMap.get(constant.name());
             }
         }
+    }
+
+    /**
+     * Gets the value of the constant.
+     *
+     * @return The value of the constant
+     */
+    public double getValue() {
+        return value;
     }
 }

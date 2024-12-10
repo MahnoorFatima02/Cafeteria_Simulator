@@ -8,8 +8,8 @@ public class MariaDbConnection {
 
     private static Connection conn = null;
 
-    public static Connection getConnection() {
-        if (conn == null) {
+    public static Connection getConnection() throws SQLException {
+        if (conn == null || conn.isClosed()) {
             // connect if necessary
             try {
                 conn = DriverManager.getConnection(
@@ -28,7 +28,6 @@ public class MariaDbConnection {
         try {
             getConnection().close();
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

@@ -6,11 +6,13 @@ import simu.framework.*;
 import eduni.distributions.Negexp;
 import simu.utility.SimulationVariables;
 import simu.dao.ConstantsDao;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
+
 import simu.utility.ConstantsEnum;
 
 /**
@@ -18,25 +20,10 @@ import simu.utility.ConstantsEnum;
  * It handles the arrival and departure events of customers and manages the service points.
  */
 public class MyEngine extends Engine {
-    Customer customer;
-//    private Map<String, Double> constants;
-    ConstantsDao constantsDao = new ConstantsDao();
-    private int totalCustomers;
-    private int totalCustomersServed;
-    private int totalCustomersNotServed;
-    private double serveEfficiency;
-    private ArrivalProcess arrivalProcess;
     public ServicePoint veganFoodStation;
     public ServicePoint[] nonVeganFoodStation;
     public ServicePoint[] cashierServicePoints;
     public ServicePoint selfCheckoutServicePoint;
-    ContinuousGenerator arrivalTime;
-    ContinuousGenerator veganFoodServiceTime;
-    ContinuousGenerator nonVeganFoodServiceTime;
-    ContinuousGenerator cashierServiceTime;
-    ContinuousGenerator selfCheckoutServiceTime;
-
-
     /*
         ====== Flags for moving balls =======
         ====== These values dont necessarily affect the simulation system,
@@ -66,13 +53,23 @@ public class MyEngine extends Engine {
     public boolean cashierDeparture1;
     public boolean cashierDeparture2;
     public boolean selfCashierDeparture;
+    Customer customer;
+    ContinuousGenerator arrivalTime;
+    ContinuousGenerator veganFoodServiceTime;
+    ContinuousGenerator nonVeganFoodServiceTime;
+    ContinuousGenerator cashierServiceTime;
+    ContinuousGenerator selfCheckoutServiceTime;
+    private ConstantsDao constantsDao;
+    private int totalCustomers;
+    private int totalCustomersServed;
+    private int totalCustomersNotServed;
+    private double serveEfficiency;
+    private ArrivalProcess arrivalProcess;
     /*
         ====== Flags for moving balls =======
         ====== These values dont necessarily affect the simulation system,
          it only helps to move the balls, so can be public values ======
     */
-
-
     private int veganCustomerId;
     private int nonVeganCustomerId;
     private int cashierCustomerId;
@@ -82,19 +79,22 @@ public class MyEngine extends Engine {
     private boolean assignByQueueLength;
 
 
-    // TODO: put variables in database
-
-
     /**
      * Service Points and random number generator with different distributions are created here.
      * We use exponential distribution for customer arrival times and normal distribution for the
      * service times.
      */
+
     public MyEngine() {
+        this(new ConstantsDao());
+    }
+
+    public MyEngine(ConstantsDao constantsDao) {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
-        ConstantsEnum.initialize(constantsDao.loadConstants());
-
+        this.constantsDao = constantsDao;
+        Map<String, Double> constants = constantsDao.loadConstants();
+        ConstantsEnum.initialize(constants);
 
     /*
       ======  Random Number Generator =======
@@ -105,11 +105,11 @@ public class MyEngine extends Engine {
       ======  Continuous Generators =======
     */
 
-        arrivalTime =  new Negexp(SimulationVariables.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
-        veganFoodServiceTime =  new Normal(SimulationVariables.MEAN_VEGAN_SERVICE, ConstantsEnum.STD_DEV_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
+        arrivalTime = new Negexp(SimulationVariables.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
+        veganFoodServiceTime = new Normal(SimulationVariables.MEAN_VEGAN_SERVICE, ConstantsEnum.STD_DEV_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
         nonVeganFoodServiceTime = new Normal(SimulationVariables.MEAN_NON_VEGAN_SERVICE, ConstantsEnum.STD_DEV_NON_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
         cashierServiceTime = new Normal(SimulationVariables.MEAN_CASHIER, ConstantsEnum.STD_DEV_CASHIER.getValue(), Integer.toUnsignedLong(r.nextInt()));
-        selfCheckoutServiceTime =  new Normal(SimulationVariables.MEAN_SELF_CHECKOUT, ConstantsEnum.STD_DEV_SELF_CHECKOUT.getValue(), Integer.toUnsignedLong(r.nextInt()));
+        selfCheckoutServiceTime = new Normal(SimulationVariables.MEAN_SELF_CHECKOUT, ConstantsEnum.STD_DEV_SELF_CHECKOUT.getValue(), Integer.toUnsignedLong(r.nextInt()));
 
     /*
       ====== Service Points =======
@@ -146,7 +146,7 @@ public class MyEngine extends Engine {
      * @param t The event to be processed
      */
     @Override
-    protected void runEvent(Event t) {
+    public void runEvent(Event t) {
         checkAndUpdateSecondCashierStatus();
         System.out.println("Simulation speed" + SimulationVariables.DELAY_TIME);
         // Implement delay
@@ -201,7 +201,7 @@ public class MyEngine extends Engine {
      */
     @Override
     // starting service for the next customer.
-    protected void tryCEvents() {
+    public void tryCEvents() {
 
         // for vegan service point event scheduling
         if (!veganFoodStation.isReserved() && veganFoodStation.isOnQueue()) {
@@ -245,16 +245,16 @@ public class MyEngine extends Engine {
         // Handle self-service checkout independently
         if (!selfCheckoutServicePoint.isReserved() && selfCheckoutServicePoint.isOnQueue()) {
             System.out.println("SELF SERVICE POINT SERVICE STARTED: ");
-            Customer customer =  selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
+            Customer customer = selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
             selfCheckoutCustomerId = customer.getId();
             selfCashierArrival = true;
         }
 
         totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
-        SimulationVariables.AVG_VEGAN_SERVICE_TIME  = veganFoodStation.getAverageServiceTime();
+        SimulationVariables.AVG_VEGAN_SERVICE_TIME = veganFoodStation.getAverageServiceTime();
         SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME = ServicePoint.getAverageServiceTime(nonVeganFoodStation);
         SimulationVariables.AVG_CASHIER_SERVICE_TIME = ServicePoint.getAverageServiceTime(cashierServicePoints);
-        SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME  = selfCheckoutServicePoint.getAverageServiceTime();
+        SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME = selfCheckoutServicePoint.getAverageServiceTime();
         SimulationVariables.TOTAL_CUSTOMERS_SERVED = totalCustomersServed;
         totalCustomers = Customer.getTotalCustomers();
         SimulationVariables.TOTAL_CUSTOMERS_ARRIVED = totalCustomers;
@@ -263,9 +263,8 @@ public class MyEngine extends Engine {
         serveEfficiency = (totalCustomersServed / (double) totalCustomers) * 100;
         SimulationVariables.SERVE_EFFICIENCY = serveEfficiency;
         if (totalCustomersServed > 0 && (SimulationVariables.AVG_CASHIER_SERVICE_TIME != 0 || SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME != 0) && (SimulationVariables.AVG_VEGAN_SERVICE_TIME != 0 || SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME != 0)) {
-            SimulationVariables.AVERAGE_TIME_SPENT = (SimulationVariables.AVG_VEGAN_SERVICE_TIME  + SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME) / 2 + (SimulationVariables.AVG_CASHIER_SERVICE_TIME  + SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME ) / 2;
-        }
-        else{
+            SimulationVariables.AVERAGE_TIME_SPENT = (SimulationVariables.AVG_VEGAN_SERVICE_TIME + SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME) / 2 + (SimulationVariables.AVG_CASHIER_SERVICE_TIME + SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME) / 2;
+        } else {
             SimulationVariables.AVERAGE_TIME_SPENT = 0.0;
         }
     }
@@ -306,8 +305,8 @@ public class MyEngine extends Engine {
         SimulationVariables.AVG_CASHIER_SERVICE_TIME = ServicePoint.getAverageServiceTime(cashierServicePoints);
         SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME = selfCheckoutServicePoint.getAverageServiceTime();
         if (totalCustomersServed > 0 && (SimulationVariables.AVG_CASHIER_SERVICE_TIME != 0 || SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME != 0) && (SimulationVariables.AVG_VEGAN_SERVICE_TIME != 0 || SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME != 0)) {
-            SimulationVariables.AVERAGE_TIME_SPENT = (SimulationVariables.AVG_VEGAN_SERVICE_TIME + SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME)/2 + (SimulationVariables.AVG_CASHIER_SERVICE_TIME + SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME)/2;}
-        else {
+            SimulationVariables.AVERAGE_TIME_SPENT = (SimulationVariables.AVG_VEGAN_SERVICE_TIME + SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME) / 2 + (SimulationVariables.AVG_CASHIER_SERVICE_TIME + SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME) / 2;
+        } else {
             SimulationVariables.AVERAGE_TIME_SPENT = 0.0;
         }
 
@@ -456,7 +455,7 @@ public class MyEngine extends Engine {
      *
      * @param customer The customer to be assigned
      */
-    private void assignToCashier(Customer customer) {
+    public void assignToCashier(Customer customer) {
         if (assignByQueueLength) {
             System.out.println("Assigning by queue length");
             // cashiers share same waiting queue
@@ -522,10 +521,9 @@ public class MyEngine extends Engine {
         }
     }
 
-      /**
+    /**
      * Assigns the given customer to the shortest queue between the two cashiers if the second cashier is active.
      *
-     * @param customer The customer to be assigned
      */
     public void assignToCashier() {
         if (cashierServicePoints[1].isActive()) {
@@ -579,13 +577,13 @@ public class MyEngine extends Engine {
     /**
      * Adjusts the simulation variables based on the simulation adjustments and reinitializes the generators.
      */
-    private void checkAdjustments() {
+    public void checkAdjustments() {
         SimulationVariables.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
         System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
         System.out.println("Student Arrival rate mean " + SimulationVariables.ARRIVAL_MEAN);
 
         double rate = SimulationAdjustments.adjustFoodLineServiceSpeed();
-        SimulationVariables.MEAN_VEGAN_SERVICE  *= rate;
+        SimulationVariables.MEAN_VEGAN_SERVICE *= rate;
         SimulationVariables.MEAN_NON_VEGAN_SERVICE *= rate;
         System.out.println("Mean Vegan Service is " + SimulationVariables.MEAN_VEGAN_SERVICE);
         System.out.println("Mean Non-Vegan Service is " + SimulationVariables.MEAN_NON_VEGAN_SERVICE);
@@ -601,11 +599,11 @@ public class MyEngine extends Engine {
 
         // Reinitialize the ContinuousGenerator instances
         Random r = new Random();
-        arrivalTime =  new Negexp(SimulationVariables.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
-        veganFoodServiceTime =  new Normal(SimulationVariables.MEAN_VEGAN_SERVICE, ConstantsEnum.STD_DEV_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
+        arrivalTime = new Negexp(SimulationVariables.ARRIVAL_MEAN, Integer.toUnsignedLong(r.nextInt()));
+        veganFoodServiceTime = new Normal(SimulationVariables.MEAN_VEGAN_SERVICE, ConstantsEnum.STD_DEV_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
         nonVeganFoodServiceTime = new Normal(SimulationVariables.MEAN_NON_VEGAN_SERVICE, ConstantsEnum.STD_DEV_NON_VEGAN_SERVICE.getValue(), Integer.toUnsignedLong(r.nextInt()));
         cashierServiceTime = new Normal(SimulationVariables.MEAN_CASHIER, ConstantsEnum.STD_DEV_CASHIER.getValue(), Integer.toUnsignedLong(r.nextInt()));
-        selfCheckoutServiceTime =  new Normal(SimulationVariables.MEAN_SELF_CHECKOUT, ConstantsEnum.STD_DEV_SELF_CHECKOUT.getValue(), Integer.toUnsignedLong(r.nextInt()));
+        selfCheckoutServiceTime = new Normal(SimulationVariables.MEAN_SELF_CHECKOUT, ConstantsEnum.STD_DEV_SELF_CHECKOUT.getValue(), Integer.toUnsignedLong(r.nextInt()));
 
         // Set the updated generators in the respective service points and processes
         arrivalProcess.setGenerator((Negexp) arrivalTime);
@@ -629,16 +627,7 @@ public class MyEngine extends Engine {
     }
 
     // setter method
-    /**
-     * Sets the flag to determine the assignment method for customers.
-     *
-     * @param assignByQueueLength True to assign customers by queue length, false to assign by customer preference
-     */
-    public void setAssignByQueueLength(boolean assignByQueueLength) {
-        this.assignByQueueLength = assignByQueueLength;
-    }
 
-    // Getter method
     /**
      * Checks if customers are assigned by queue length.
      *
@@ -648,6 +637,16 @@ public class MyEngine extends Engine {
         return assignByQueueLength;
     }
 
+    // Getter method
+
+    /**
+     * Sets the flag to determine the assignment method for customers.
+     *
+     * @param assignByQueueLength True to assign customers by queue length, false to assign by customer preference
+     */
+    public void setAssignByQueueLength(boolean assignByQueueLength) {
+        this.assignByQueueLength = assignByQueueLength;
+    }
 
     /**
      * Gets the total number of customers served.
@@ -659,6 +658,7 @@ public class MyEngine extends Engine {
     }
 
     // Getter methods for the customer IDs
+
     /**
      * Gets the ID of the last vegan customer served.
      *
@@ -741,12 +741,12 @@ public class MyEngine extends Engine {
         return selfCheckoutServicePoint.getQueueSize();
     }
 
-    public void setTotalCustomers(int totalCustomers) {
-        this.totalCustomers = totalCustomers;
-    }
-
     public int getTotalCustomers() {
         return totalCustomers;
+    }
+
+    public void setTotalCustomers(int totalCustomers) {
+        this.totalCustomers = totalCustomers;
     }
 
     public int getTotalCustomersNotServed() {

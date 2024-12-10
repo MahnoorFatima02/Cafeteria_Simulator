@@ -2,7 +2,7 @@ package simu.utility;
 
 public class SimulationVariables {
     public static double ARRIVAL_MEAN = 5;
-//    public static final double IS_VEGAN_PROBABILITY = 0.2;
+    //    public static final double IS_VEGAN_PROBABILITY = 0.2;
     public static double MEAN_VEGAN_SERVICE = 20;  // this should be 30
     public static double MEAN_NON_VEGAN_SERVICE = 25; // this should be 25
     public static double MEAN_CASHIER = 22;  // this should be 19
@@ -19,7 +19,6 @@ public class SimulationVariables {
     public static double AVG_CASHIER_SERVICE_TIME = 0;
     public static double AVG_SELF_CHECKOUT_SERVICE_TIME = 0;
 
-
     public static double getFoodServiceSpeed() {
         return MEAN_VEGAN_SERVICE; // or MEAN_NON_VEGAN_SERVICE
     }
@@ -32,7 +31,7 @@ public class SimulationVariables {
         return ARRIVAL_MEAN;
     }
 
-    public static double getSimulationSpeed(){
+    public static double getSimulationSpeed() {
         return DELAY_TIME;
     }
 
