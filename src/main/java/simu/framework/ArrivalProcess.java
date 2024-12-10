@@ -45,3 +45,4 @@ public class ArrivalProcess {
 		this.generator = generator;
 	}
 }
+

@@ -2,6 +2,7 @@ package simu.utility;
 
 import java.util.Map;
 
+
 /**
  * The {@code ConstantsEnum} enum defines various constants used in the simulation.
  * Each constant can be initialized with a value from a provided map.
@@ -20,6 +21,7 @@ public enum ConstantsEnum {
 
     private double value;
 
+
     /**
      * Gets the value of the constant.
      *
@@ -28,6 +30,7 @@ public enum ConstantsEnum {
     public double getValue() {
         return value;
     }
+
 
     /**
      * Initializes the constants with values from the provided map.

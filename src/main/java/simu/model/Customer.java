@@ -18,7 +18,7 @@ public class Customer {
     private double serviceStartTime;
     private double expectedDepartureTime;
 
-    /**
+      /**
      * Create a unique customer and check if the customer is vegan or not
      * @param isVegan Indicates if the customer is vegan
      */
@@ -30,7 +30,7 @@ public class Customer {
         Trace.out(Trace.Level.INFO, "New customer #" + id + " arrived at  " + arrivalTime);
     }
 
-    /**
+      /**
      * Get the total number of customers
      * @return Total number of customers
      */
@@ -38,7 +38,7 @@ public class Customer {
         return i - 1;
     }
 
-    /**
+      /**
      * Check if the customer is vegan
      * @return True if the customer is vegan, false otherwise
      */
@@ -46,7 +46,7 @@ public class Customer {
         return isVegan;
     }
 
-    /**
+      /**
      * Get the time when the customer has been removed (from the system to be simulated)
      * @return Customer removal time
      */
@@ -54,7 +54,7 @@ public class Customer {
         return removalTime;
     }
 
-    /**
+     /**
      * Set the time when the customer has been removed (from the system to be simulated)
      * @param removalTime Customer removal time
      */
@@ -62,7 +62,7 @@ public class Customer {
         this.removalTime = removalTime;
     }
 
-    /**
+      /**
      * Get the time when the customer arrived (to the system to be simulated)
      * @return Customer arrival time
      */
@@ -70,7 +70,7 @@ public class Customer {
         return arrivalTime;
     }
 
-    /**
+      /**
      * Set the time when the customer arrived (to the system to be simulated)
      * @param arrivalTime Customer arrival time
      */
@@ -78,7 +78,7 @@ public class Customer {
         this.arrivalTime = arrivalTime;
     }
 
-    /**
+      /**
      * Get the (unique) customer ID
      * @return Customer ID
      */
@@ -86,7 +86,7 @@ public class Customer {
         return id;
     }
 
-    /**
+     /**
      * Report the measured variables of the customer to the diagnostic output
      */
     public void reportResults() {
@@ -105,7 +105,7 @@ public class Customer {
         System.out.println("Current mean of the customer service times " + mean);
     }
 
-    /**
+      /**
      * Get the expected departure time of the customer
      * @return Expected departure time
      */
@@ -113,7 +113,7 @@ public class Customer {
         return expectedDepartureTime;
     }
 
-    /**
+      /**
      * Set the expected departure time of the customer
      * @param expectedDepartureTime Expected departure time
      */
@@ -121,7 +121,7 @@ public class Customer {
         this.expectedDepartureTime = expectedDepartureTime;
     }
 
-    /**
+      /**
      * Get the service start time of the customer
      * @return Service start time
      */
@@ -129,7 +129,7 @@ public class Customer {
         return serviceStartTime;
     }
 
-    /**
+      /**
      * Set the service start time of the customer
      * @param serviceStartTime Service start time
      */
@@ -137,7 +137,7 @@ public class Customer {
         this.serviceStartTime = serviceStartTime;
     }
 
-    /**
+      /**
      * Reset the total number of customers
      */
     public static void resetTotalCustomers() {

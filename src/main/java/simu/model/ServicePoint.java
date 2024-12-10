@@ -23,10 +23,10 @@ public class ServicePoint {
     private double totalServiceTime = 0;
     private int totalCustomersServed = 0;
     private int totalCustomersRemoved = 0;
+    private int currentCustomerID;
     private double totalWaitingTime = 0;
 
-
-    /**
+      /**
      * Constructs a ServicePoint with the specified generator, event list, event type, and active status.
      *
      * @param generator The generator for service times
@@ -41,7 +41,7 @@ public class ServicePoint {
         this.isActive = isActive;
     }
 
-    /**
+      /**
      * Constructs a ServicePoint with the specified generator, event list, and event type.
      * This constructor is a simplified version of the main constructor, which assumes that the service point
      * is ACTIVE by default. It is designed to simplify the code and reduce repetition, since the default active
@@ -56,7 +56,7 @@ public class ServicePoint {
     }
 
     // remove repeat
-    /**
+      /**
      * Calculates the average service time for an array of service points.
      *
      * @param servicePoints The array of service points
@@ -72,7 +72,7 @@ public class ServicePoint {
         return totalCustomersRemoved == 0 ? 0 : totalServiceTime / totalCustomersRemoved;
     }
 
-    /**
+      /**
      * Calculates the average waiting time for an array of service points.
      *
      * @param servicePoints The array of service points
@@ -88,7 +88,7 @@ public class ServicePoint {
         return totalCustomersRemoved == 0 ? 0 : totalWaitingTime / totalCustomersRemoved;
     }
 
-    /**
+      /**
      * Gets the size of the queue at the service point.
      *
      * @return The size of the queue
@@ -97,7 +97,7 @@ public class ServicePoint {
         return queue.size();
     }
 
-    /**
+      /**
      * Adds a customer to the queue if the service point is active.
      *
      * @param a The customer to be added
@@ -109,7 +109,7 @@ public class ServicePoint {
         }
     }
 
-    /**
+      /**
      * Removes and returns the first customer from the queue.
      * Updates the service and waiting times.
      *
@@ -129,8 +129,7 @@ public class ServicePoint {
         return customer;
     }
 
-
-    /**
+      /**
      * Begins service for the first customer in the queue.
      * Schedules the departure event for the customer.
      *
@@ -139,9 +138,10 @@ public class ServicePoint {
     public Customer beginService() {
         Customer customer = queue.peek();
         if (customer != null) {
+            reserved = true;
             customer.setServiceStartTime(Clock.getInstance().getClock());
             Trace.out(Trace.Level.INFO, "ServicePoint: Starting a new service for the customer #" + customer.getId());
-            reserved = true;
+            currentCustomerID = customer.getId();
             double serviceTime = generator.sample();
             customer.setExpectedDepartureTime(Clock.getInstance().getClock() + serviceTime);
             eventList.add(new Event(eventTypeScheduled, Clock.getInstance().getClock() + serviceTime));
@@ -149,7 +149,7 @@ public class ServicePoint {
         return customer;
     }
 
-    /**
+      /**
      * Sets the generator for service times.
      *
      * @param generator The generator to be set
@@ -158,7 +158,7 @@ public class ServicePoint {
         this.generator = generator;
     }
 
-    /**
+      /**
      * Peeks at the first customer in the queue without removing them.
      *
      * @return The first customer in the queue, or null if the queue is empty
@@ -167,7 +167,7 @@ public class ServicePoint {
         return queue.peek();
     }
 
-    /**
+      /**
      * Checks if the service point is reserved.
      *
      * @return True if the service point is reserved, false otherwise
@@ -176,7 +176,7 @@ public class ServicePoint {
         return reserved;
     }
 
-    /**
+      /**
      * Checks if there are customers in the queue.
      *
      * @return True if the queue is not empty, false otherwise
@@ -185,7 +185,7 @@ public class ServicePoint {
         return queue.size() != 0;
     }
 
-    /**
+      /**
      * Checks if the service point is active.
      *
      * @return True if the service point is active, false otherwise
@@ -194,7 +194,7 @@ public class ServicePoint {
         return isActive;
     }
 
-    /**
+      /**
      * Sets the active status of the service point.
      *
      * @param active The active status to be set
@@ -203,7 +203,7 @@ public class ServicePoint {
         this.isActive = active;
     }
 
-    /**
+      /**
      * Gets the average service time for this service point.
      *
      * @return The average service time
@@ -212,7 +212,7 @@ public class ServicePoint {
         return totalCustomersRemoved == 0 ? 0 : totalServiceTime / totalCustomersRemoved;
     }
 
-    /**
+      /**
      * Gets the average waiting time for this service point.
      *
      * @return The average waiting time
@@ -221,7 +221,7 @@ public class ServicePoint {
         return totalCustomersRemoved == 0 ? 0 : totalWaitingTime / totalCustomersRemoved;
     }
 
-    /**
+      /**
      * Gets the total number of customers removed from the queue.
      *
      * @return The total number of customers removed
@@ -230,7 +230,9 @@ public class ServicePoint {
         return totalCustomersRemoved;
     }
 
-    /**
+    public int getCurrentCustomerID() {return currentCustomerID;}
+
+     /**
      * Resets the service point to its initial state.
      */
     public void reset() {
@@ -240,7 +242,9 @@ public class ServicePoint {
         this.totalServiceTime = 0.0;
         this.totalWaitingTime = 0.0;
         this.reserved = false;
-        this.isActive = true; // Assuming the service point is active by default
+        this.isActive = true;
+        this.currentCustomerID = 0;
     }
 
 }
+

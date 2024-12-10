@@ -3,6 +3,7 @@ package simu.model;
 import simu.utility.ConstantsEnum;
 import simu.utility.SimulationVariables;
 
+
 /**
  * The {@code SimulationAdjustments} class provides methods to dynamically adjust various simulation parameters.
  * It includes flags that can be set to adjust the speed of different aspects of the simulation.
@@ -30,6 +31,7 @@ public class SimulationAdjustments {
         return flag ? ConstantsEnum.SIMULATION_UPPER_SPEED.getValue() : ConstantsEnum.SIMULATION_LOWER_SPEED.getValue();
     }
 
+
     /**
      * Adjusts the stimulation speed based on the current flag.
      *
@@ -40,6 +42,7 @@ public class SimulationAdjustments {
         adjustStimulationSpeedFlag = null;
         return  adjustSpeed(currentFlag);
     }
+
 
     /**
      * Adjusts the student arrival speed based on the current flag.
@@ -52,6 +55,7 @@ public class SimulationAdjustments {
         return adjustSpeed(currentFlag);
     }
 
+
     /**
      * Adjusts the food line service speed based on the current flag.
      *
@@ -62,6 +66,7 @@ public class SimulationAdjustments {
         adjustFoodLineServiceSpeedFlag = null;
         return  adjustSpeed(currentFlag);
     }
+
 
     /**
      * Adjusts the cashier service speed based on the current flag.
@@ -87,6 +92,7 @@ public class SimulationAdjustments {
         adjustStudentArrivalFlag = adjustStudentArrival;
     }
 
+
     /**
      * Sets the flag to adjust food line service speed.
      *
@@ -96,7 +102,8 @@ public class SimulationAdjustments {
         adjustFoodLineServiceSpeedFlag = adjustFoodLineServiceSpeed;
     }
 
-    /**
+
+     /**
      * Sets the flag to adjust cashier service speed.
      *
      * @param adjustCashierServiceSpeed The flag to adjust cashier service speed
@@ -105,7 +112,7 @@ public class SimulationAdjustments {
         adjustCashierServiceSpeedFlag = adjustCashierServiceSpeed;
     }
 
-    /**
+      /**
      * Sets the flag to adjust stimulation speed.
      *
      * @param adjustStimulationSpeed The flag to adjust stimulation speed
@@ -125,7 +132,7 @@ public class SimulationAdjustments {
         return adjustStudentArrivalFlag;
     }
 
-    /**
+      /**
      * Gets the flag to adjust food line service speed.
      *
      * @return The flag to adjust food line service speed
@@ -134,7 +141,7 @@ public class SimulationAdjustments {
         return adjustFoodLineServiceSpeedFlag;
     }
 
-    /**
+     /**
      * Gets the flag to adjust cashier service speed.
      *
      * @return The flag to adjust cashier service speed
@@ -143,7 +150,7 @@ public class SimulationAdjustments {
         return adjustCashierServiceSpeedFlag;
     }
 
-    /**
+      /**
      * Gets the flag to adjust stimulation speed.
      *
      * @return The flag to adjust stimulation speed
@@ -151,4 +158,5 @@ public class SimulationAdjustments {
     public static Boolean getAdjustStimulationSpeedFlag() {
         return adjustStimulationSpeedFlag;
     }
+
 }
