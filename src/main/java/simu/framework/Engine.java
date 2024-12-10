@@ -23,7 +23,7 @@ public abstract class Engine {
         eventList = new EventList();
 
     }
-  
+
     /**
      * Sets the simulation time.
      *
@@ -33,7 +33,7 @@ public abstract class Engine {
         simulationTime = time;
     }
 
-  
+
     /**
      * Runs the simulation. It resets variables, initializes the simulation, and processes events.
      * The simulation runs until it is stopped or the simulation time is reached.
@@ -58,21 +58,21 @@ public abstract class Engine {
             if (!simulate()) {
                 break;
             }
-                Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
-                clock.setClock(currentTime());
+            Trace.out(Trace.Level.INFO, "\nA-phase: time is " + currentTime());
+            clock.setClock(currentTime());
 
-                Trace.out(Trace.Level.INFO, "\nB-phase:");
-                runBEvents();
+            Trace.out(Trace.Level.INFO, "\nB-phase:");
+            runBEvents();
 
-                Trace.out(Trace.Level.INFO, "\nC-phase:");
-                tryCEvents();
+            Trace.out(Trace.Level.INFO, "\nC-phase:");
+            tryCEvents();
         }
 
         results();
         eventList.clear(); // Clear the event list
     }
-  
-      /**
+
+    /**
      * Runs the B-phase events.
      */
     private void runBEvents() {
@@ -81,7 +81,7 @@ public abstract class Engine {
         }
     }
 
-      /**
+    /**
      * Returns the current simulation time.
      *
      * @return the current simulation time
@@ -90,7 +90,7 @@ public abstract class Engine {
         return eventList.getNextEventTime();
     }
 
-      /**
+    /**
      * Checks if the simulation should continue running.
      *
      * @return {@code true} if the simulation should continue, {@code false} otherwise
@@ -99,24 +99,24 @@ public abstract class Engine {
         return clock.getClock() < simulationTime;
     }
 
-      /**
+    /**
      * Runs the specified event.
      *
      * @param t the event to run
      */
     protected abstract void runEvent(Event t);    // Defined in simu.model-package's class who is inheriting the Engine class
 
-      /**
+    /**
      * Tries to run C-phase events.
      */
     protected abstract void tryCEvents();        // Defined in simu.model-package's class who is inheriting the Engine class
 
-      /**
+    /**
      * Initializes the simulation.
      */
     protected abstract void initialize();        // Defined in simu.model-package's class who is inheriting the Engine class
 
-      /**
+    /**
      * Processes the results of the simulation.
      */
     protected abstract void results();            // Defined in simu.model-package's class who is inheriting the Engine class
@@ -131,21 +131,21 @@ public abstract class Engine {
         run(); // Run the simulation in the current thread
     }
 
-      /**
+    /**
      * Pauses the simulation.
      */
     public void pauseSimulation() {
         paused = true;
     }
 
-      /**
+    /**
      * Resumes the simulation.
      */
     public void resumeSimulation() {
         paused = false;
     }
 
-      /**
+    /**
      * Stops the simulation.
      */
     public void stopSimulation() {
@@ -154,14 +154,14 @@ public abstract class Engine {
         paused = false;
     }
 
-      /**
+    /**
      * Resets the simulation variables.
      */
     public abstract void resetVariables();
 
     // Getter and Setter
 
-      /**
+    /**
      * Returns whether the simulation is running.
      *
      * @return {@code true} if the simulation is running, {@code false} otherwise
@@ -170,7 +170,7 @@ public abstract class Engine {
         return running;
     }
 
-      /**
+    /**
      * Sets whether the simulation is running.
      *
      * @param running {@code true} to set the simulation as running, {@code false} otherwise
@@ -180,7 +180,7 @@ public abstract class Engine {
         this.running = running;
     }
 
-      /**
+    /**
      * Returns whether the simulation is paused.
      *
      * @return {@code true} if the simulation is paused, {@code false} otherwise
@@ -189,7 +189,7 @@ public abstract class Engine {
         return paused;
     }
 
-      /**
+    /**
      * Sets whether the simulation is paused.
      *
      * @param paused {@code true} to set the simulation as paused, {@code false} otherwise
@@ -199,7 +199,7 @@ public abstract class Engine {
         this.paused = paused;
     }
 
-      /**
+    /**
      * Returns whether the simulation is stopped.
      *
      * @return {@code true} if the simulation is stopped, {@code false} otherwise
@@ -208,7 +208,7 @@ public abstract class Engine {
         return stopped;
     }
 
-      /**
+    /**
      * Sets whether the simulation is stopped.
      *
      * @param stopped {@code true} to set the simulation as stopped, {@code false} otherwise
@@ -217,3 +217,4 @@ public abstract class Engine {
 
         this.stopped = stopped;
     }
+}
