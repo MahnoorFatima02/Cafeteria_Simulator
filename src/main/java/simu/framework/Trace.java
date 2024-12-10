@@ -21,14 +21,18 @@ public class Trace {
 		traceLevel = lvl;
 	}
 
+	public static void initialize(Level level) {
+		traceLevel = level;
+	}
+
 	/**
 	 * Prints a diagnostic message if its severity level is equal to or higher than the current trace level.
 	 *
 	 * @param lvl the severity level of the message
 	 * @param txt the diagnostic message to be printed
 	 */
-	public static void out(Level lvl, String txt) {
-		if (lvl.ordinal() >= traceLevel.ordinal()) {
+	public static void out(Level lvl, String txt){
+		if (lvl.ordinal() >= traceLevel.ordinal()){
 			System.out.println(txt);
 		}
 	}

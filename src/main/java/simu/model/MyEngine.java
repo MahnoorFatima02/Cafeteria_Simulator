@@ -19,8 +19,7 @@ import simu.utility.ConstantsEnum;
  */
 public class MyEngine extends Engine {
     Customer customer;
-//    private Map<String, Double> constants;
-    ConstantsDao constantsDao = new ConstantsDao();
+    private ConstantsDao constantsDao;
     private int totalCustomers;
     private int totalCustomersServed;
     private int totalCustomersNotServed;
@@ -82,19 +81,22 @@ public class MyEngine extends Engine {
     private boolean assignByQueueLength;
 
 
-    // TODO: put variables in database
-
-
     /**
      * Service Points and random number generator with different distributions are created here.
      * We use exponential distribution for customer arrival times and normal distribution for the
      * service times.
      */
+
     public MyEngine() {
+        this(new ConstantsDao());
+    }
+
+    public MyEngine(ConstantsDao constantsDao) {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
-        ConstantsEnum.initialize(constantsDao.loadConstants());
-
+        this.constantsDao = constantsDao;
+        Map<String, Double> constants  = constantsDao.loadConstants();
+        ConstantsEnum.initialize(constants);
 
     /*
       ======  Random Number Generator =======
@@ -201,7 +203,7 @@ public class MyEngine extends Engine {
      */
     @Override
     // starting service for the next customer.
-    protected void tryCEvents() {
+    public void tryCEvents() {
 
         // for vegan service point event scheduling
         if (!veganFoodStation.isReserved() && veganFoodStation.isOnQueue()) {
