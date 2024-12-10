@@ -24,6 +24,26 @@ public class MyEngine extends Engine {
     public ServicePoint[] nonVeganFoodStation;
     public ServicePoint[] cashierServicePoints;
     public ServicePoint selfCheckoutServicePoint;
+    Customer customer;
+    ContinuousGenerator arrivalTime;
+    ContinuousGenerator veganFoodServiceTime;
+    ContinuousGenerator nonVeganFoodServiceTime;
+    ContinuousGenerator cashierServiceTime;
+    ContinuousGenerator selfCheckoutServiceTime;
+    private ConstantsDao constantsDao;
+    private int totalCustomers;
+    private int totalCustomersServed;
+    private int totalCustomersNotServed;
+    private double serveEfficiency;
+    private ArrivalProcess arrivalProcess;
+    private int veganCustomerId;
+    private int nonVeganCustomerId;
+    private int cashierCustomerId;
+    private int selfCheckoutCustomerId;
+
+    // Flag to determine assignment method
+    private boolean assignByQueueLength;
+
     /*
         ====== Flags for moving balls =======
         ====== These values dont necessarily affect the simulation system,
@@ -53,31 +73,11 @@ public class MyEngine extends Engine {
     public boolean cashierDeparture1;
     public boolean cashierDeparture2;
     public boolean selfCashierDeparture;
-    Customer customer;
-    ContinuousGenerator arrivalTime;
-    ContinuousGenerator veganFoodServiceTime;
-    ContinuousGenerator nonVeganFoodServiceTime;
-    ContinuousGenerator cashierServiceTime;
-    ContinuousGenerator selfCheckoutServiceTime;
-    private ConstantsDao constantsDao;
-    private int totalCustomers;
-    private int totalCustomersServed;
-    private int totalCustomersNotServed;
-    private double serveEfficiency;
-    private ArrivalProcess arrivalProcess;
     /*
         ====== Flags for moving balls =======
         ====== These values dont necessarily affect the simulation system,
          it only helps to move the balls, so can be public values ======
     */
-    private int veganCustomerId;
-    private int nonVeganCustomerId;
-    private int cashierCustomerId;
-    private int selfCheckoutCustomerId;
-
-    // Flag to determine assignment method
-    private boolean assignByQueueLength;
-
 
     /**
      * Service Points and random number generator with different distributions are created here.
@@ -468,7 +468,7 @@ public class MyEngine extends Engine {
 
             // Assign customer to the appropriate queue
             if (firstCashierQueueSize <= selfServiceQueueSize) {
-                assignToCashier();
+                assignToShortestStaffedCashierQueue();
             } else {
                 selfCheckoutServicePoint.addQueue(customer);
                 selfCashierQueueArrival = true;
@@ -486,7 +486,7 @@ public class MyEngine extends Engine {
                 System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
                 System.out.println("Self Service Cash Counter Activated");
             } else {
-                assignToCashier();
+                assignToShortestStaffedCashierQueue();
             }
         }
 
@@ -525,7 +525,7 @@ public class MyEngine extends Engine {
      * Assigns the given customer to the shortest queue between the two cashiers if the second cashier is active.
      *
      */
-    public void assignToCashier() {
+    public void assignToShortestStaffedCashierQueue() {
         if (cashierServicePoints[1].isActive()) {
             if (cashierServicePoints[1].getQueueSize() < cashierServicePoints[0].getQueueSize()) {
                 cashierServicePoints[1].addQueue(customer);
