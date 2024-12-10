@@ -14,7 +14,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import simu.utility.SimulationVariables;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
@@ -104,7 +103,7 @@ public class CafeteriaGUI extends Application {
             controller.startSimulation(simulationTime1.getText(), delayTime1.getText());
 
             // Create a Timeline to update the GUI elements periodically
-            timeline = new Timeline(new KeyFrame(Duration.millis(SimulationVariables.DELAY_TIME*1000), event -> {
+            timeline = new Timeline(new KeyFrame(Duration.millis(controller.getSimulationSpeed()*1000), event -> {
                 if (controller.isEngineRunning() && !controller.isEngineStopped()) {
                     ballControllers();
                     updateLabels();
@@ -275,18 +274,18 @@ public class CafeteriaGUI extends Application {
     }
 
     public void setTexts(){
-        simulationSpeed1.setText(String.format("%.2f", SimulationVariables.DELAY_TIME));
-        arrivalRate1.setText(String.format("%.2f", SimulationVariables.ARRIVAL_MEAN));
-        foodLineSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_NON_VEGAN_SERVICE));
-        cashierSpeed1.setText(String.format("%.2f", SimulationVariables.MEAN_CASHIER));
-        totalStudentsServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_SERVED));
-        totalStudentsNotServed.setText(String.format("%d", SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED));
-        serveEfficiency.setText(String.format("%.2f", SimulationVariables.SERVE_EFFICIENCY));
-        averageTimeSpent.setText(String.format("%.2f", SimulationVariables.AVERAGE_TIME_SPENT));
-        normalFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME));
-        veganFoodLineTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_VEGAN_SERVICE_TIME));
-        staffedCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_CASHIER_SERVICE_TIME));
-        selfServiceCashierTimeSpent.setText(String.format("%.2f", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
+        simulationSpeed1.setText(String.format("%.2f", controller.getSimulationSpeed()));
+        arrivalRate1.setText(String.format("%.2f", controller.getArrivalRate()));
+        foodLineSpeed1.setText(String.format("%.2f", controller.getFoodLineSpeed()));
+        cashierSpeed1.setText(String.format("%.2f", controller.getCashierSpeed()));
+        totalStudentsServed.setText(String.format("%d", controller.getTotalStudentsServed()));
+        totalStudentsNotServed.setText(String.format("%d", controller.getTotalStudentsNotServed()));
+        serveEfficiency.setText(String.format("%.2f", controller.getServiceEfficiency()));
+        averageTimeSpent.setText(String.format("%.2f", controller.getAverageTimeSpent()));
+        normalFoodLineTimeSpent.setText(String.format("%.2f", controller.getNormalFoodLineTimeSpent()));
+        veganFoodLineTimeSpent.setText(String.format("%.2f", controller.getVeganFoodLineTimeSpent()));
+        staffedCashierTimeSpent.setText(String.format("%.2f", controller.getStaffedCashierTimeSpent()));
+        selfServiceCashierTimeSpent.setText(String.format("%.2f", controller.getSelfServiceCashierTimeSpent()));
         queue1.setText(String.format("%d", controller.getVeganFoodStationQueueSize()));
         queue2.setText(String.format("%d", controller.getNonVeganFoodStationQueueSize()));
         queue3.setText(String.format("%d", controller.getCashierServicePointQueueSize()));
@@ -512,8 +511,8 @@ public class CafeteriaGUI extends Application {
             */
     private void setupPieChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Total Students Served", SimulationVariables.TOTAL_CUSTOMERS_SERVED),
-                new PieChart.Data("Students Not Served", SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED)
+                new PieChart.Data("Total Students Served", controller.getTotalStudentsServed()),
+                new PieChart.Data("Students Not Served", controller.getTotalStudentsNotServed())
         );
 
         servedPieChart.setData(pieChartData);
@@ -532,9 +531,9 @@ public class CafeteriaGUI extends Application {
     public void updatePieChart() {
         for (PieChart.Data data : servedPieChart.getData()) {
             if (data.getName().equals("Total Students Served")) {
-                data.setPieValue(SimulationVariables.TOTAL_CUSTOMERS_SERVED);
+                data.setPieValue(controller.getTotalStudentsServed());
             } else if (data.getName().equals("Students Not Served")) {
-                data.setPieValue(SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED);
+                data.setPieValue(controller.getTotalStudentsNotServed());
             }
         }
     }
@@ -573,7 +572,7 @@ public class CafeteriaGUI extends Application {
 
     public void updateLineChart() {
         int currentTime = (int) Clock.getInstance().getClock();
-        int averageTimeSpent = (int) SimulationVariables.AVERAGE_TIME_SPENT;
+        int averageTimeSpent = (int) controller.getAverageTimeSpent();
 
         averageTimeSeries.getData().add(new XYChart.Data<>(currentTime, averageTimeSpent));
 
@@ -620,10 +619,10 @@ public class CafeteriaGUI extends Application {
     public void updateBarChart() {
         foodLineSeries.getData().clear();
 
-        XYChart.Data<String, Number> normalFoodLine = new XYChart.Data<>("Normal Food Line", SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME);
-        XYChart.Data<String, Number> veganFoodLine = new XYChart.Data<>("Vegan Food Line", SimulationVariables.AVG_VEGAN_SERVICE_TIME);
-        XYChart.Data<String, Number> staffedCashier = new XYChart.Data<>("Staffed Cashier", SimulationVariables.AVG_CASHIER_SERVICE_TIME);
-        XYChart.Data<String, Number> selfServiceCashier = new XYChart.Data<>("Self-service Cashier", SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME);
+        XYChart.Data<String, Number> normalFoodLine = new XYChart.Data<>("Normal Food Line", controller.getNormalFoodLineTimeSpent());
+        XYChart.Data<String, Number> veganFoodLine = new XYChart.Data<>("Vegan Food Line", controller.getVeganFoodLineTimeSpent());
+        XYChart.Data<String, Number> staffedCashier = new XYChart.Data<>("Staffed Cashier", controller.getStaffedCashierTimeSpent());
+        XYChart.Data<String, Number> selfServiceCashier = new XYChart.Data<>("Self-service Cashier", controller.getSelfServiceCashierTimeSpent());
 
         // Set different colors for each bar
         normalFoodLine.nodeProperty().addListener((observable, oldValue, newValue) -> newValue.setStyle("-fx-bar-fill: #ff5000;"));
@@ -634,8 +633,8 @@ public class CafeteriaGUI extends Application {
         foodLineSeries.getData().addAll(normalFoodLine, veganFoodLine, staffedCashier, selfServiceCashier);
 
         // Calculate the upper bound for the vertical axis
-        double maxValue = Math.max(Math.max(SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME, SimulationVariables.AVG_VEGAN_SERVICE_TIME),
-                Math.max(SimulationVariables.AVG_CASHIER_SERVICE_TIME, SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME));
+        double maxValue = Math.max(Math.max(controller.getNormalFoodLineTimeSpent(), controller.getVeganFoodLineTimeSpent()),
+                Math.max(controller.getStaffedCashierTimeSpent(), controller.getSelfServiceCashierTimeSpent()));
         int verticalUpperBound = (int) Math.ceil(maxValue / 10.0) * 10;
 
         timeAxis.setUpperBound(verticalUpperBound);
@@ -842,7 +841,7 @@ public class CafeteriaGUI extends Application {
             transition17.stop();
             ball17.setTranslateX(0);
             ball17.setTranslateY(0);
-            transition17.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition17.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition17.play();
             controller.setSelfCashierDeparture(false);
         }
@@ -861,7 +860,7 @@ public class CafeteriaGUI extends Application {
             transition16.stop();
             ball16.setTranslateX(0);
             ball16.setTranslateY(0);
-            transition16.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition16.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition16.play();
             controller.setCashierDeparture2(false);
         }
@@ -880,7 +879,7 @@ public class CafeteriaGUI extends Application {
             transition15.stop();
             ball15.setTranslateX(0);
             ball15.setTranslateY(0);
-            transition15.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition15.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition15.play();
             controller.setCashierDeparture1(false);
         }
@@ -899,7 +898,7 @@ public class CafeteriaGUI extends Application {
             transition14.stop();
             ball14.setTranslateX(0);
             ball14.setTranslateY(0);
-            transition14.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition14.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition14.play();
             controller.setSelfCashierQueueDeparture(false);
             controller.setSelfCashierArrival(false);
@@ -908,8 +907,8 @@ public class CafeteriaGUI extends Application {
             transition14.stop();
             ball14.setTranslateX(0);
             ball14.setTranslateY(0);
-            transition14.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause8 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            transition14.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause8 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause8.setOnFinished(event -> {
                 transition14.play();
             });
@@ -932,7 +931,7 @@ public class CafeteriaGUI extends Application {
             transition13.stop();
             ball13.setTranslateX(0);
             ball13.setTranslateY(0);
-            transition13.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition13.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition13.play();
             controller.setCashierQueueDeparture2(false);
             controller.setCashierArrival2(false);
@@ -941,8 +940,8 @@ public class CafeteriaGUI extends Application {
             transition13.stop();
             ball13.setTranslateX(0);
             ball13.setTranslateY(0);
-            transition13.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause7 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            transition13.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause7 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause7.setOnFinished(event -> {
                 transition13.play();
             });
@@ -965,7 +964,7 @@ public class CafeteriaGUI extends Application {
             transition12.stop();
             ball12.setTranslateX(0);
             ball12.setTranslateY(0);
-            transition12.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition12.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition12.play();
             controller.setCashierQueueDeparture1(false);
             controller.setCashierArrival1(false);
@@ -974,8 +973,8 @@ public class CafeteriaGUI extends Application {
             transition12.stop();
             ball12.setTranslateX(0);
             ball12.setTranslateY(0);
-            transition12.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause6 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            transition12.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause6 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause6.setOnFinished(event -> {
                 transition12.play();
             });
@@ -998,7 +997,7 @@ public class CafeteriaGUI extends Application {
             transition11.stop();
             ball11.setTranslateX(0);
             ball11.setTranslateY(0);
-            transition11.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition11.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition11.play();
             controller.setNonVeganDeparture2(false);
             controller.setSelfCashierQueueArrival(false);
@@ -1018,7 +1017,7 @@ public class CafeteriaGUI extends Application {
             transition10extra.stop();
             ball10extra.setTranslateX(0);
             ball10extra.setTranslateY(0);
-            transition10extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition10extra.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition10extra.play();
             controller.setNonVeganDeparture2(false);
             controller.setCashierQueueArrival2(false);
@@ -1038,7 +1037,7 @@ public class CafeteriaGUI extends Application {
             transition10.stop();
             ball10.setTranslateX(0);
             ball10.setTranslateY(0);
-            transition10.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition10.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition10.play();
             controller.setNonVeganDeparture2(false);
             controller.setCashierQueueArrival1(false);
@@ -1058,7 +1057,7 @@ public class CafeteriaGUI extends Application {
             transition9.stop();
             ball9.setTranslateX(0);
             ball9.setTranslateY(0);
-            transition9.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition9.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition9.play();
             controller.setNonVeganDeparture1(false);
             controller.setSelfCashierQueueArrival(false);
@@ -1078,7 +1077,7 @@ public class CafeteriaGUI extends Application {
             transition8extra.stop();
             ball8extra.setTranslateX(0);
             ball8extra.setTranslateY(0);
-            transition8extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition8extra.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition8extra.play();
             controller.setNonVeganDeparture1(false);
             controller.setCashierQueueArrival2(false);
@@ -1098,7 +1097,7 @@ public class CafeteriaGUI extends Application {
             transition8.stop();
             ball8.setTranslateX(0);
             ball8.setTranslateY(0);
-            transition8.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition8.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition8.play();
             controller.setNonVeganDeparture1(false);
             controller.setCashierQueueArrival1(false);
@@ -1118,7 +1117,7 @@ public class CafeteriaGUI extends Application {
             transition7.stop();
             ball7.setTranslateX(0);
             ball7.setTranslateY(0);
-            transition7.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition7.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition7.play();
             controller.setVeganDeparture(false);
             controller.setSelfCashierQueueArrival(false);
@@ -1138,7 +1137,7 @@ public class CafeteriaGUI extends Application {
             transition6extra.stop();
             ball6extra.setTranslateX(0);
             ball6extra.setTranslateY(0);
-            transition6extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition6extra.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition6extra.play();
             controller.setVeganDeparture(false);
             controller.setCashierQueueArrival2(false);
@@ -1158,7 +1157,7 @@ public class CafeteriaGUI extends Application {
             transition6.stop();
             ball6.setTranslateX(0);
             ball6.setTranslateY(0);
-            transition6.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition6.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition6.play();
             controller.setVeganDeparture(false);
             controller.setCashierQueueArrival1(false);
@@ -1178,7 +1177,7 @@ public class CafeteriaGUI extends Application {
             transition5.stop();
             ball5.setTranslateX(0);
             ball5.setTranslateY(0);
-            transition5.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition5.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition5.play();
             controller.setNonVeganFoodServe2(false);
             controller.setNonVeganQueueDeparture2(false);
@@ -1187,8 +1186,8 @@ public class CafeteriaGUI extends Application {
             ball5.setOpacity(1.0);
             ball5.setTranslateX(0);
             ball5.setTranslateY(0);
-            transition5.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause5 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            transition5.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause5 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause5.setOnFinished(event -> {
                 transition5.play();
             });
@@ -1211,7 +1210,7 @@ public class CafeteriaGUI extends Application {
             transition4.stop();
             ball4.setTranslateX(0);
             ball4.setTranslateY(0);
-            transition4.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition4.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition4.play();
             controller.setNonVeganFoodServe1(false);
             controller.setNonVeganQueueDeparture1(false);
@@ -1220,8 +1219,8 @@ public class CafeteriaGUI extends Application {
             ball4.setOpacity(1.0);
             ball4.setTranslateX(0);
             ball4.setTranslateY(0);
-            transition4.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause4 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME * 500)); // Adjust the delay as needed
+            transition4.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause4 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() * 500)); // Adjust the delay as needed
             pause4.setOnFinished(event -> {
                 transition4.play();
             });
@@ -1244,7 +1243,7 @@ public class CafeteriaGUI extends Application {
             transition3.stop();
             ball3.setTranslateX(0);
             ball3.setTranslateY(0);
-            transition3.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition3.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition3.play();
             controller.setVeganFoodServe(false);
             controller.setVeganQueueDeparture(false);
@@ -1253,8 +1252,8 @@ public class CafeteriaGUI extends Application {
             ball3.setOpacity(1.0);
             ball3.setTranslateX(0);
             ball3.setTranslateY(0);
-            transition3.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
-            PauseTransition pause3 = new PauseTransition(Duration.millis(SimulationVariables.DELAY_TIME *500)); // Adjust the delay as needed
+            transition3.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
+            PauseTransition pause3 = new PauseTransition(Duration.millis(controller.getSimulationSpeed() *500)); // Adjust the delay as needed
             pause3.setOnFinished(event -> {
                 transition3.play();
             });
@@ -1277,7 +1276,7 @@ public class CafeteriaGUI extends Application {
             transition2extra.stop();
             ball2extra.setTranslateX(0);
             ball2extra.setTranslateY(0);
-            transition2extra.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition2extra.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition2extra.play();
             controller.setNonVeganQueueArrival2(false);
         }
@@ -1297,7 +1296,7 @@ public class CafeteriaGUI extends Application {
             transition2.stop();
             ball2.setTranslateX(0);
             ball2.setTranslateY(0);
-            transition2.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition2.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition2.play();
             controller.setNonVeganQueueArrival1(false);
         }
@@ -1316,7 +1315,7 @@ public class CafeteriaGUI extends Application {
             transition1.stop();
             ball1.setTranslateX(0);
             ball1.setTranslateY(0);
-            transition1.setDuration(Duration.millis(SimulationVariables.DELAY_TIME * 500));
+            transition1.setDuration(Duration.millis(controller.getSimulationSpeed() * 500));
             transition1.play();
             controller.setVeganQueueArrival(false);
         }

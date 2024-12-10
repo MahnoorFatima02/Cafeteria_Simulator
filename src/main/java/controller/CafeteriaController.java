@@ -1,6 +1,7 @@
 package controller;
 
 import simu.framework.Trace;
+import simu.utility.SimulationVariables;
 import view.CafeteriaGUI;
 import simu.model.MyEngine;
 import simu.model.SimulationAdjustments;
@@ -408,4 +409,55 @@ public class CafeteriaController {
     /*
                 ====== Animation Updating Functions =======
             */
+
+
+    public double getSimulationSpeed() {
+        return SimulationVariables.DELAY_TIME;
+    }
+
+
+    public double getArrivalRate() {
+        return SimulationVariables.ARRIVAL_MEAN;
+    }
+
+    public double getFoodLineSpeed() {
+        return SimulationVariables.MEAN_NON_VEGAN_SERVICE;
+    }
+
+    public double getCashierSpeed() {
+        return SimulationVariables.MEAN_CASHIER;
+    }
+
+    public int getTotalStudentsServed() {
+        return SimulationVariables.TOTAL_CUSTOMERS_SERVED;
+    }
+
+    public int getTotalStudentsNotServed() {
+        return SimulationVariables.TOTAL_CUSTOMERS_NOT_SERVED;
+    }
+
+    public double getAverageTimeSpent() {
+        return SimulationVariables.AVERAGE_TIME_SPENT;
+    }
+
+    public double getNormalFoodLineTimeSpent() {
+        return SimulationVariables.AVG_NON_VEGAN_SERVICE_TIME;
+    }
+
+    public double getVeganFoodLineTimeSpent() {
+        return SimulationVariables.AVG_VEGAN_SERVICE_TIME;
+    }
+
+    public double getStaffedCashierTimeSpent() {
+        return SimulationVariables.AVG_CASHIER_SERVICE_TIME;
+    }
+
+
+    public double getSelfServiceCashierTimeSpent() {
+        return SimulationVariables.AVG_SELF_CHECKOUT_SERVICE_TIME;
+    }
+
+    public double getServiceEfficiency() {
+        return SimulationVariables.SERVE_EFFICIENCY;
+    }
 }
