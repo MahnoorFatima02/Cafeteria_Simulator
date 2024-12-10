@@ -218,195 +218,195 @@ public class CafeteriaController {
                 ====== Animation Updating Functions =======
             */
     public boolean isSelfCashierDeparture() {
-        return engine.selfCashierDeparture;
+        return SimulationVariables.selfCashierDeparture;
     }
 
     public void setSelfCashierDeparture(boolean selfCashierDeparture) {
-        engine.selfCashierDeparture = selfCashierDeparture;
+        SimulationVariables.selfCashierDeparture = selfCashierDeparture;
     }
 
     public boolean isCashierDeparture2() {
-        return engine.cashierDeparture2;
+        return SimulationVariables.cashierDeparture2;
     }
 
     public void setCashierDeparture2(boolean cashierDeparture2) {
-        engine.cashierDeparture2 = cashierDeparture2;
+        SimulationVariables.cashierDeparture2 = cashierDeparture2;
     }
 
     public boolean isCashierDeparture1() {
-        return engine.cashierDeparture1;
+        return SimulationVariables.cashierDeparture1;
     }
 
     public void setCashierDeparture1(boolean cashierDeparture1) {
-        engine.cashierDeparture1 = cashierDeparture1;
+        SimulationVariables.cashierDeparture1 = cashierDeparture1;
     }
 
     public boolean isSelfCashierQueueDeparture() {
-        return engine.selfCashierQueueDeparture;
+        return SimulationVariables.selfCashierQueueDeparture;
     }
 
     public void setSelfCashierQueueDeparture(boolean selfCashierQueueDeparture) {
-        engine.selfCashierQueueDeparture = selfCashierQueueDeparture;
+        SimulationVariables.selfCashierQueueDeparture = selfCashierQueueDeparture;
     }
 
     public boolean isSelfCashierArrival() {
-        return engine.selfCashierArrival;
+        return SimulationVariables.selfCashierArrival;
     }
 
     public void setSelfCashierArrival(boolean selfCashierArrival) {
-        engine.selfCashierArrival = selfCashierArrival;
+        SimulationVariables.selfCashierArrival = selfCashierArrival;
     }
 
     public boolean isCashierQueueDeparture2() {
-        return engine.cashierQueueDeparture2;
+        return SimulationVariables.cashierQueueDeparture2;
     }
 
     public void setCashierQueueDeparture2(boolean cashierQueueDeparture2) {
-        engine.cashierQueueDeparture2 = cashierQueueDeparture2;
+        SimulationVariables.cashierQueueDeparture2 = cashierQueueDeparture2;
     }
 
     public boolean isCashierArrival2() {
-        return engine.cashierArrival2;
+        return SimulationVariables.cashierArrival2;
     }
 
     public void setCashierArrival2(boolean cashierArrival2) {
-        engine.cashierArrival2 = cashierArrival2;
+        SimulationVariables.cashierArrival2 = cashierArrival2;
     }
 
     public boolean isCashierQueueDeparture1() {
-        return engine.cashierQueueDeparture1;
+        return SimulationVariables.cashierQueueDeparture1;
     }
 
     public void setCashierQueueDeparture1(boolean cashierQueueDeparture1) {
-        engine.cashierQueueDeparture1 = cashierQueueDeparture1;
+        SimulationVariables.cashierQueueDeparture1 = cashierQueueDeparture1;
     }
 
     public boolean isCashierArrival1() {
-        return engine.cashierArrival1;
+        return SimulationVariables.cashierArrival1;
     }
 
     public void setCashierArrival1(boolean cashierArrival1) {
-        engine.cashierArrival1 = cashierArrival1;
+        SimulationVariables.cashierArrival1 = cashierArrival1;
     }
 
     public boolean isNonVeganDeparture2() {
-        return engine.nonVeganDeparture2;
+        return SimulationVariables.nonVeganDeparture2;
     }
 
     public void setNonVeganDeparture2(boolean nonVeganDeparture2) {
-        engine.nonVeganDeparture2 = nonVeganDeparture2;
+        SimulationVariables.nonVeganDeparture2 = nonVeganDeparture2;
     }
 
     public boolean isSelfCashierQueueArrival() {
-        return engine.selfCashierQueueArrival;
+        return SimulationVariables.selfCashierQueueArrival;
     }
 
     public void setSelfCashierQueueArrival(boolean selfCashierQueueArrival) {
-        engine.selfCashierQueueArrival = selfCashierQueueArrival;
+        SimulationVariables.selfCashierQueueArrival = selfCashierQueueArrival;
     }
 
     public boolean isNonVeganDeparture1() {
-        return engine.nonVeganDeparture1;
+        return SimulationVariables.nonVeganDeparture1;
     }
 
     public void setNonVeganDeparture1(boolean nonVeganDeparture1) {
-        engine.nonVeganDeparture1 = nonVeganDeparture1;
+        SimulationVariables.nonVeganDeparture1 = nonVeganDeparture1;
     }
 
     public boolean isCashierQueueArrival2() {
-        return engine.cashierQueueArrival2;
+        return SimulationVariables.cashierQueueArrival2;
     }
 
     public void setCashierQueueArrival2(boolean cashierQueueArrival2) {
-        engine.cashierQueueArrival2 = cashierQueueArrival2;
+        SimulationVariables.cashierQueueArrival2 = cashierQueueArrival2;
     }
 
     public boolean isCashierQueueArrival1() {
-        return engine.cashierQueueArrival1;
+        return SimulationVariables.cashierQueueArrival1;
     }
 
     public void setCashierQueueArrival1(boolean cashierQueueArrival1) {
-        engine.cashierQueueArrival1 = cashierQueueArrival1;
+        SimulationVariables.cashierQueueArrival1 = cashierQueueArrival1;
     }
 
     public boolean isVeganDeparture() {
-        return engine.veganDeparture;
+        return SimulationVariables.veganDeparture;
     }
 
     public void setVeganDeparture(boolean veganDeparture) {
-        engine.veganDeparture = veganDeparture;
+        SimulationVariables.veganDeparture = veganDeparture;
     }
 
     public boolean isNonVeganFoodServe2() {
-        return engine.nonVeganFoodServe2;
+        return SimulationVariables.nonVeganFoodServe2;
     }
 
     public void setNonVeganFoodServe2(boolean nonVeganFoodServe2) {
-        engine.nonVeganFoodServe2 = nonVeganFoodServe2;
+        SimulationVariables.nonVeganFoodServe2 = nonVeganFoodServe2;
     }
 
     public boolean isNonVeganQueueDeparture2() {
-        return engine.nonVeganQueueDeparture2;
+        return SimulationVariables.nonVeganQueueDeparture2;
     }
 
     public void setNonVeganQueueDeparture2(boolean nonVeganQueueDeparture2) {
-        engine.nonVeganQueueDeparture2 = nonVeganQueueDeparture2;
+        SimulationVariables.nonVeganQueueDeparture2 = nonVeganQueueDeparture2;
     }
 
     public boolean isNonVeganFoodServe1() {
-        return engine.nonVeganFoodServe1;
+        return SimulationVariables.nonVeganFoodServe1;
     }
 
     public void setNonVeganFoodServe1(boolean nonVeganFoodServe1) {
-        engine.nonVeganFoodServe1 = nonVeganFoodServe1;
+        SimulationVariables.nonVeganFoodServe1 = nonVeganFoodServe1;
     }
 
     public boolean isNonVeganQueueDeparture1() {
-        return engine.nonVeganQueueDeparture1;
+        return SimulationVariables.nonVeganQueueDeparture1;
     }
 
     public void setNonVeganQueueDeparture1(boolean nonVeganQueueDeparture1) {
-        engine.nonVeganQueueDeparture1 = nonVeganQueueDeparture1;
+        SimulationVariables.nonVeganQueueDeparture1 = nonVeganQueueDeparture1;
     }
 
     public boolean isVeganFoodServe() {
-        return engine.veganFoodServe;
+        return SimulationVariables.veganFoodServe;
     }
 
     public void setVeganFoodServe(boolean veganFoodServe) {
-        engine.veganFoodServe = veganFoodServe;
+        SimulationVariables.veganFoodServe = veganFoodServe;
     }
 
     public boolean isVeganQueueDeparture() {
-        return engine.veganQueueDeparture;
+        return SimulationVariables.veganQueueDeparture;
     }
 
     public void setVeganQueueDeparture(boolean veganQueueDeparture) {
-        engine.veganQueueDeparture = veganQueueDeparture;
+        SimulationVariables.veganQueueDeparture = veganQueueDeparture;
     }
 
     public boolean isNonVeganQueueArrival2() {
-        return engine.nonVeganQueueArrival2;
+        return SimulationVariables.nonVeganQueueArrival2;
     }
 
     public void setNonVeganQueueArrival2(boolean nonVeganQueueArrival2) {
-        engine.nonVeganQueueArrival2 = nonVeganQueueArrival2;
+        SimulationVariables.nonVeganQueueArrival2 = nonVeganQueueArrival2;
     }
 
     public boolean isNonVeganQueueArrival1() {
-        return engine.nonVeganQueueArrival1;
+        return SimulationVariables.nonVeganQueueArrival1;
     }
 
     public void setNonVeganQueueArrival1(boolean nonVeganQueueArrival1) {
-        engine.nonVeganQueueArrival1 = nonVeganQueueArrival1;
+        SimulationVariables.nonVeganQueueArrival1 = nonVeganQueueArrival1;
     }
 
     public boolean isVeganQueueArrival() {
-        return engine.veganQueueArrival;
+        return SimulationVariables.veganQueueArrival;
     }
 
     public void setVeganQueueArrival(boolean veganQueueArrival) {
-        engine.veganQueueArrival = veganQueueArrival;
+        SimulationVariables.veganQueueArrival = veganQueueArrival;
     }
     /*
                 ====== Animation Updating Functions =======

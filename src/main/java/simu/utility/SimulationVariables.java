@@ -19,6 +19,31 @@ public class SimulationVariables {
     public static double AVG_CASHIER_SERVICE_TIME = 0;
     public static double AVG_SELF_CHECKOUT_SERVICE_TIME = 0;
 
+    public static boolean veganQueueArrival;
+    public static boolean nonVeganQueueArrival1;
+    public static boolean nonVeganQueueArrival2;
+    public static boolean veganQueueDeparture;
+    public static boolean nonVeganQueueDeparture1;
+    public static boolean nonVeganQueueDeparture2;
+    public static boolean veganFoodServe;
+    public static boolean nonVeganFoodServe1;
+    public static boolean nonVeganFoodServe2;
+    public static boolean veganDeparture;
+    public static boolean nonVeganDeparture1;
+    public static boolean nonVeganDeparture2;
+    public static boolean cashierQueueArrival1;
+    public static boolean cashierQueueArrival2;
+    public static boolean selfCashierQueueArrival;
+    public static boolean cashierQueueDeparture1;
+    public static boolean cashierQueueDeparture2;
+    public static boolean selfCashierQueueDeparture;
+    public static boolean cashierArrival1;
+    public static boolean cashierArrival2;
+    public static boolean selfCashierArrival;
+    public static boolean cashierDeparture1;
+    public static boolean cashierDeparture2;
+    public static boolean selfCashierDeparture;
+
     public static double getFoodServiceSpeed() {
         return MEAN_VEGAN_SERVICE; // or MEAN_NON_VEGAN_SERVICE
     }

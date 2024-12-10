@@ -44,41 +44,6 @@ public class MyEngine extends Engine {
     // Flag to determine assignment method
     private boolean assignByQueueLength;
 
-    /*
-        ====== Flags for moving balls =======
-        ====== These values dont necessarily affect the simulation system,
-         it only helps to move the balls, so can be public values ======
-    */
-    public boolean veganQueueArrival;
-    public boolean nonVeganQueueArrival1;
-    public boolean nonVeganQueueArrival2;
-    public boolean veganQueueDeparture;
-    public boolean nonVeganQueueDeparture1;
-    public boolean nonVeganQueueDeparture2;
-    public boolean veganFoodServe;
-    public boolean nonVeganFoodServe1;
-    public boolean nonVeganFoodServe2;
-    public boolean veganDeparture;
-    public boolean nonVeganDeparture1;
-    public boolean nonVeganDeparture2;
-    public boolean cashierQueueArrival1;
-    public boolean cashierQueueArrival2;
-    public boolean selfCashierQueueArrival;
-    public boolean cashierQueueDeparture1;
-    public boolean cashierQueueDeparture2;
-    public boolean selfCashierQueueDeparture;
-    public boolean cashierArrival1;
-    public boolean cashierArrival2;
-    public boolean selfCashierArrival;
-    public boolean cashierDeparture1;
-    public boolean cashierDeparture2;
-    public boolean selfCashierDeparture;
-    /*
-        ====== Flags for moving balls =======
-        ====== These values dont necessarily affect the simulation system,
-         it only helps to move the balls, so can be public values ======
-    */
-
     /**
      * Service Points and random number generator with different distributions are created here.
      * We use exponential distribution for customer arrival times and normal distribution for the
@@ -209,7 +174,7 @@ public class MyEngine extends Engine {
 
             Customer customer = veganFoodStation.beginService();
             veganCustomerId = customer.getId();
-            veganFoodServe = true;
+            SimulationVariables.veganFoodServe = true;
         }
 
         // for non-vegan service points event scheduling
@@ -220,9 +185,9 @@ public class MyEngine extends Engine {
                 Customer customer = sp.beginService();
                 nonVeganCustomerId = customer.getId();
                 if (i == 0) {
-                    nonVeganFoodServe1 = true;
+                    SimulationVariables.nonVeganFoodServe1 = true;
                 } else if (i == 1) {
-                    nonVeganFoodServe2 = true;
+                    SimulationVariables.nonVeganFoodServe2 = true;
                 }
             }
         }
@@ -235,9 +200,9 @@ public class MyEngine extends Engine {
                 Customer customer = p.beginService();
                 cashierCustomerId = customer.getId();
                 if (i == 0) {
-                    cashierArrival1 = true;
+                    SimulationVariables.cashierArrival1 = true;
                 } else if (i == 1) {
-                    cashierArrival2 = true;
+                    SimulationVariables.cashierArrival2 = true;
                 }
             }
         }
@@ -247,7 +212,7 @@ public class MyEngine extends Engine {
             System.out.println("SELF SERVICE POINT SERVICE STARTED: ");
             Customer customer = selfCheckoutServicePoint.beginService(); // Start serving the next customer in the self-service line
             selfCheckoutCustomerId = customer.getId();
-            selfCashierArrival = true;
+            SimulationVariables.selfCashierArrival = true;
         }
 
         totalCustomersServed = cashierServicePoints[0].getTotalCustomersRemoved() + cashierServicePoints[1].getTotalCustomersRemoved() + selfCheckoutServicePoint.getTotalCustomersRemoved();
@@ -351,18 +316,18 @@ public class MyEngine extends Engine {
         customer = new Customer(isVegan);
 
         if (isVegan) {
-            veganQueueArrival = true;
-            veganQueueDeparture = true;
+            SimulationVariables.veganQueueArrival = true;
+            SimulationVariables.veganQueueDeparture = true;
             veganFoodStation.addQueue(customer);
         } else {
             // Assign to the shorter non-vegan queue
             if (nonVeganFoodStation[0].getQueueSize() <= nonVeganFoodStation[1].getQueueSize()) {
-                nonVeganQueueArrival1 = true;
-                nonVeganQueueDeparture1 = true;
+                SimulationVariables.nonVeganQueueArrival1 = true;
+                SimulationVariables.nonVeganQueueDeparture1 = true;
                 nonVeganFoodStation[0].addQueue(customer);
             } else {
-                nonVeganQueueArrival2 = true;
-                nonVeganQueueDeparture2 = true;
+                SimulationVariables.nonVeganQueueArrival2 = true;
+                SimulationVariables.nonVeganQueueDeparture2 = true;
                 nonVeganFoodStation[1].addQueue(customer);
             }
         }
@@ -375,7 +340,7 @@ public class MyEngine extends Engine {
      */
     private void handleVeganDepartureEvent() {
         customer = veganFoodStation.removeQueue();
-        veganDeparture = true;
+        SimulationVariables.veganDeparture = true;
         assignToCashier(customer);
     }
 
@@ -394,9 +359,9 @@ public class MyEngine extends Engine {
                     System.out.println("Customer " + customer.getId() + " removed from non-vegan service point at time: " + Clock.getInstance().getClock());
                     assignToCashier(customer);
                     if (i == 0) {
-                        nonVeganDeparture1 = true;
+                        SimulationVariables.nonVeganDeparture1 = true;
                     } else if (i == 1) {
-                        nonVeganDeparture2 = true;
+                        SimulationVariables.nonVeganDeparture2 = true;
                     }
                     //break; // Process only one customer per event //This was the problem why events get skipped
                 }
@@ -417,9 +382,9 @@ public class MyEngine extends Engine {
                 servedCustomer.setRemovalTime(Clock.getInstance().getClock());
                 servedCustomer.reportResults();
                 if (i == 0) {
-                    cashierDeparture1 = true;
+                    SimulationVariables.cashierDeparture1 = true;
                 } else if (i == 1) {
-                    cashierDeparture2 = true;
+                    SimulationVariables.cashierDeparture2 = true;
                 }
                 //break; //This was the problem that makes the dynamic cashier not work
             }
@@ -436,7 +401,7 @@ public class MyEngine extends Engine {
             if (servedCustomer != null) {
                 servedCustomer.setRemovalTime(Clock.getInstance().getClock());
                 servedCustomer.reportResults();
-                selfCashierDeparture = true;
+                SimulationVariables.selfCashierDeparture = true;
                 System.out.println("Customer " + servedCustomer.getId() + " removed: " + servedCustomer.getRemovalTime());
             }
         }
@@ -471,8 +436,8 @@ public class MyEngine extends Engine {
                 assignToShortestStaffedCashierQueue();
             } else {
                 selfCheckoutServicePoint.addQueue(customer);
-                selfCashierQueueArrival = true;
-                selfCashierQueueDeparture = true;
+                SimulationVariables.selfCashierQueueArrival = true;
+                SimulationVariables.selfCashierQueueDeparture = true;
                 System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
                 System.out.println("Self Service Cash Counter Activated");
             }
@@ -481,8 +446,8 @@ public class MyEngine extends Engine {
             boolean chooseSelfCheckOut = Math.random() < ConstantsEnum.CUSTOMER_PREFERENCE.getValue();
             if (chooseSelfCheckOut) {
                 selfCheckoutServicePoint.addQueue(customer);
-                selfCashierQueueArrival = true;
-                selfCashierQueueDeparture = true;
+                SimulationVariables.selfCashierQueueArrival = true;
+                SimulationVariables.selfCashierQueueDeparture = true;
                 System.out.println("Customer " + customer.getId() + " assigned to Self-Service Cashier");
                 System.out.println("Self Service Cash Counter Activated");
             } else {
@@ -529,17 +494,17 @@ public class MyEngine extends Engine {
         if (cashierServicePoints[1].isActive()) {
             if (cashierServicePoints[1].getQueueSize() < cashierServicePoints[0].getQueueSize()) {
                 cashierServicePoints[1].addQueue(customer);
-                cashierQueueArrival2 = true;
-                cashierQueueDeparture2 = true;
+                SimulationVariables.cashierQueueArrival2 = true;
+                SimulationVariables.cashierQueueDeparture2 = true;
             } else {
                 cashierServicePoints[0].addQueue(customer);
-                cashierQueueArrival1 = true;
-                cashierQueueDeparture1 = true;
+                SimulationVariables.cashierQueueArrival1 = true;
+                SimulationVariables.cashierQueueDeparture1 = true;
             }
         } else {
             cashierServicePoints[0].addQueue(customer);
-            cashierQueueArrival1 = true;
-            cashierQueueDeparture1 = true;
+            SimulationVariables.cashierQueueArrival1 = true;
+            SimulationVariables.cashierQueueDeparture1 = true;
         }
     }
 
