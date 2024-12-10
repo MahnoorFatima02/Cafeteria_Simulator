@@ -1,3 +1,4 @@
+
 package eduni.distributions;
 
 /** A random number generator based on the uniform distribution.

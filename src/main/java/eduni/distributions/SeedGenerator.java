@@ -1,3 +1,4 @@
+
 package eduni.distributions;
 
 /** A SeedGenerator is a DiscreteGenerator which produces well-spaced seeds

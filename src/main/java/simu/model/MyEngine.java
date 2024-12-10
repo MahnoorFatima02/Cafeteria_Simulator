@@ -13,7 +13,10 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import simu.utility.ConstantsEnum;
 
-
+/**
+ * The {@code MyEngine} class represents the engine of the simulation model.
+ * It handles the arrival and departure events of customers and manages the service points.
+ */
 public class MyEngine extends Engine {
     Customer customer;
 //    private Map<String, Double> constants;
@@ -32,6 +35,7 @@ public class MyEngine extends Engine {
     ContinuousGenerator nonVeganFoodServiceTime;
     ContinuousGenerator cashierServiceTime;
     ContinuousGenerator selfCheckoutServiceTime;
+
 
     /*
         ====== Flags for moving balls =======
@@ -68,6 +72,7 @@ public class MyEngine extends Engine {
          it only helps to move the balls, so can be public values ======
     */
 
+
     private int veganCustomerId;
     private int nonVeganCustomerId;
     private int cashierCustomerId;
@@ -80,6 +85,11 @@ public class MyEngine extends Engine {
     // TODO: put variables in database
 
 
+    /**
+     * Service Points and random number generator with different distributions are created here.
+     * We use exponential distribution for customer arrival times and normal distribution for the
+     * service times.
+     */
     public MyEngine() {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
@@ -114,9 +124,12 @@ public class MyEngine extends Engine {
       ====== Arrival Process =======
   */
 
-   arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
+        arrivalProcess = new ArrivalProcess(arrivalTime, eventList, EventType.ARR1);
     }
 
+    /**
+     * Initializes the simulation by generating the first arrival event in the system.
+     */
     @Override
     protected void initialize() {    // First arrival in the system
         arrivalProcess.generateNextEvent();
@@ -126,6 +139,12 @@ public class MyEngine extends Engine {
       ====== B phase events =======
    */
 
+    /**
+     * Handles the events in the simulation based on their type.
+     * Implements a delay to simulate real-time processing.
+     *
+     * @param t The event to be processed
+     */
     @Override
     protected void runEvent(Event t) {
         checkAndUpdateSecondCashierStatus();
@@ -141,6 +160,7 @@ public class MyEngine extends Engine {
 
             // Category 1: Vegan and Non-Vegan food service
             // Arrival at first food service point
+
             case ARR1:
                 handleArrivalEvent();
                 break;
@@ -175,6 +195,10 @@ public class MyEngine extends Engine {
         ====== C phase events =======
     */
 
+    /**
+     * Starts the service for the next customer at the appropriate service points.
+     * Schedules events for vegan, non-vegan, cashier, and self-checkout service points.
+     */
     @Override
     // starting service for the next customer.
     protected void tryCEvents() {
@@ -249,6 +273,9 @@ public class MyEngine extends Engine {
         ====== Results =======
     */
 
+    /**
+     * Prints the results of the simulation to the console, including total customers created, served, and average service times.
+     */
     @Override
     protected void results() {
         System.out.println();
@@ -312,6 +339,11 @@ public class MyEngine extends Engine {
     }
 
 
+    /**
+     * Handles the arrival event of a customer.
+     * Determines if the customer is vegan and assigns them to the appropriate queue.
+     * Generates the next arrival event.
+     */
     private void handleArrivalEvent() {
 //        boolean isVegan = Math.random() < SimulationVariables.IS_VEGAN_PROBABILITY;
         boolean isVegan = Math.random() < ConstantsEnum.IS_VEGAN_PROBABILITY.getValue();
@@ -338,6 +370,10 @@ public class MyEngine extends Engine {
         arrivalProcess.generateNextEvent();
     }
 
+    /**
+     * Handles the departure event of a vegan customer.
+     * Removes the customer from the vegan food station queue and assigns them to the cashier.
+     */
     private void handleVeganDepartureEvent() {
         customer = veganFoodStation.removeQueue();
         veganDeparture = true;
@@ -345,6 +381,10 @@ public class MyEngine extends Engine {
     }
 
 
+    /**
+     * Handles the departure event of a non-vegan customer.
+     * Removes the customer from the non-vegan food station queue and assigns them to the cashier.
+     */
     private void handleNonVeganDepartureEvent() {
         for (int i = 0; i < nonVeganFoodStation.length; i++) {
             ServicePoint sp = nonVeganFoodStation[i];
@@ -365,6 +405,10 @@ public class MyEngine extends Engine {
         }
     }
 
+    /**
+     * Handles the departure event of a customer from the cashier service points.
+     * Removes the customer from the cashier queue, sets their removal time, and reports the results.
+     */
     private void handleCashierDepartureEvent() {
         for (int i = 0; i < cashierServicePoints.length; i++) {
             ServicePoint p = cashierServicePoints[i];
@@ -383,6 +427,10 @@ public class MyEngine extends Engine {
         }
     }
 
+    /**
+     * Handles the departure event of a customer from the self-checkout service point.
+     * Removes the customer from the self-checkout queue, sets their removal time, and reports the results.
+     */
     private void handleSelfCheckoutDepartureEvent() {
         if (selfCheckoutServicePoint.isOnQueue()) {
             Customer servedCustomer = selfCheckoutServicePoint.removeQueue();
@@ -400,6 +448,14 @@ public class MyEngine extends Engine {
      */
 
 
+    /**
+     * Assigns the given customer to either the cashier or self-checkout queue based on the assignment method.
+     * If assigning by queue length, the customer is assigned to the shorter queue.
+     * If assigning by customer preference, the customer is assigned based on a random preference.
+     * Also checks and updates the status of the second cashier and assigns customers to the shortest queue if the second cashier is active.
+     *
+     * @param customer The customer to be assigned
+     */
     private void assignToCashier(Customer customer) {
         if (assignByQueueLength) {
             System.out.println("Assigning by queue length");
@@ -445,6 +501,12 @@ public class MyEngine extends Engine {
         System.out.println("The self service queue length: " + updatedSelfServiceQueueSize);
     }
 
+
+    /**
+     * Checks the queue size of the first cashier and updates the status of the second cashier based on predefined limits.
+     * If the queue size exceeds the upper limit, the second cashier is activated.
+     * If the queue size falls below the lower limit and the second cashier's queue is empty, the second cashier is deactivated.
+     */
     private void checkAndUpdateSecondCashierStatus() {
         int cashierQueueSize = cashierServicePoints[0].getQueueSize();
         System.out.println("Current cashier queue size: " + cashierQueueSize);
@@ -460,6 +522,11 @@ public class MyEngine extends Engine {
         }
     }
 
+      /**
+     * Assigns the given customer to the shortest queue between the two cashiers if the second cashier is active.
+     *
+     * @param customer The customer to be assigned
+     */
     public void assignToCashier() {
         if (cashierServicePoints[1].isActive()) {
             if (cashierServicePoints[1].getQueueSize() < cashierServicePoints[0].getQueueSize()) {
@@ -481,6 +548,10 @@ public class MyEngine extends Engine {
     /*
         ====== Adjustments =======
     */
+
+    /**
+     * Resets the simulation variables and service points to their initial states.
+     */
     @Override
     public void resetVariables() {
         totalCustomersServed = 0;
@@ -505,6 +576,9 @@ public class MyEngine extends Engine {
         Customer.resetTotalCustomers();
     }
 
+    /**
+     * Adjusts the simulation variables based on the simulation adjustments and reinitializes the generators.
+     */
     private void checkAdjustments() {
         SimulationVariables.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
         System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
@@ -545,57 +619,124 @@ public class MyEngine extends Engine {
         selfCheckoutServicePoint.setGenerator(selfCheckoutServiceTime);
     }
 
+    /**
+     * Sets the delay time for the simulation.
+     *
+     * @param simulationTime The delay time in seconds
+     */
     public void setDelayTime(double simulationTime) {
         SimulationVariables.DELAY_TIME = simulationTime;
     }
 
     // setter method
+    /**
+     * Sets the flag to determine the assignment method for customers.
+     *
+     * @param assignByQueueLength True to assign customers by queue length, false to assign by customer preference
+     */
     public void setAssignByQueueLength(boolean assignByQueueLength) {
         this.assignByQueueLength = assignByQueueLength;
     }
 
     // Getter method
+    /**
+     * Checks if customers are assigned by queue length.
+     *
+     * @return True if customers are assigned by queue length, false otherwise
+     */
     public boolean isAssignByQueueLength() {
         return assignByQueueLength;
     }
 
+
+    /**
+     * Gets the total number of customers served.
+     *
+     * @return Total number of customers served
+     */
     public int getTotalCustomersServed() {
         return totalCustomersServed;
     }
 
     // Getter methods for the customer IDs
+    /**
+     * Gets the ID of the last vegan customer served.
+     *
+     * @return ID of the last vegan customer served
+     */
     public int getVeganCustomerId() {
         return veganCustomerId;
     }
 
+
+    /**
+     * Gets the ID of the last non-vegan customer served.
+     *
+     * @return ID of the last non-vegan customer served
+     */
     public int getNonVeganCustomerId() {
         return nonVeganCustomerId;
     }
 
+
+    /**
+     * Gets the ID of the last customer served by the cashier.
+     *
+     * @return ID of the last customer served by the cashier
+     */
     public int getCashierCustomerId() {
         return cashierCustomerId;
     }
 
+
+    /**
+     * Gets the ID of the last customer served by the self-checkout.
+     *
+     * @return ID of the last customer served by the self-checkout
+     */
     public int getSelfCheckoutCustomerId() {
         return selfCheckoutCustomerId;
     }
 
+
+    /**
+     * Gets the size of the queue at the vegan service point.
+     *
+     * @return Size of the vegan service point queue
+     */
     public int getVeganQueueSize() {
         return veganFoodStation.getQueueSize();
     }
 
+
+    /**
+     * Gets the sizes of the queues at the non-vegan service points.
+     *
+     * @return List of sizes of the non-vegan service point queues
+     */
     public List<Integer> getNonVeganQueueSizes() {
         return Arrays.stream(nonVeganFoodStation)
                 .map(ServicePoint::getQueueSize)
                 .collect(Collectors.toList());
     }
 
+
+    /**
+     * Gets the sizes of the queues at the cashier service points.
+     *
+     * @return List of sizes of the cashier service point queues
+     */
     public List<Integer> getCashierQueueSizes() {
         return Arrays.stream(cashierServicePoints)
                 .map(ServicePoint::getQueueSize)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Gets the size of the queue at the self-checkout service point.
+     *
+     * @return Size of the self-checkout service point queue
+     */
     public int getSelfCheckoutQueueSize() {
         return selfCheckoutServicePoint.getQueueSize();
     }
@@ -615,6 +756,7 @@ public class MyEngine extends Engine {
     public void setTotalCustomersNotServed(int totalCustomersNotServed) {
         this.totalCustomersNotServed = totalCustomersNotServed;
     }
+
 
 }
 
@@ -641,6 +783,5 @@ The average time spent (60.07) and the average waiting time (35.33) are the lowe
 the vegan service point is handling the customer load more efficiently, with shorter wait times and faster service.
 
  */
-
 
 
