@@ -2,22 +2,14 @@ import eduni.distributions.ContinuousGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import simu.dao.ConstantsDao;
-import simu.framework.ArrivalProcess;
 import simu.framework.Event;
 import simu.framework.Trace;
 import simu.model.*;
-import simu.utility.ConstantsEnum;
 import simu.utility.SimulationVariables;
-
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +27,6 @@ class MyEngineTest {
     @BeforeEach
     void setUp() {
         // Initialize the trace level
-        System.out.println("HELLO");
         Trace.initialize(Trace.Level.INFO);
 
         // Mock the constants data
@@ -55,16 +46,12 @@ class MyEngineTest {
 
         // Now create the MyEngine instance
         myEngine = new MyEngine(constantsDao);
-
-        // Add debugging output to check if mock works
-        System.out.println("Constants Map Loaded: " + constantsMap);
-
     }
 
     @Test
     void testCheckAdjustments() {
 
-//         Set initial values for the variables
+        // Set initial values for the variables
         double initialArrivalMean = SimulationVariables.ARRIVAL_MEAN;
         double initialVeganServiceMean = SimulationVariables.MEAN_VEGAN_SERVICE;
         double initialNonVeganServiceMean = SimulationVariables.MEAN_NON_VEGAN_SERVICE;
@@ -113,7 +100,7 @@ class MyEngineTest {
         myEngine.setDelayTime(simulationTime);
         assertEquals(simulationTime, SimulationVariables.DELAY_TIME);
     }
-//
+
     @Test
     void testSetAssignByQueueLength() {
         myEngine.setAssignByQueueLength(true);
@@ -124,12 +111,12 @@ class MyEngineTest {
     void testGetTotalCustomersServed() {
         assertEquals(0, myEngine.getTotalCustomersServed());
     }
-//
+
     @Test
     void testGetVeganCustomerId() {
         assertEquals(0, myEngine.getVeganCustomerId());
     }
-//
+
     @Test
     void testRunEvent() {
         Event arrivalEvent = new Event(EventType.ARR1, 0);
@@ -155,7 +142,6 @@ class MyEngineTest {
         assertNotNull(myEngine.getSelfCheckoutQueueSize());
         assertTrue(myEngine.getSelfCheckoutQueueSize() >= 0);
     }
-//
 
     @Test
     void testTryCEvents() {
@@ -212,45 +198,6 @@ class MyEngineTest {
         assertNotNull(myEngine.getSelfCheckoutQueueSize());
     }
 
-
-//    @Test
-//    void testAssignToShortestCashierQueueWithActivation() {
-//        // Create 6 customers
-//        Customer customer1 = new Customer(false);
-//        Customer customer2 = new Customer(false);
-//        Customer customer3 = new Customer(false);
-//        Customer customer4 = new Customer(false);
-//        Customer customer5 = new Customer(false);
-//        Customer customer6 = new Customer(false);
-//
-//        // Assign the first 6 customers to cashier 1
-//        myEngine.assignToCashier(customer1);
-//        myEngine.assignToCashier(customer2);
-//        myEngine.assignToCashier(customer3);
-//        myEngine.assignToCashier(customer4);
-//        myEngine.assignToCashier(customer5);
-//        myEngine.assignToCashier(customer6);
-//
-//        // Verify that cashier 2 is activated
-//        assertTrue(cashierServicePoints[1].isActive());
-//
-//        // Create a new customer to be assigned to the shortest queue
-//        Customer newCustomer = new Customer(false);
-//        myEngine.assignToShortestCashierQueue(newCustomer);
-//
-//        // Get the sizes of the cashier queues before assignment
-//        List<Integer> cashierQueueSizesBefore = myEngine.getCashierQueueSizes();
-//
-//        // Assign the new customer to the shortest queue
-//        myEngine.assignToShortestCashierQueue(newCustomer);
-//
-//        // Get the sizes of the cashier queues after assignment
-//        List<Integer> cashierQueueSizesAfter = myEngine.getCashierQueueSizes();
-//
-//        // Verify that the new customer was assigned to the shortest queue
-//        int shortestQueueIndex = cashierQueueSizesBefore.indexOf(Collections.min(cashierQueueSizesBefore));
-//        assertEquals(cashierQueueSizesBefore.get(shortestQueueIndex) + 1, cashierQueueSizesAfter.get(shortestQueueIndex));
-//    }
 
     @Test
     void testAssignToCashierWithMultipleCustomers() {

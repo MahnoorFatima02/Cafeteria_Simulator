@@ -39,5 +39,4 @@ public class ConstantsDao {
 
         return constantsMap;
     }
-
 }

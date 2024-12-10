@@ -95,7 +95,7 @@ public class MyEngine extends Engine {
         nonVeganFoodStation = new ServicePoint[2];
         cashierServicePoints = new ServicePoint[2];
         this.constantsDao = constantsDao;
-        Map<String, Double> constants  = constantsDao.loadConstants();
+        Map<String, Double> constants = constantsDao.loadConstants();
         ConstantsEnum.initialize(constants);
 
     /*
@@ -148,7 +148,7 @@ public class MyEngine extends Engine {
      * @param t The event to be processed
      */
     @Override
-    protected void runEvent(Event t) {
+    public void runEvent(Event t) {
         checkAndUpdateSecondCashierStatus();
         System.out.println("Simulation speed" + SimulationVariables.DELAY_TIME);
         // Implement delay
@@ -458,7 +458,7 @@ public class MyEngine extends Engine {
      *
      * @param customer The customer to be assigned
      */
-    private void assignToCashier(Customer customer) {
+    public void assignToCashier(Customer customer) {
         if (assignByQueueLength) {
             System.out.println("Assigning by queue length");
             // cashiers share same waiting queue
@@ -581,7 +581,7 @@ public class MyEngine extends Engine {
     /**
      * Adjusts the simulation variables based on the simulation adjustments and reinitializes the generators.
      */
-    private void checkAdjustments() {
+    public void checkAdjustments() {
         SimulationVariables.ARRIVAL_MEAN *= SimulationAdjustments.adjustStudentArrival();
         System.out.println("Student Arrival value coming from adjustment " + SimulationAdjustments.adjustStudentArrival());
         System.out.println("Student Arrival rate mean " + SimulationVariables.ARRIVAL_MEAN);
