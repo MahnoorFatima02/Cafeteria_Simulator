@@ -63,6 +63,13 @@ public class CafeteriaGUI extends Application {
     /*
                 ====== Load Scene Functions =======
             */
+
+    /**
+     * Starts the JavaFX application.
+     *
+     * @param stage the primary stage for this application
+     * @throws Exception if an error occurs during loading the scene
+     */
     @Override
     public void start(Stage stage) throws Exception {
         this.primaryStage = stage;
@@ -71,6 +78,12 @@ public class CafeteriaGUI extends Application {
         loadScene("/mainpage.fxml");
     }
 
+    /**
+     * Loads a new scene from the specified FXML file.
+     *
+     * @param fxmlFile the path to the FXML file
+     * @throws Exception if an error occurs during loading the FXML file
+     */
     public void loadScene(String fxmlFile) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
         fxmlLoader.setController(this);
@@ -80,6 +93,9 @@ public class CafeteriaGUI extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Handles the action when the initial start button is pressed.
+     */
     @FXML
     private void initialStartButtonAction() {
         System.out.println("The initialStartButton has been pressed");
@@ -96,6 +112,11 @@ public class CafeteriaGUI extends Application {
     /*
                 ====== Buttons Functions =======
             */
+    /**
+     * Handles the action when the start button is pressed.
+     *
+     * @throws InterruptedException if the thread is interrupted
+     */
     @FXML
     private void startButtonAction() throws InterruptedException {
         if (validateInputs()) {
@@ -118,6 +139,9 @@ public class CafeteriaGUI extends Application {
         }
     }
 
+    /**
+     * Handles the action when the preference button is pressed.
+     */
     @FXML
     private void preferenceButtonAction() {
         preferenceButton1.setDisable(true);
@@ -127,6 +151,9 @@ public class CafeteriaGUI extends Application {
         checkStartConditions();
     }
 
+    /**
+     * Handles the action when the queue length button is pressed.
+     */
     @FXML
     private void queueLengthButtonAction() {
         queueLengthButton1.setDisable(true);
@@ -136,6 +163,9 @@ public class CafeteriaGUI extends Application {
         checkStartConditions();
     }
 
+    /**
+     * Handles the action when the pause button is pressed.
+     */
     @FXML
     private void pauseButtonAction() {
         stopRotateImage();
@@ -146,6 +176,9 @@ public class CafeteriaGUI extends Application {
         controller.pauseButtonAction();
     }
 
+    /**
+     * Handles the action when the resume button is pressed.
+     */
     @FXML
     private void resumeButtonAction() {
         startRotateImage();
@@ -158,6 +191,9 @@ public class CafeteriaGUI extends Application {
         controller.resumeButtonAction();
     }
 
+    /**
+     * Handles the action when the stop button is pressed.
+     */
     @FXML
     private void stopButtonAction() {
         stopRotateImage();
@@ -233,6 +269,11 @@ public class CafeteriaGUI extends Application {
         }
     }
 
+    /**
+     * Validates the input fields for simulation time and delay time.
+     *
+     * @return true if the inputs are valid, false otherwise
+     */
     private boolean validateInputs() {
         boolean valid = true;
         if (!isInteger(simulationTime1.getText()) || !isInteger(delayTime1.getText())) {
