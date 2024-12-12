@@ -6,10 +6,17 @@ import view.CafeteriaGUI;
 import simu.model.MyEngine;
 import simu.model.SimulationAdjustments;
 
+/**
+ * The {@code CafeteriaController} class is responsible for controlling the simulation of the cafeteria.
+ * It interacts with the GUI and the simulation engine to manage the simulation flow and update the GUI.
+ */
 public class CafeteriaController {
     private CafeteriaGUI mainApp;
     private MyEngine engine;
 
+    /**
+     * Constructs a new {@code CafeteriaController} and initializes the simulation engine.
+     */
     public CafeteriaController() {
         this.engine = new MyEngine();
     }
@@ -17,10 +24,22 @@ public class CafeteriaController {
     /*
             ====== Main Functions =======
         */
+    /**
+     * Sets the main application GUI.
+     *
+     * @param mainApp The main application GUI
+     */
     public void setMainApp(CafeteriaGUI mainApp) {
         this.mainApp = mainApp;
     }
 
+    /**
+     * Starts the simulation with the specified simulation time and delay time.
+     *
+     * @param simulationTime The simulation time
+     * @param delayTime The delay time
+     * @throws InterruptedException If the simulation thread is interrupted
+     */
     public void startSimulation(String simulationTime, String delayTime) throws InterruptedException {
         engine.setSimulationTime(Double.parseDouble(simulationTime));
         engine.setDelayTime(Double.parseDouble(delayTime));
