@@ -111,6 +111,9 @@ public class CafeteriaGUI extends Application {
                     updatePieChart();
                     updateLineChart();
                     updateBarChart();
+                    if (!controller.isSimulate()){
+                        simulationFinished();
+                    }
                 }
             }));
             timeline.setCycleCount(Timeline.INDEFINITE);
@@ -226,6 +229,17 @@ public class CafeteriaGUI extends Application {
     /*
                 ====== Utilities Functions =======
             */
+    private void simulationFinished() {
+        stopRotateImage();
+        setButtonsDisabled(true);
+        preferenceButton1.setDisable(false);
+        queueLengthButton1.setDisable(false);
+        messageBox.setText("Simulation finished. Press START to start a new simulation.");
+        if (timeline != null) {
+            timeline.stop();
+        }
+    }
+
     private void checkStartConditions() {
         if (validateInputs()) {
             startButton1.setDisable(false);

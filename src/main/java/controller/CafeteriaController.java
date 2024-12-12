@@ -58,6 +58,10 @@ public class CafeteriaController {
     public boolean isEngineStopped() {
         return engine.isStopped();
     }
+
+    public boolean isSimulate() {
+        return engine.simulate();
+    }
     /*
             ====== Main Functions =======
         */

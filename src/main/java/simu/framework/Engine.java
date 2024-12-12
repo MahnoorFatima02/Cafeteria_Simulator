@@ -95,7 +95,7 @@ public abstract class Engine {
      *
      * @return {@code true} if the simulation should continue, {@code false} otherwise
      */
-    private boolean simulate() {
+    public boolean simulate() {
         return clock.getClock() < simulationTime;
     }
 
