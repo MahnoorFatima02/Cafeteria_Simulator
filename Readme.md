@@ -39,13 +39,13 @@ to handle events, manage queues, and adjust simulation parameters dynamically.
    cd simulation-engine
 
 
-# Running the Simulation
+### Running the Simulation
 To run the simulation, execute the SimulationView class from your IDE or use the following Maven command:
 ```mvn exec:java -Dexec.mainClass="simu.view.SimulationView"```
 
 Or you can start the ```Main``` file from the view folder.
 
-# Running Tests
+### Running Tests
 To run the unit tests, use the following Maven command:
 ```mvn test```
 Or run the ```MyEngineTest``` file from the Test folder.
