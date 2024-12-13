@@ -2,7 +2,6 @@ package simu.utility;
 
 public class SimulationVariables {
     public static double ARRIVAL_MEAN = 5;
-    //    public static final double IS_VEGAN_PROBABILITY = 0.2;
     public static double MEAN_VEGAN_SERVICE = 20;  // this should be 30
     public static double MEAN_NON_VEGAN_SERVICE = 25; // this should be 25
     public static double MEAN_CASHIER = 22;  // this should be 19

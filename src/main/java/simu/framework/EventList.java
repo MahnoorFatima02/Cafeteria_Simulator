@@ -51,12 +51,4 @@ public class EventList {
     public void clear() {
         eventlist.clear();
     }
-//	public double getNextEventTime() {
-//		Event nextEvent = eventlist.peek();
-//		if (nextEvent == null) {
-//			// Handle the case when the queue is empty
-//			return Double.MAX_VALUE; // or some other appropriate value
-//		}
-//		return nextEvent.getTime();
-//	}
 }

@@ -24,12 +24,12 @@ public class MyEngine extends Engine {
     public ServicePoint[] nonVeganFoodStation;
     public ServicePoint[] cashierServicePoints;
     public ServicePoint selfCheckoutServicePoint;
-    Customer customer;
-    ContinuousGenerator arrivalTime;
-    ContinuousGenerator veganFoodServiceTime;
-    ContinuousGenerator nonVeganFoodServiceTime;
-    ContinuousGenerator cashierServiceTime;
-    ContinuousGenerator selfCheckoutServiceTime;
+    private Customer customer;
+    private ContinuousGenerator arrivalTime;
+    private ContinuousGenerator veganFoodServiceTime;
+    private ContinuousGenerator nonVeganFoodServiceTime;
+    private ContinuousGenerator cashierServiceTime;
+    private ContinuousGenerator selfCheckoutServiceTime;
     private ConstantsDao constantsDao;
     private int totalCustomers;
     private int totalCustomersServed;
@@ -363,7 +363,6 @@ public class MyEngine extends Engine {
                     } else if (i == 1) {
                         SimulationVariables.nonVeganDeparture2 = true;
                     }
-                    //break; // Process only one customer per event //This was the problem why events get skipped
                 }
             }
         }
@@ -722,31 +721,4 @@ public class MyEngine extends Engine {
         this.totalCustomersNotServed = totalCustomersNotServed;
     }
 
-
 }
-
-/*
-Analysis of Results
-
-Non-Vegan Service Points:
-The average time spent (348.39) and the average waiting time (318.67) are significantly higher compared to other service points.
-This indicates that customers are spending a lot of time waiting in the queue before being served.
-This could be due to a high arrival rate of customers at the non-vegan service points, slower service times, or both.
-It suggests that the service capacity at these points is not sufficient to handle the incoming customer load efficiently.
-
-Cashier Service Points:
-The average time spent (279.28) and the average waiting time (266.47) are also quite high.
-This indicates that customers are experiencing long wait times at the cashier service points.
-Similar to the non-vegan service points, this could be due to a high arrival rate of customers or slower service times.
-
-Self-Checkout:
-The average time spent (217.49) and the average waiting time (186.91) are lower than the non-vegan and cashier service points
-but still relatively high. This suggests that while self-checkout is more efficient, there is still a significant wait time.
-
-Vegan Service Point:
-The average time spent (60.07) and the average waiting time (35.33) are the lowest among all service points. This indicates that
-the vegan service point is handling the customer load more efficiently, with shorter wait times and faster service.
-
- */
-
-

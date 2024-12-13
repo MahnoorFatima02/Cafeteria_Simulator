@@ -5,8 +5,6 @@ import simu.framework.*;
 
 import java.util.LinkedList;
 
-// TODO:
-// Service Point functionalities & calculations (+ variables needed) and reporting to be implemented
 
 /**
  * Represents a service point where customers are served.

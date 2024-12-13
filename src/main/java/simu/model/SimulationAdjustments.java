@@ -1,7 +1,6 @@
 package simu.model;
 
 import simu.utility.ConstantsEnum;
-import simu.utility.SimulationVariables;
 
 
 /**
