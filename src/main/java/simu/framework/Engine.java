@@ -69,7 +69,7 @@ public abstract class Engine {
         }
 
         results();
-        eventList.clear(); // Clear the event list
+        eventList.clear();
     }
 
     /**
